@@ -1,0 +1,29 @@
+{
+    "name": "jsor/stack-hal",
+    "description": "HAL stack middlewares",
+    "keywords": ["stack", "stackphp", "hal", "vnd.error", "rest"],
+    "homepage": "https://github.com/jsor/stack-hal",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jan Sorgalla",
+            "email": "jsorgalla@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/http-foundation": "~2.1",
+        "symfony/http-kernel": "~2.1",
+        "nocarrier/hal": "~0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jsor\\Stack\\Hal\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
