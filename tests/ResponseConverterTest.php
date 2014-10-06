@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal;
 
 use Nocarrier\Hal;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class ResponseConverterTest extends \PHPUnit_Framework_TestCase
@@ -105,6 +106,70 @@ class ResponseConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource href="/"/>',
+            $response->getContent()
+        );
+    }
+
+    /** @test */
+    public function it_converts_for_silex()
+    {
+        $silex = new Application();
+        $silex['debug'] = true;
+        $silex->get('/', function () {
+            return new Hal('/');
+        });
+
+        $app = new ResponseConverter($silex);
+
+        $request = Request::create('/');
+        $request->attributes->set('_format', 'json');
+
+        $response = $app->handle($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    '_links' => [
+                        'self' => [
+                            'href' => '/',
+                        ],
+                    ],
+                ]
+            ),
+            $response->getContent()
+        );
+    }
+
+    /** @test */
+    public function it_converts_for_http_kernel()
+    {
+        $silex = new Application();
+        $silex['debug'] = true;
+        $silex->get('/', function () {
+            return new Hal('/');
+        });
+        $silex->boot();
+        $silex->flush();
+
+        $app = new ResponseConverter($silex['kernel']);
+
+        $request = Request::create('/');
+        $request->attributes->set('_format', 'json');
+
+        $response = $app->handle($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    '_links' => [
+                        'self' => [
+                            'href' => '/',
+                        ],
+                    ],
+                ]
+            ),
             $response->getContent()
         );
     }
