@@ -18,6 +18,7 @@
         "nocarrier/hal": "~0.9"
     },
     "require-dev": {
+        "silex/silex": "@stable"
     },
     "autoload": {
         "psr-4": {
