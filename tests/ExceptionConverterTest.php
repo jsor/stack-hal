@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
+class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
     public function it_serializes_exception_to_json()
