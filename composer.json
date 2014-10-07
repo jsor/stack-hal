@@ -1,6 +1,6 @@
 {
     "name": "jsor/stack-hal",
-    "description": "Stack middlewares for working with HAL and vnd.error",
+    "description": "Stack middlewares for working with the Hypertext Application Language (HAL).",
     "keywords": ["stack", "stackphp", "hal", "vnd.error", "rest"],
     "homepage": "https://github.com/jsor/stack-hal",
     "license": "MIT",

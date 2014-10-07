@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class ExceptionToVndErrorConverter implements HttpKernelInterface
+class ExceptionConverter implements HttpKernelInterface
 {
     private $app;
     private $factory;
@@ -18,6 +18,8 @@ class ExceptionToVndErrorConverter implements HttpKernelInterface
     {
         if (!$factory) {
             $factory = function ($message, $statusCode) {
+                // Converts to a vnd.error response by default
+                // @see https://github.com/blongden/vnd.error
                 return new Hal(null, ['message' => $message]);
             };
         }

@@ -22,7 +22,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $app = new ResponseConverter($kernel);
         $app = new RequestFormatValidator($app);
-        $app = new ExceptionToVndErrorConverter($app);
+        $app = new ExceptionConverter($app);
 
         $request = new Request();
         $request->attributes->set('_format', 'html');
@@ -47,7 +47,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $app = new ResponseConverter($kernel);
         $app = new RequestFormatValidator($app);
-        $app = new ExceptionToVndErrorConverter($app);
+        $app = new ExceptionConverter($app);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -83,7 +83,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $app = new ResponseConverter($kernel);
         $app = new RequestFormatValidator($app);
-        $app = new ExceptionToVndErrorConverter($app);
+        $app = new ExceptionConverter($app);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');
@@ -109,7 +109,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $app = new ResponseConverter($kernel);
         $app = new RequestFormatValidator($app);
-        $app = new ExceptionToVndErrorConverter($app);
+        $app = new ExceptionConverter($app);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -139,7 +139,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $app = new ResponseConverter($kernel);
         $app = new RequestFormatValidator($app);
-        $app = new ExceptionToVndErrorConverter($app);
+        $app = new ExceptionConverter($app);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');

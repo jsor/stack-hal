@@ -19,7 +19,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception()));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -47,7 +47,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -75,7 +75,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException('Resource not found')));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -103,7 +103,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception()));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');
@@ -127,7 +127,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');
@@ -151,7 +151,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException('Resource not found')));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');
@@ -175,7 +175,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception('Error')));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -205,7 +205,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception('Error')));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -225,7 +225,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception('Error')));
 
-        $app = new ExceptionToVndErrorConverter($kernel);
+        $app = new ExceptionConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'html');
@@ -243,7 +243,7 @@ class ExceptionToVndErrorConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception()));
 
-        $app = new ExceptionToVndErrorConverter($kernel, function ($message) {
+        $app = new ExceptionConverter($kernel, function ($message) {
             return new Hal(null, ['message' => 'Error: ' . $message]);
         });
 
