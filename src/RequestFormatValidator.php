@@ -11,7 +11,7 @@ class RequestFormatValidator implements HttpKernelInterface
     private $app;
     private $acceptableFormats;
 
-    public function __construct(HttpKernelInterface $app, callable $acceptableFormats = null)
+    public function __construct(HttpKernelInterface $app, array $acceptableFormats = null)
     {
         $this->app = $app;
         $this->acceptableFormats = $acceptableFormats ?: [
