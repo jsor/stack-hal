@@ -9,7 +9,7 @@ php:
 env:
   - PHPUNIT_ARGS=--group=no-deps
   - COMPOSER_PACKAGES=silex/silex:~1.0 PHPUNIT_ARGS=--group=deps-silex
-  - COMPOSER_PACKAGES="symfony/config:~2.0 symfony/dependency-injection:~2.0" PHPUNIT_ARGS=--group=deps-kernel
+  - "COMPOSER_PACKAGES='symfony/config:~2.0 symfony/dependency-injection:~2.0' PHPUNIT_ARGS=--group=deps-kernel"
   - COMPOSER_PACKAGES=laravel/laravel:~4.1 PHPUNIT_ARGS=--group=deps-laravel
   - COMPOSER_PACKAGES=silex/silex:~2.0@dev PHPUNIT_ARGS=--group=deps-silex
 
