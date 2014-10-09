@@ -4,6 +4,9 @@ namespace Jsor\Stack\Hal;
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @group no-deps
+ */
 class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */

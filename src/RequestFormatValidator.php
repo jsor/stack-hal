@@ -14,51 +14,39 @@ class RequestFormatValidator implements HttpKernelInterface
     public function __construct(HttpKernelInterface $app, array $acceptableFormats = null)
     {
         $this->app = $app;
-        $this->acceptableFormats = $acceptableFormats ?: [
-            'json' => ['application/hal+json', 'application/json'],
-            'xml' => ['application/hal+xml', 'application/xml']
-        ];
+        $this->acceptableFormats = $acceptableFormats;
     }
 
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
+        $response = static::intercept($request, $this->acceptableFormats);
+
+        if ($response instanceof Response) {
+            return $response;
+        }
+
+        return $this->app->handle($request, $type, $catch);
+    }
+
+    public static function intercept(Request $request, array $acceptableFormats = null)
+    {
+        $acceptableFormats = $acceptableFormats ?: [
+            'json' => ['application/hal+json', 'application/json'],
+            'xml' => ['application/hal+xml', 'application/xml']
+        ];
+
         $format = $request->attributes->get('_format'); // Might be set via Negotiation middleware
 
-        if (!isset($this->acceptableFormats[$format])) {
-            $mimeType = $request->attributes->get('_mime_type'); // Might be set via Negotiation middleware
-            $acceptableMimeTypes = call_user_func_array('array_merge', array_values($this->acceptableFormats));
+        if (isset($acceptableFormats[$format])) {
+            return;
+        }
 
-            if (!$format) {
-                return new Response(
-                    sprintf(
-                        'Could not detect supported mime type. Supported mime types are: %s.',
-                        implode(', ', $acceptableMimeTypes)
-                    ),
-                    406,
-                    [
-                        'Content-Type' => 'text/plain'
-                    ]
-                );
-            }
+        $acceptableMimeTypes = call_user_func_array('array_merge', array_values($acceptableFormats));
 
-            if ($mimeType) {
-                return new Response(
-                    sprintf(
-                        'Mime type "%s" is not supported. Supported mime types are: %s.',
-                        $mimeType,
-                        implode(', ', $acceptableMimeTypes)
-                    ),
-                    406,
-                    [
-                        'Content-Type' => 'text/plain'
-                    ]
-                );
-            }
-
+        if (!$format) {
             return new Response(
                 sprintf(
-                    'Format "%s" is not supported. Supported mime types are: %s.',
-                    $format,
+                    'Could not detect supported mime type. Supported mime types are: %s.',
                     implode(', ', $acceptableMimeTypes)
                 ),
                 406,
@@ -68,6 +56,32 @@ class RequestFormatValidator implements HttpKernelInterface
             );
         }
 
-        return $this->app->handle($request, $type, $catch);
+        $mimeType = $request->attributes->get('_mime_type'); // Might be set via Negotiation middleware
+
+        if ($mimeType) {
+            return new Response(
+                sprintf(
+                    'Mime type "%s" is not supported. Supported mime types are: %s.',
+                    $mimeType,
+                    implode(', ', $acceptableMimeTypes)
+                ),
+                406,
+                [
+                    'Content-Type' => 'text/plain'
+                ]
+            );
+        }
+
+        return new Response(
+            sprintf(
+                'Format "%s" is not supported. Supported mime types are: %s.',
+                $format,
+                implode(', ', $acceptableMimeTypes)
+            ),
+            406,
+            [
+                'Content-Type' => 'text/plain'
+            ]
+        );
     }
 }

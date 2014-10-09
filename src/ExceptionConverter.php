@@ -2,28 +2,33 @@
 
 namespace Jsor\Stack\Hal;
 
+use Jsor\Stack\Hal\Configurator\ConfiguratorInterface;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+/**
+ * Converts to a vnd.error response.
+ * @see https://github.com/blongden/vnd.error
+ */
 class ExceptionConverter implements HttpKernelInterface
 {
     private $app;
     private $factory;
     private $prettyPrint;
 
-    public function __construct(HttpKernelInterface $app, callable $factory = null, $prettyPrint = false)
+    public function __construct(HttpKernelInterface $app,
+                                callable $factory = null,
+                                $prettyPrint = false,
+                                ConfiguratorInterface $configurator = null)
     {
         if (!$factory) {
             $factory = function ($message, $statusCode) {
-                // Converts to a vnd.error response by default
-                // @see https://github.com/blongden/vnd.error
                 return new Hal(null, ['message' => $message]);
             };
         }
-
         $this->app = $app;
         $this->factory = $factory;
         $this->prettyPrint = (bool) $prettyPrint;
@@ -33,23 +38,29 @@ class ExceptionConverter implements HttpKernelInterface
     {
         try {
             return $this->app->handle($request, $type, false);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             if (!$catch) {
-                throw $e;
+                throw $exception;
             }
 
-            $format = $request->attributes->get('_format');
+            $response = static::convert($exception, $request, $this->factory, $this->prettyPrint);
 
-            if (!in_array($format, ['json', 'xml'])) {
-                throw $e;
+            if ($response instanceof \Exception) {
+                throw $response;
             }
 
-            return $this->createResponseFromException($e, $format);
+            return $response;
         }
     }
 
-    private function createResponseFromException(\Exception $exception, $format)
+    public static function convert(\Exception $exception, Request $request, callable $factory = null, $prettyPrint = false)
     {
+        $format = $request->attributes->get('_format');
+
+        if (!in_array($format, ['json', 'xml'])) {
+            return $exception;
+        }
+
         $statusCode = 500;
         $message = '';
         $headers = [];
@@ -65,17 +76,17 @@ class ExceptionConverter implements HttpKernelInterface
         }
 
         /* @var $hal Hal */
-        $hal = call_user_func($this->factory, $message, $statusCode);
+        $hal = call_user_func($factory, $message, $statusCode, $headers);
 
         switch ($format) {
             case 'xml':
-                return new Response($hal->asXml($this->prettyPrint), $statusCode, array_merge(
+                return new Response($hal->asXml($prettyPrint), $statusCode, array_merge(
                     $headers,
                     ['Content-Type' => 'application/vnd.error+xml']
                 ));
 
             default:
-                return new Response($hal->asJson($this->prettyPrint), $statusCode, array_merge(
+                return new Response($hal->asJson($prettyPrint), $statusCode, array_merge(
                     $headers,
                     ['Content-Type' => 'application/vnd.error+json']
                 ));

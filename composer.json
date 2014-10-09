@@ -17,9 +17,6 @@
         "symfony/event-dispatcher": "~2.1",
         "nocarrier/hal": "~0.9"
     },
-    "require-dev": {
-        "silex/silex": "@stable"
-    },
     "autoload": {
         "psr-4": {
             "Jsor\\Stack\\Hal\\": "src/"

@@ -2,8 +2,8 @@
 
 namespace Jsor\Stack\Hal;
 
-use Jsor\Stack\Hal\ResponseConverter\GuessingHttpKernelConfigurator;
-use Jsor\Stack\Hal\ResponseConverter\HttpKernelConfigurator;
+use Jsor\Stack\Hal\Configurator\ConfiguratorGuesser;
+use Jsor\Stack\Hal\Configurator\ConfiguratorInterface;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,16 +16,16 @@ class ResponseConverter implements HttpKernelInterface
 
     public function __construct(HttpKernelInterface $app,
                                 $prettyPrint = false,
-                                HttpKernelConfigurator $httpKernelConfigurator = null)
+                                ConfiguratorInterface $configurator = null)
     {
-        $this->app = $app;
         $this->prettyPrint = (bool) $prettyPrint;
 
-        if (!$httpKernelConfigurator) {
-            $httpKernelConfigurator = new GuessingHttpKernelConfigurator();
+        if (!$configurator) {
+            $guesser = new ConfiguratorGuesser();
+            $configurator = $guesser->guess($app);
         }
 
-        $httpKernelConfigurator->configureHttpKernel($app, $this->prettyPrint);
+        $this->app = $configurator->configureResponseConversion($app, $this->prettyPrint);
     }
 
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
