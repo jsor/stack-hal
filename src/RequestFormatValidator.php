@@ -31,8 +31,8 @@ class RequestFormatValidator implements HttpKernelInterface
     public static function intercept(Request $request, array $acceptableFormats = null)
     {
         $acceptableFormats = $acceptableFormats ?: [
-            'json' => ['application/hal+json', 'application/json'],
-            'xml' => ['application/hal+xml', 'application/xml']
+            'json' => ['application/hal+json', 'application/json', 'application/x-json'],
+            'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
         ];
 
         $format = $request->attributes->get('_format'); // Might be set via Negotiation middleware
