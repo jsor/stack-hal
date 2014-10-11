@@ -2,14 +2,10 @@
 
 namespace Jsor\Stack\Hal\Exception;
 
-use Jsor\Stack\Hal\Fixtures\Form\FormType;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\Form\Forms;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\ValidatorBuilder;
 
 /**

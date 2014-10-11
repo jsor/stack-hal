@@ -36,6 +36,6 @@ class ResponseConverter implements HttpKernelInterface
             return $hal;
         }
 
-        return HalResponse::create($hal, 200, [], $this->prettyPrint);
+        return new HalResponse($hal, 200, [], $this->prettyPrint);
     }
 }
