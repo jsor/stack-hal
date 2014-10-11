@@ -27,7 +27,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -55,7 +55,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -83,7 +83,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -111,7 +111,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'xml');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
@@ -135,7 +135,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'xml');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
@@ -159,7 +159,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'xml');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
@@ -183,7 +183,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -214,55 +214,5 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set('_format', 'json');
 
         $app->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
-    }
-
-    /** @test */
-    public function it_rethrows_exception_for_invalid_request_format()
-    {
-        $this->setExpectedException('\Exception', 'Error');
-
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
-
-        $kernel
-            ->expects($this->once())
-            ->method('handle')
-            ->will($this->throwException(new \Exception('Error')));
-
-        $app = new ExceptionConverter($kernel);
-
-        $request = new Request();
-        $request->attributes->set('_format', 'html');
-
-        $app->handle($request);
-    }
-
-    /** @test */
-    public function it_uses_hal_factory()
-    {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
-
-        $kernel
-            ->expects($this->once())
-            ->method('handle')
-            ->will($this->throwException(new \Exception()));
-
-        $app = new ExceptionConverter($kernel, function ($message) {
-            return new Hal(null, ['message' => 'Error: ' . $message]);
-        });
-
-        $request = new Request();
-        $request->attributes->set('_format', 'json');
-
-        $response = $app->handle($request);
-
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(
-                [
-                    'message' => 'Error: Internal Server Error',
-                ]
-            ),
-            $response->getContent()
-        );
     }
 }

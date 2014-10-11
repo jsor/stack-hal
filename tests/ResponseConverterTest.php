@@ -4,6 +4,7 @@ namespace Jsor\Stack\Hal;
 
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group no-deps
@@ -13,43 +14,45 @@ class ResponseConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_original_response_for_invalid_format()
     {
-        $hal = new Hal();
+        $expectedResponse = new Response();
 
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($hal));
+            ->will($this->returnValue($expectedResponse));
 
         $app = new ResponseConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'html');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
-        $this->assertSame($hal, $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /** @test */
     public function it_returns_original_response_if_response_is_not_a_hal_instance()
     {
+        $expectedResponse = new Response();
+
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue('success'));
+            ->will($this->returnValue($expectedResponse));
 
         $app = new ResponseConverter($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
-        $this->assertSame('success', $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /** @test */
@@ -69,7 +72,7 @@ class ResponseConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/hal+json', $response->headers->get('Content-Type'));
@@ -104,7 +107,7 @@ class ResponseConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'xml');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/hal+xml', $response->headers->get('Content-Type'));

@@ -39,10 +39,10 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/');
         $request->attributes->set('_format', 'html');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain', $response->headers->get('Content-Type'));
+        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
         $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
@@ -73,7 +73,7 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/');
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/hal+json', $response->headers->get('Content-Type'));
@@ -118,7 +118,7 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/exception');
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/vnd.error+json', $response->headers->get('Content-Type'));

@@ -2,9 +2,9 @@
 
 namespace Jsor\Stack\Hal\EventListener;
 
-use Jsor\Stack\Hal\ResponseConverter;
+use Jsor\Stack\Hal\Response\HalResponse;
+use Nocarrier\Hal;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -19,14 +19,10 @@ class ResponseConversionListener implements EventSubscriberInterface
 
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-        $response = ResponseConverter::convert(
-            $event->getControllerResult(),
-            $event->getRequest(),
-            $this->prettyPrint
-        );
+        $hal = $event->getControllerResult();
 
-        if ($response instanceof Response) {
-            $event->setResponse($response);
+        if ($hal instanceof Hal) {
+            $event->setResponse(new HalResponse($hal, 200, [], $this->prettyPrint));
         }
     }
 

@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group no-deps
@@ -12,41 +13,45 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_accepts_default_json_format()
     {
+        $expectedResponse = new Response();
+
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue('success'));
+            ->will($this->returnValue($expectedResponse));
 
         $app = new RequestFormatValidator($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
-        $this->assertSame('success', $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /** @test */
     public function it_accepts_default_xml_format()
     {
+        $expectedResponse = new Response();
+
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue('success'));
+            ->will($this->returnValue($expectedResponse));
 
         $app = new RequestFormatValidator($kernel);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
-        $this->assertSame('success', $response);
+        $this->assertSame($expectedResponse, $response);
     }
 
     /** @test */
@@ -62,10 +67,10 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
 
         $request = new Request();
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
         $this->assertSame('Could not detect supported mime type. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
@@ -83,10 +88,10 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('_format', 'html');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
         $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
@@ -105,10 +110,10 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set('_format', 'html');
         $request->attributes->set('_mime_type', 'text/html');
 
-        $response = $app->handle($request);
+        $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
         $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 }

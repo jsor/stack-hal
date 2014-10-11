@@ -17,9 +17,24 @@
         "symfony/event-dispatcher": "~2.1",
         "nocarrier/hal": "~0.9"
     },
+    "suggest": {
+        "willdurand/negotiation": "~1.3",
+        "symfony/form": "~2.1",
+        "symfony/validator": "~2.1"
+    },
+    "require-dev": {
+        "willdurand/negotiation": "~1.3",
+        "symfony/form": "~2.1",
+        "symfony/validator": "~2.1"
+    },
     "autoload": {
         "psr-4": {
             "Jsor\\Stack\\Hal\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jsor\\Stack\\Hal\\": "tests/"
         }
     },
     "extra": {
