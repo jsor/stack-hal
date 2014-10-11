@@ -52,7 +52,7 @@ class LaravelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(406, $response->getStatusCode());
         $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
-        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/hal+xml, application/xml.', $response->getContent());
+        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
