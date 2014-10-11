@@ -9,8 +9,8 @@ class HttpKernelConfigurator implements ConfiguratorInterface
 {
     public function configureResponseConversion(HttpKernelInterface $app, $prettyPrint = false)
     {
-        return new HttpKernelDecorator($app, function () use ($prettyPrint) {
+        call_user_func(\Closure::bind(function () use ($prettyPrint) {
             $this->dispatcher->addSubscriber(new ResponseConversionListener($prettyPrint));
-        });
+        }, $app, 'Symfony\Component\HttpKernel\HttpKernel'));
     }
 }

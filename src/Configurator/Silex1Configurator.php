@@ -14,7 +14,5 @@ class Silex1Configurator implements ConfiguratorInterface
 
             return $dispatcher;
         }));
-
-        return $app;
     }
 }

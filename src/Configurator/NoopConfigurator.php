@@ -8,6 +8,5 @@ class NoopConfigurator implements ConfiguratorInterface
 {
     public function configureResponseConversion(HttpKernelInterface $app, $prettyPrint = false)
     {
-        return $app;
     }
 }

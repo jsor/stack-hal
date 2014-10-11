@@ -27,7 +27,5 @@ class LaravelConfigurator implements ConfiguratorInterface
 
             return $router;
         });
-
-        return $app;
     }
 }
