@@ -5,7 +5,6 @@ namespace Jsor\Stack\Hal\Response;
 use Jsor\Stack\Hal\Exception\ErrorException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Collection;
 
 class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
 {

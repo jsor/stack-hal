@@ -2,12 +2,6 @@
 
 namespace Jsor\Stack\Hal\Exception;
 
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\ValidatorBuilder;
-
 class ErrorExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */

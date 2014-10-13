@@ -5,7 +5,6 @@ namespace Jsor\Stack\Hal\Integration;
 use Jsor\Stack\Hal\ExceptionConverter;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Jsor\Stack\Hal\Response\HalResponse;
-use Jsor\Stack\Hal\ResponseConverter;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
