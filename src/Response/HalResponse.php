@@ -67,4 +67,9 @@ class HalResponse extends Response
                 return $this->hal->asJson($this->prettyPrint);
         }
     }
+
+    public function getHal()
+    {
+        return $this->hal;
+    }
 }

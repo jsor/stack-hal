@@ -10,10 +10,6 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class VndErrorResponse extends HalResponse
 {
-    protected $hal;
-    protected $requestFormat;
-    protected $prettyPrint;
-
     public function __construct(Hal $hal, $status = 500, $headers = array(), $prettyPrint = false)
     {
         parent::__construct($hal, $status, $headers, $prettyPrint);

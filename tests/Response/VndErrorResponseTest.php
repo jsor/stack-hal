@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
 {
-    use ResponseTestCase;
+    use HalResponseTestCase;
 
     protected function provideResponse(Hal $hal = null)
     {

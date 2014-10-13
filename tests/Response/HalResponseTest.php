@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HalResponseTest extends \PHPUnit_Framework_TestCase
 {
-    use ResponseTestCase;
+    use HalResponseTestCase;
 
     protected function provideResponse(Hal $hal = null)
     {

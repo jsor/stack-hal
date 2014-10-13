@@ -4,7 +4,7 @@ namespace Jsor\Stack\Hal\Response;
 
 use Nocarrier\Hal;
 
-trait ResponseTestCase
+trait HalResponseTestCase
 {
     /** @test */
     public function it_allows_setting_hal_content()
@@ -60,6 +60,16 @@ trait ResponseTestCase
             ),
             $string
         );
+    }
+
+    /** @test */
+    public function it_returns_hal_instance()
+    {
+        $hal = new Hal(null, ['message' => 'test']);
+
+        $response = $this->provideResponse($hal);
+
+        $this->assertSame($hal, $response->getHal());
     }
 
     /**
