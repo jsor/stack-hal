@@ -34,7 +34,7 @@ class ErrorException extends BadRequestHttpException implements HalException
 
         $hal = new Hal(null, $data);
 
-        $this->appendErrors($hal, $this->errors, '');
+        $this->appendErrors($hal, $this->errors);
 
         return $hal;
     }
