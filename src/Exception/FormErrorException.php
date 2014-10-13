@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal\Exception;
 
 use Nocarrier\Hal;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -42,6 +43,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
 
     private function appendErrors(Hal $hal, FormInterface $form, $path)
     {
+        /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
             $data = array(
                 'message' => $error->getMessage()
