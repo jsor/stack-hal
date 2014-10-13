@@ -2,6 +2,7 @@
 
 namespace Jsor\Stack\Hal\Integration;
 
+use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
 use Jsor\Stack\Hal\ExceptionConverter;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Jsor\Stack\Hal\ResponseConverter;
@@ -12,9 +13,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\Tests\Fixtures\KernelForTest;
 
-/**
- * @group deps-kernel
- */
 class KernelTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
@@ -22,8 +20,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     {
         $kernel = new KernelForTest('test', true);
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = Request::create('/');
@@ -60,8 +57,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $dispatcher->addSubscriber(new ResponseConversionListener());
+
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = Request::create('/');
@@ -109,8 +107,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = Request::create('/exception');

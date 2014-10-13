@@ -4,14 +4,12 @@ namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\ExceptionConverter;
 use Jsor\Stack\Hal\RequestFormatValidator;
+use Jsor\Stack\Hal\Response\HalResponse;
 use Jsor\Stack\Hal\ResponseConverter;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * @group no-deps
- */
 class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
@@ -23,8 +21,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('handle');
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -40,7 +37,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_response_to_json()
     {
-        $hal = new Hal('/');
+        $hal = new HalResponse(new Hal('/'));
 
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
@@ -49,8 +46,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->returnValue($hal));
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -77,7 +73,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_response_to_xml()
     {
-        $hal = new Hal('/');
+        $hal = new HalResponse(new Hal('/'));
 
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
@@ -86,8 +82,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->returnValue($hal));
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -113,8 +108,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -144,8 +138,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $app = new ResponseConverter($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();

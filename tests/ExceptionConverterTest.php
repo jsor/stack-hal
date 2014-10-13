@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-/**
- * @group no-deps
- */
 class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */

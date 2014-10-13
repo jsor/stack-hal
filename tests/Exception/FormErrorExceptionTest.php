@@ -7,9 +7,6 @@ use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Validator\Validation;
 
-/**
- * @group no-deps
- */
 class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */

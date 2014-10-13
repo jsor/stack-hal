@@ -8,9 +8,6 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ValidatorBuilder;
 
-/**
- * @group no-deps
- */
 class ValidationErrorExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */

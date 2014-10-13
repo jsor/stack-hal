@@ -21,10 +21,4 @@
             <directory suffix=".php">./src/</directory>
         </whitelist>
     </filter>
-
-    <groups>
-        <include>
-            <group>no-deps</group>
-        </include>
-    </groups>
 </phpunit>
