@@ -57,7 +57,7 @@ class HalResponse extends Response
     public function getContent()
     {
         if (null === $this->hal) {
-            return null;
+            return '';
         }
 
         switch ($this->requestFormat) {
