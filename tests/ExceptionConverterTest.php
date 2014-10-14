@@ -194,6 +194,34 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_exposes_standard_exception_message_when_debug_is_true()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new \Exception('Custom error message')));
+
+        $app = new ExceptionConverter($kernel, false, true);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'json');
+
+        $response = $app->handle($request)->prepare($request);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    'message' => 'Custom error message',
+                ]
+            ),
+            $response->getContent()
+        );
+    }
+
+    /** @test */
     public function it_rethrows_exception_if_catch_is_false()
     {
         $this->setExpectedException('\Exception', 'Error');

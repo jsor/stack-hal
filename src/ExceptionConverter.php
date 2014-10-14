@@ -14,14 +14,17 @@ class ExceptionConverter implements HttpKernelInterface
 {
     private $app;
     private $prettyPrint;
+    private $debug;
     private $passThroughCatch;
 
     public function __construct(HttpKernelInterface $app,
                                 $prettyPrint = false,
+                                $debug = false,
                                 $passThroughCatch = false)
     {
         $this->app = $app;
         $this->prettyPrint = (bool) $prettyPrint;
+        $this->debug = (bool) $debug;
         $this->passThroughCatch = (bool) $passThroughCatch;
     }
 
@@ -34,7 +37,7 @@ class ExceptionConverter implements HttpKernelInterface
                 throw $exception;
             }
 
-            return VndErrorResponse::fromException($exception, $this->prettyPrint);
+            return VndErrorResponse::fromException($exception, $this->prettyPrint, $this->debug);
         }
     }
 }

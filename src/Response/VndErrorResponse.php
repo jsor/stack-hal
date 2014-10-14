@@ -10,19 +10,19 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class VndErrorResponse extends HalResponse
 {
-    public function __construct(Hal $hal, $status = 500, $headers = array(), $prettyPrint = false)
+    public function __construct(Hal $hal, $status = 500, $headers = array(), $prettyPrint = false, $debug = false)
     {
         parent::__construct($hal, $status, $headers, $prettyPrint);
 
         $this->headers->set('Content-Type', 'application/vnd.error+json');
     }
 
-    public static function create($hal = null, $status = 500, $headers = array(), $prettyPrint = false)
+    public static function create($hal = null, $status = 500, $headers = array(), $prettyPrint = false, $debug = false)
     {
-        return new static($hal, $status, $headers, $prettyPrint);
+        return new static($hal, $status, $headers, $prettyPrint, $debug);
     }
 
-    public static function fromException(\Exception $exception, $prettyPrint = false)
+    public static function fromException(\Exception $exception, $prettyPrint = false, $debug = false)
     {
         $statusCode = 500;
         $headers = [];
@@ -34,11 +34,11 @@ class VndErrorResponse extends HalResponse
 
         if ($exception instanceof HalException) {
             $hal = $exception->getHal();
-        } elseif ($exception instanceof HttpExceptionInterface) {
+        } elseif ($debug || $exception instanceof HttpExceptionInterface) {
             $hal = new Hal(null, ['message' => $exception->getMessage()]);
         } else {
-            // Discard exception messages from exceptions
-            // not implementing HttpExceptionInterface
+            // Discard exception messages from exceptions not implementing
+            // HttpExceptionInterface (if $debug is false)
             $hal = new Hal();
         }
 
