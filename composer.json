@@ -18,8 +18,8 @@
         "nocarrier/hal": "~0.9"
     },
     "suggest": {
-        "symfony/form": "~2.1",
-        "symfony/validator": "~2.1"
+        "symfony/form": "For using FormErrorException",
+        "symfony/validator": "For using ValidationErrorException"
     },
     "require-dev": {
         "symfony/config": "~2.0",
