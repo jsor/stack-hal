@@ -11,17 +11,14 @@ Stack/Hal
 Installation
 ------------
 
-Install [through composer](http://getcomposer.org). Check the
-[packagist page](https://packagist.org/packages/jsor/stack-hal) for all
-available versions.
+Install the latest version with [composer](http://getcomposer.org):
 
-```json
-{
-    "require": {
-        "jsor/stack-hal": "~1.0@dev"
-    }
-}
+```bash
+composer require jsor/stack-hal
 ```
+
+Check the [packagist page](https://packagist.org/packages/jsor/stack-hal) for
+all available versions.
 
 License
 -------
