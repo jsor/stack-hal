@@ -20,7 +20,8 @@
     "suggest": {
         "symfony/form": "For using FormErrorException",
         "symfony/validator": "For using ValidationErrorException",
-        "willdurand/negotiation": "For using HalNegotiator"
+        "willdurand/negotiation": "For using HalNegotiator",
+        "willdurand/stack-negotiation": "For using RequestFormatNegotiator"
     },
     "require-dev": {
         "symfony/config": "~2.0",
@@ -29,7 +30,8 @@
         "symfony/form": "~2.1",
         "symfony/validator": "~2.1",
 
-        "willdurand/negotiation": "~1.3"
+        "willdurand/negotiation": "~1.3",
+        "willdurand/stack-negotiation": "~0.1"
     },
     "autoload": {
         "psr-4": {
