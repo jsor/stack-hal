@@ -43,10 +43,13 @@ class RequestFormatValidator implements HttpKernelInterface
 
         $acceptableMimeTypes = call_user_func_array('array_merge', array_values($acceptableFormats));
 
-        if (!$format) {
+        $mimeType = $request->attributes->get('_mime_type'); // Might be set via Negotiation middleware
+
+        if ($mimeType) {
             return new Response(
                 sprintf(
-                    'Could not detect supported mime type. Supported mime types are: %s.',
+                    'Mime type "%s" is not supported. Supported mime types are: %s.',
+                    $mimeType,
                     implode(', ', $acceptableMimeTypes)
                 ),
                 406,
@@ -56,13 +59,10 @@ class RequestFormatValidator implements HttpKernelInterface
             );
         }
 
-        $mimeType = $request->attributes->get('_mime_type'); // Might be set via Negotiation middleware
-
-        if ($mimeType) {
+        if (!$format) {
             return new Response(
                 sprintf(
-                    'Mime type "%s" is not supported. Supported mime types are: %s.',
-                    $mimeType,
+                    'Could not detect supported mime type. Supported mime types are: %s.',
                     implode(', ', $acceptableMimeTypes)
                 ),
                 406,

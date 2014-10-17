@@ -113,4 +113,26 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
         $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
+
+    /** @test */
+    public function it_returns_406_for_null_format_with_mime_type()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->never())
+            ->method('handle');
+
+        $app = new RequestFormatValidator($kernel);
+
+        $request = new Request();
+        $request->attributes->set('_format', null);
+        $request->attributes->set('_mime_type', 'text/html');
+
+        $response = $app->handle($request)->prepare($request);
+
+        $this->assertSame(406, $response->getStatusCode());
+        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
+        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+    }
 }
