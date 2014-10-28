@@ -2,8 +2,8 @@
 
 namespace Jsor\Stack\Hal\Integration;
 
+use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
 use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
-use Jsor\Stack\Hal\ExceptionConverter;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Nocarrier\Hal;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -20,7 +20,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel = new KernelForTest('test', true);
 
         $app = new RequestFormatValidator($kernel);
-        $app = new ExceptionConverter($app);
 
         $request = Request::create('/');
         $request->attributes->set('_format', 'html');
@@ -59,7 +58,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
 
         $app = new RequestFormatValidator($kernel);
-        $app = new ExceptionConverter($app);
 
         $request = Request::create('/');
         $request->attributes->set('_format', 'json');
@@ -106,8 +104,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
+        $dispatcher->addSubscriber(new ExceptionConversionListener());
+
         $app = new RequestFormatValidator($kernel);
-        $app = new ExceptionConverter($app);
 
         $request = Request::create('/exception');
         $request->attributes->set('_format', 'json');
