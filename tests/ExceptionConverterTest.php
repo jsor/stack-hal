@@ -2,10 +2,10 @@
 
 namespace Jsor\Stack\Hal;
 
-use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,6 +94,34 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_serializes_access_denied_exception_to_json()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new AccessDeniedException('Forbidden')));
+
+        $app = new ExceptionConverter($kernel);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'json');
+
+        $response = $app->handle($request)->prepare($request);
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    'message' => 'Forbidden',
+                ]
+            ),
+            $response->getContent()
+        );
+    }
+
+    /** @test */
     public function it_serializes_exception_to_xml()
     {
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
@@ -161,6 +189,30 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Resource not found</message></resource>',
+            $response->getContent()
+        );
+    }
+
+    /** @test */
+    public function it_serializes_access_denied_exception_to_xml()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new AccessDeniedException('Forbidden')));
+
+        $app = new ExceptionConverter($kernel);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'xml');
+
+        $response = $app->handle($request)->prepare($request);
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertXmlStringEqualsXmlString(
+            '<resource><message>Forbidden</message></resource>',
             $response->getContent()
         );
     }

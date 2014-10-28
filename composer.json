@@ -29,6 +29,7 @@
 
         "symfony/form": "~2.1",
         "symfony/validator": "~2.1",
+        "symfony/security-core": "~2.1",
 
         "willdurand/negotiation": "~1.3",
         "willdurand/stack-negotiation": "~0.1"

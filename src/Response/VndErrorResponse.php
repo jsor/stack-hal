@@ -26,19 +26,25 @@ class VndErrorResponse extends HalResponse
     {
         $statusCode = 500;
         $headers = [];
+        $message = null;
 
         if ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
             $headers = $exception->getHeaders();
+            $message = $exception->getMessage();
+        } elseif ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+            $statusCode = 403;
+            $message = $exception->getMessage();
+        } elseif ($debug) {
+            // Expose exception message only in debug mode
+            $message = $exception->getMessage();
         }
 
         if ($exception instanceof HalException) {
             $hal = $exception->getHal();
-        } elseif ($debug || $exception instanceof HttpExceptionInterface) {
+        } elseif ($message) {
             $hal = new Hal(null, ['message' => $exception->getMessage()]);
         } else {
-            // Discard exception messages from exceptions not implementing
-            // HttpExceptionInterface (if $debug is false)
             $hal = new Hal();
         }
 
