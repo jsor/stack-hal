@@ -4,7 +4,6 @@ namespace Jsor\Stack\Hal;
 
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
