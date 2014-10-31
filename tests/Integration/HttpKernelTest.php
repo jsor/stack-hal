@@ -3,8 +3,8 @@
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
+use Jsor\Stack\Hal\EventListener\RequestFormatValidationListener;
 use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
-use Jsor\Stack\Hal\RequestFormatValidator;
 use Nocarrier\Hal;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,12 +29,14 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $httpKernel = new HttpKernel($dispatcher, $resolver);
 
-        $app = new RequestFormatValidator($httpKernel);
+        $dispatcher->addSubscriber(new RequestFormatValidationListener());
+        $dispatcher->addSubscriber(new ResponseConversionListener());
+        $dispatcher->addSubscriber(new ExceptionConversionListener());
 
         $request = Request::create('/');
         $request->attributes->set('_format', 'html');
 
-        $response = $app->handle($request)->prepare($request);
+        $response = $httpKernel->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
         $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
@@ -61,14 +63,14 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $httpKernel = new HttpKernel($dispatcher, $resolver);
 
+        $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
-
-        $app = new RequestFormatValidator($httpKernel);
+        $dispatcher->addSubscriber(new ExceptionConversionListener());
 
         $request = Request::create('/');
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request)->prepare($request);
+        $response = $httpKernel->handle($request)->prepare($request);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/hal+json', $response->headers->get('Content-Type'));
@@ -106,14 +108,14 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $httpKernel = new HttpKernel($dispatcher, $resolver);
 
+        $dispatcher->addSubscriber(new RequestFormatValidationListener());
+        $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
-
-        $app = new RequestFormatValidator($httpKernel);
 
         $request = Request::create('/exception');
         $request->attributes->set('_format', 'json');
 
-        $response = $app->handle($request)->prepare($request);
+        $response = $httpKernel->handle($request)->prepare($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/vnd.error+json', $response->headers->get('Content-Type'));
