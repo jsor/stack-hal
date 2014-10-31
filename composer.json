@@ -14,16 +14,18 @@
         "php": ">=5.4.0",
         "symfony/http-foundation": "~2.1",
         "symfony/http-kernel": "~2.1",
-        "symfony/event-dispatcher": "~2.1",
         "nocarrier/hal": "~0.9"
     },
     "suggest": {
+        "symfony/event-dispatcher": "For using the event listeners",
         "symfony/form": "For using FormErrorException",
         "symfony/validator": "For using ValidationErrorException",
         "willdurand/negotiation": "For using HalNegotiator",
         "willdurand/stack-negotiation": "For using RequestFormatNegotiator"
     },
     "require-dev": {
+        "symfony/event-dispatcher": "~2.1",
+
         "symfony/config": "~2.0",
         "symfony/dependency-injection": "~2.0",
 
