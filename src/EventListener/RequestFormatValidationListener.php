@@ -32,7 +32,7 @@ class RequestFormatValidationListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array('onKernelRequest', 11)
+            KernelEvents::REQUEST => 'onKernelRequest'
         );
     }
 }
