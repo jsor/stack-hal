@@ -8,14 +8,14 @@ class CreatedResponse extends HalResponse
 {
     public function __construct(Hal $hal, $headers = array(), $prettyPrint = true)
     {
-        parent::__construct($hal, 204, $headers, $prettyPrint);
+        parent::__construct($hal, 201, $headers, $prettyPrint);
 
         if (!$this->headers->has('Location') && null !== ($url = $hal->getUri())) {
             $this->headers->set('Location', $url);
         }
     }
 
-    public static function create($hal = null, $status = 204, $headers = array(), $prettyPrint = true)
+    public static function create($hal = null, $status = 201, $headers = array(), $prettyPrint = true)
     {
         return new static($hal, $headers, $prettyPrint);
     }
