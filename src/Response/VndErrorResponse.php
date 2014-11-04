@@ -10,19 +10,19 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class VndErrorResponse extends HalResponse
 {
-    public function __construct(Hal $hal, $status = 500, $headers = array(), $prettyPrint = false)
+    public function __construct(Hal $hal, $status = 500, $headers = array(), $prettyPrint = true)
     {
         parent::__construct($hal, $status, $headers, $prettyPrint);
 
         $this->headers->set('Content-Type', 'application/vnd.error+json');
     }
 
-    public static function create($hal = null, $status = 500, $headers = array(), $prettyPrint = false)
+    public static function create($hal = null, $status = 500, $headers = array(), $prettyPrint = true)
     {
         return new static($hal, $status, $headers, $prettyPrint);
     }
 
-    public static function fromException(\Exception $exception, $prettyPrint = false, $debug = false)
+    public static function fromException(\Exception $exception, $prettyPrint = true, $debug = false)
     {
         $statusCode = 500;
         $headers = [];

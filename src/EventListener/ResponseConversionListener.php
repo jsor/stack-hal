@@ -12,7 +12,7 @@ class ResponseConversionListener implements EventSubscriberInterface
 {
     private $prettyPrint;
 
-    public function __construct($prettyPrint = false)
+    public function __construct($prettyPrint = true)
     {
         $this->prettyPrint = (bool) $prettyPrint;
     }

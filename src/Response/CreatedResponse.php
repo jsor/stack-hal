@@ -6,7 +6,7 @@ use Nocarrier\Hal;
 
 class CreatedResponse extends HalResponse
 {
-    public function __construct(Hal $hal, $headers = array(), $prettyPrint = false)
+    public function __construct(Hal $hal, $headers = array(), $prettyPrint = true)
     {
         parent::__construct($hal, 204, $headers, $prettyPrint);
 
@@ -15,7 +15,7 @@ class CreatedResponse extends HalResponse
         }
     }
 
-    public static function create($hal = null, $status = 204, $headers = array(), $prettyPrint = false)
+    public static function create($hal = null, $status = 204, $headers = array(), $prettyPrint = true)
     {
         return new static($hal, $headers, $prettyPrint);
     }

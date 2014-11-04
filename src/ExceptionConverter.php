@@ -22,7 +22,7 @@ class ExceptionConverter implements HttpKernelInterface
 
     public function __construct(HttpKernelInterface $app,
                                 LoggerInterface $logger = null,
-                                $prettyPrint = false,
+                                $prettyPrint = true,
                                 $debug = false,
                                 $passThroughCatch = false)
     {

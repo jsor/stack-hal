@@ -16,7 +16,7 @@ class ExceptionConversionListener implements EventSubscriberInterface
     private $logger;
 
     public function __construct(LoggerInterface $logger = null,
-                                $prettyPrint = false,
+                                $prettyPrint = true,
                                 $debug = false)
     {
         $this->logger = $logger;
