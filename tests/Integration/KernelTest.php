@@ -114,6 +114,12 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->method('getArguments')
             ->will($this->returnValue([]));
 
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+
+        $logger
+            ->expects($this->once())
+            ->method('error');
+
         $dispatcher = new EventDispatcher();
         $httpKernel = new HttpKernel($dispatcher, $resolver);
 
@@ -123,7 +129,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
-        $dispatcher->addSubscriber(new ExceptionConversionListener());
+        $dispatcher->addSubscriber(new ExceptionConversionListener($logger));
 
         $request = Request::create('/exception');
         $request->attributes->set('_format', 'json');

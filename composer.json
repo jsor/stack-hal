@@ -18,6 +18,7 @@
     },
     "suggest": {
         "symfony/event-dispatcher": "For using the event listeners",
+        "psr/log": "For using the ExceptionConversionListener",
         "symfony/form": "For using FormErrorException",
         "symfony/validator": "For using ValidationErrorException",
         "willdurand/negotiation": "For using HalNegotiator",
@@ -25,6 +26,7 @@
     },
     "require-dev": {
         "symfony/event-dispatcher": "~2.1",
+        "psr/log": "~1.0",
 
         "symfony/config": "~2.0",
         "symfony/dependency-injection": "~2.0",

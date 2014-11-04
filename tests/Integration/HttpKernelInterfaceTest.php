@@ -107,8 +107,14 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+
+        $logger
+            ->expects($this->once())
+            ->method('error');
+
         $app = new RequestFormatValidator($kernel);
-        $app = new ExceptionConverter($app);
+        $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -137,8 +143,14 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+
+        $logger
+            ->expects($this->once())
+            ->method('error');
+
         $app = new RequestFormatValidator($kernel);
-        $app = new ExceptionConverter($app);
+        $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();
         $request->attributes->set('_format', 'xml');

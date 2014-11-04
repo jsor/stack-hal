@@ -255,7 +255,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->throwException(new \Exception('Custom error message')));
 
-        $app = new ExceptionConverter($kernel, false, true);
+        $app = new ExceptionConverter($kernel, null, false, true);
 
         $request = new Request();
         $request->attributes->set('_format', 'json');
@@ -291,5 +291,53 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set('_format', 'json');
 
         $app->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+    }
+
+    /** @test */
+    public function it_logs_exceptions()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new NotFoundHttpException()));
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+
+        $logger
+            ->expects($this->once())
+            ->method('error');
+
+        $app = new ExceptionConverter($kernel, $logger);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'json');
+
+        $app->handle($request);
+    }
+
+    /** @test */
+    public function it_logs_critical_exceptions()
+    {
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new \Exception()));
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+
+        $logger
+            ->expects($this->once())
+            ->method('critical');
+
+        $app = new ExceptionConverter($kernel, $logger);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'json');
+
+        $app->handle($request);
     }
 }
