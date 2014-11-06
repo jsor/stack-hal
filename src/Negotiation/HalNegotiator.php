@@ -6,8 +6,18 @@ use Negotiation\FormatNegotiator;
 
 class HalNegotiator extends FormatNegotiator
 {
-    protected $formats = array(
-        'json' => ['application/hal+json', 'application/json', 'application/x-json'],
-        'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
-    );
+    public function __construct()
+    {
+        $this->registerFormat(
+            'json',
+            ['application/hal+json', 'application/json', 'application/x-json'],
+            true
+        );
+
+        $this->registerFormat(
+            'xml',
+            ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
+            true
+        );
+    }
 }

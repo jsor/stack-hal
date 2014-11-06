@@ -27,9 +27,9 @@ class HalNegotiatorTest extends \PHPUnit_Framework_TestCase
             array('application/xml;q=0.9,*/*;q=0.8', 'xml'),
             array('application/x-xml;q=0.9,*/*;q=0.8', 'xml'),
 
-            array('text/html, application/json;q=0.8, text/csv;q=0.7', null),
-            array('text/html', null),
-            array('text/*, text/html, text/html;level=1, */*', null),
+            array('text/html, application/json;q=0.8, text/csv;q=0.7', 'html'),
+            array('text/html', 'html'),
+            array('text/*, text/html, text/html;level=1, */*', 'html'),
             array('text/html; q=0.0', null),
         );
     }
