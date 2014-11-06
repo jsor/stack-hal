@@ -35,9 +35,9 @@ class RequestFormatValidator implements HttpKernelInterface
             'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
         ];
 
-        $format = $request->attributes->get('_format'); // Might be set via Negotiation middleware
+        $format = $request->getRequestFormat(null);
 
-        if (isset($acceptableFormats[$format])) {
+        if ($format && isset($acceptableFormats[$format])) {
             return;
         }
 
