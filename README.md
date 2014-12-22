@@ -2,7 +2,7 @@ Stack/Hal
 =========
 
 [![Build Status](https://secure.travis-ci.org/jsor/stack-hal.svg?branch=master)](http://travis-ci.org/jsor/stack-hal)
-[![Coverage Status](https://img.shields.io/coveralls/jsor/stack-hal.svg)](https://coveralls.io/r/jsor/stack-hal)
+[![Coverage Status](https://img.shields.io/coveralls/jsor/stack-hal.svg?style=flat)](https://coveralls.io/r/jsor/stack-hal)
 
 [Stack](http://stackphp.com) middlewares and utilities for working with the
 [Hypertext Application Language](http://tools.ietf.org/html/draft-kelly-json-hal-06)
