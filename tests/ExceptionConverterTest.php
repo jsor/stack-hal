@@ -294,6 +294,45 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_rethrows_exception_for_default_request_format()
+    {
+        $this->setExpectedException('\Exception', 'Error');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new \Exception('Error')));
+
+        $app = new ExceptionConverter($kernel);
+
+        $request = new Request();
+
+        $app->handle($request);
+    }
+
+    /** @test */
+    public function it_rethrows_exception_for_invalid_request_format()
+    {
+        $this->setExpectedException('\Exception', 'Error');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->will($this->throwException(new \Exception('Error')));
+
+        $app = new ExceptionConverter($kernel);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'foo');
+
+        $app->handle($request);
+    }
+
+    /** @test */
     public function it_logs_exceptions()
     {
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
