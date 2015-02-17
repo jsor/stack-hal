@@ -12,19 +12,19 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('gender', 'choice', array(
-                'choices' => array('m' => 'Male', 'f' => 'Female'),
+            ->add('gender', 'choice', [
+                'choices' => ['m' => 'Male', 'f' => 'Female'],
                 'mapped' => false,
-                'constraints' => array(
+                'constraints' => [
                     new NotBlank()
-                ),
-            ))
-            ->add('name', new NameType(), array(
+                ],
+            ])
+            ->add('name', new NameType(), [
                 'mapped' => false,
-                'constraints' => array(
+                'constraints' => [
                     new Valid()
-                )
-            ));
+                ]
+            ]);
     }
 
     public function getName()

@@ -28,8 +28,8 @@ class ResponseConversionListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::VIEW => 'onKernelView'
-        );
+        ];
     }
 }

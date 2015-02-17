@@ -13,15 +13,15 @@ class ValidationErrorExceptionTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_exception_to_json()
     {
-        $constraint = new Collection(array(
+        $constraint = new Collection([
             'email' => new Email(),
             'name' => new NotBlank(),
             'birthday' => new Date(),
-        ));
+        ]);
 
-        $data = array(
+        $data = [
             'additional' => 'foo'
-        );
+        ];
 
         $builder = new ValidatorBuilder();
 

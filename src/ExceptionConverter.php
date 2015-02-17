@@ -96,7 +96,7 @@ class ExceptionConverter implements HttpKernelInterface
         );
 
         $isCritical = !$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500;
-        $context = array('exception' => $exception);
+        $context = ['exception' => $exception];
 
         if ($isCritical) {
             $logger->critical($message, $context);

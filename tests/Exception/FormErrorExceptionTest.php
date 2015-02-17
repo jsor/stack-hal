@@ -19,9 +19,9 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $form = $formFactory->create(new FormType());
 
-        $data = array(
+        $data = [
             'additional' => 'foo'
-        );
+        ];
 
         $form->submit($data);
 

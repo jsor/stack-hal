@@ -3,7 +3,6 @@
 namespace Jsor\Stack\Hal\EventListener;
 
 use Jsor\Stack\Hal\ExceptionConverter;
-use Jsor\Stack\Hal\Response\VndErrorResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,8 +45,8 @@ class ExceptionConversionListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::EXCEPTION => 'onKernelException',
-        );
+        ];
     }
 }

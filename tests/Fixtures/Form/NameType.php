@@ -12,20 +12,20 @@ class NameType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('first_name', 'text', array(
+            ->add('first_name', 'text', [
                 'mapped' => false,
-                'constraints' => array(
+                'constraints' => [
                     new NotBlank(),
-                    new Length(array('min' => 4)),
-                ),
-            ))
-            ->add('last_name', 'text', array(
+                    new Length(['min' => 4]),
+                ],
+            ])
+            ->add('last_name', 'text', [
                 'mapped' => false,
-                'constraints' => array(
+                'constraints' => [
                     new NotBlank(),
-                    new Length(array('min' => 4)),
-                ),
-            ));
+                    new Length(['min' => 4]),
+                ],
+            ]);
     }
 
     public function getName()

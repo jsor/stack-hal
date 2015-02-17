@@ -26,9 +26,9 @@ class FormErrorException extends BadRequestHttpException implements HalException
 
     public function getHal()
     {
-        $data = array(
+        $data = [
             'message' => $this->getMessage()
-        );
+        ];
 
         if ($this->logref) {
             $data['@logref'] = $this->logref;
@@ -45,9 +45,9 @@ class FormErrorException extends BadRequestHttpException implements HalException
     {
         /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
-            $data = array(
+            $data = [
                 'message' => $error->getMessage()
-            );
+            ];
 
             $path = rtrim($path, '/');
 

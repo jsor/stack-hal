@@ -12,7 +12,7 @@ class HalResponse extends Response
     protected $requestFormat;
     protected $prettyPrint;
 
-    public function __construct(Hal $hal, $status = 200, $headers = array(), $prettyPrint = true)
+    public function __construct(Hal $hal, $status = 200, $headers = [], $prettyPrint = true)
     {
         parent::__construct(null, $status, $headers);
 
@@ -23,7 +23,7 @@ class HalResponse extends Response
         $this->headers->set('Content-Type', 'application/hal+json');
     }
 
-    public static function create($hal = null, $status = 200, $headers = array(), $prettyPrint = true)
+    public static function create($hal = null, $status = 200, $headers = [], $prettyPrint = true)
     {
         return new static($hal, $status, $headers, $prettyPrint);
     }

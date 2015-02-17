@@ -11,14 +11,14 @@ class FormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('person', new PersonType(), array(
+            ->add('person', new PersonType(), [
                 'mapped' => false
-            ))
-            ->add('newsletter', 'checkbox', array(
-                'constraints' => array(
+            ])
+            ->add('newsletter', 'checkbox', [
+                'constraints' => [
                     new NotBlank()
-                ),
-            ));
+                ],
+            ]);
     }
 
     public function getName()
