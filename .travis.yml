@@ -18,7 +18,7 @@ script:
   - phpunit -v --coverage-text --coverage-clover ./build/logs/clover.xml
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - if [ "`php -m | grep -i xdebug`" ]; php vendor/bin/coveralls -v; fi
 
 matrix:
   allow_failures:
