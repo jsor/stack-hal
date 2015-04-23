@@ -43,16 +43,22 @@ class FormErrorException extends BadRequestHttpException implements HalException
 
     private function appendErrors(Hal $hal, FormInterface $form, $path)
     {
+        $path = rtrim($path, '/');
+
         /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
             $data = [
                 'message' => $error->getMessage()
             ];
 
-            $path = rtrim($path, '/');
+            $currPath = $path;
 
-            if ($path) {
-                $data['path'] = $path;
+            if ($origin = $error->getOrigin()) {
+                $currPath .= '/' . $origin->getConfig()->getName();
+            }
+
+            if ($currPath) {
+                $data['path'] = $currPath;
             }
 
             $hal->addResource('errors', new Hal(null, $data));

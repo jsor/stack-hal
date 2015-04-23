@@ -20,6 +20,16 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
         $form = $formFactory->create(new FormType());
 
         $data = [
+            'family' => [
+                [
+                    'name' => [
+                        'first_name' => 'Jan',
+                    ],
+                    'emails' => [
+                        'foo'
+                    ]
+                ]
+            ],
             'additional' => 'foo'
         ];
 
@@ -41,6 +51,10 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
                                         'message' => 'This form should not contain extra fields.',
                                     ],
                                     [
+                                        'message' => 'This collection should contain 1 element or more.',
+                                        'path' => '/friends',
+                                    ],
+                                    [
                                         'message' => 'This value should not be blank.',
                                         'path' => '/person/gender',
                                     ],
@@ -51,6 +65,18 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
                                     [
                                         'message' => 'This value should not be blank.',
                                         'path' => '/person/name/last_name',
+                                    ],
+                                    [
+                                        'message' => 'This value should not be blank.',
+                                        'path' => '/family/0/gender',
+                                    ],
+                                    [
+                                        'message' => 'This value should not be blank.',
+                                        'path' => '/family/0/name/last_name',
+                                    ],
+                                    [
+                                        'message' => 'This value is not a valid email address.',
+                                        'path' => '/family/0/emails/0',
                                     ],
                                     [
                                         'message' => 'This value should not be blank.',

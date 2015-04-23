@@ -4,6 +4,7 @@ namespace Jsor\Stack\Hal\Fixtures\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
@@ -24,6 +25,15 @@ class PersonType extends AbstractType
                 'constraints' => [
                     new Valid()
                 ]
+            ])
+            ->add('emails', 'collection', [
+                'type'      => 'email',
+                'allow_add' => true,
+                'options'  => [
+                    'constraints' => [
+                        new Email()
+                    ],
+                ],
             ]);
     }
 
