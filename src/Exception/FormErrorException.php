@@ -52,8 +52,9 @@ class FormErrorException extends BadRequestHttpException implements HalException
             ];
 
             $currPath = $path;
+            $origin   = $error->getOrigin();
 
-            if ($origin = $error->getOrigin()) {
+            if ($origin) {
                 $currPath .= '/' . $origin->getConfig()->getName();
             }
 

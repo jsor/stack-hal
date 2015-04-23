@@ -24,9 +24,6 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
                 [
                     'name' => [
                         'first_name' => 'Jan',
-                    ],
-                    'emails' => [
-                        'foo'
                     ]
                 ]
             ],
@@ -73,10 +70,6 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
                                     [
                                         'message' => 'This value should not be blank.',
                                         'path' => '/family/0/name/last_name',
-                                    ],
-                                    [
-                                        'message' => 'This value is not a valid email address.',
-                                        'path' => '/family/0/emails/0',
                                     ],
                                     [
                                         'message' => 'This value should not be blank.',

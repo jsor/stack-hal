@@ -25,15 +25,6 @@ class PersonType extends AbstractType
                 'constraints' => [
                     new Valid()
                 ]
-            ])
-            ->add('emails', 'collection', [
-                'type'      => 'email',
-                'allow_add' => true,
-                'options'  => [
-                    'constraints' => [
-                        new Email()
-                    ],
-                ],
             ]);
     }
 
