@@ -46,6 +46,7 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
                                 [
                                     [
                                         'message' => 'This form should not contain extra fields.',
+                                        'path' => '/',
                                     ],
                                     [
                                         'message' => 'This collection should contain 1 element or more.',

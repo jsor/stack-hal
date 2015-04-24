@@ -36,14 +36,14 @@ class FormErrorException extends BadRequestHttpException implements HalException
 
         $hal = new Hal(null, $data);
 
-        $this->appendErrors($hal, $this->form, '');
+        $this->appendErrors($hal, $this->form);
 
         return $hal;
     }
 
-    private function appendErrors(Hal $hal, FormInterface $form, $path)
+    private function appendErrors(Hal $hal, FormInterface $form)
     {
-        $path = rtrim($path, '/');
+        $formPath = null;
 
         /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
@@ -51,11 +51,16 @@ class FormErrorException extends BadRequestHttpException implements HalException
                 'message' => $error->getMessage()
             ];
 
-            $currPath = $path;
-            $origin   = $error->getOrigin();
+            $origin = $error->getOrigin();
 
             if ($origin) {
-                $currPath .= '/' . $origin->getConfig()->getName();
+                $currPath = $this->getPath($origin);
+            } else {
+                if (null === $formPath) {
+                    $formPath = $this->getPath($form);
+                }
+
+                $currPath = $formPath;
             }
 
             if ($currPath) {
@@ -66,7 +71,24 @@ class FormErrorException extends BadRequestHttpException implements HalException
         }
 
         foreach ($form->all() as $child) {
-            $this->appendErrors($hal, $child, $path . '/' . $child->getName());
+            $this->appendErrors($hal, $child);
         }
+    }
+
+    private function getPath(FormInterface $form)
+    {
+        $path = [];
+
+        $parent = $form;
+
+        while ($parent) {
+            array_unshift($path, $parent->getName());
+            $parent = $parent->getParent();
+        }
+
+        // Remove root form
+        array_shift($path);
+
+        return '/' . implode('/', $path);
     }
 }
