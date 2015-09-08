@@ -3,6 +3,8 @@
 namespace Jsor\Stack\Hal;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -10,13 +12,16 @@ class RequestFormatValidator implements HttpKernelInterface
 {
     private $app;
     private $acceptableFormats;
+    private $exclude;
 
     public function __construct(
         HttpKernelInterface $app,
-        array $acceptableFormats = null
+        array $acceptableFormats = null,
+        $exclude = null
     ) {
         $this->app = $app;
         $this->acceptableFormats = $acceptableFormats;
+        $this->exclude = $exclude;
     }
 
     public function handle(
@@ -24,7 +29,11 @@ class RequestFormatValidator implements HttpKernelInterface
         $type = HttpKernelInterface::MASTER_REQUEST,
         $catch = true
     ) {
-        $response = static::intercept($request, $this->acceptableFormats);
+        $response = static::intercept(
+            $request,
+            $this->acceptableFormats,
+            $this->exclude
+        );
 
         if ($response instanceof Response) {
             return $response;
@@ -35,7 +44,8 @@ class RequestFormatValidator implements HttpKernelInterface
 
     public static function intercept(
         Request $request,
-        array $acceptableFormats = null
+        array $acceptableFormats = null,
+        $exclude = null
     ) {
         $acceptableFormats = $acceptableFormats ?: [
             'json' => ['application/hal+json', 'application/json', 'application/x-json'],
@@ -45,6 +55,10 @@ class RequestFormatValidator implements HttpKernelInterface
         $format = $request->getRequestFormat(null);
 
         if ($format && isset($acceptableFormats[$format])) {
+            return;
+        }
+
+        if (static::isExcluded($request, $exclude)) {
             return;
         }
 
@@ -93,6 +107,57 @@ class RequestFormatValidator implements HttpKernelInterface
             [
                 'Content-Type' => 'text/plain'
             ]
+        );
+    }
+
+    protected static function isExcluded(Request $request, $exclude)
+    {
+        if (!$exclude) {
+            return false;
+        }
+
+        if (!is_array($exclude) || 0 !== key($exclude)) {
+            $exclude = [$exclude];
+        }
+
+        $requestMatchers = array_map([__CLASS__, 'createRequestMatcher'], $exclude);
+
+        /** @var RequestMatcherInterface $requestMatcher */
+        foreach ($requestMatchers as $requestMatcher) {
+            if ($requestMatcher->matches($request)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected static function createRequestMatcher($arguments)
+    {
+        if ($arguments instanceof RequestMatcherInterface) {
+            return $arguments;
+        }
+
+        if (!is_array($arguments)) {
+            return new RequestMatcher($arguments);
+        }
+
+        $arguments = array_replace([
+            'path' => null,
+            'host' => null,
+            'methods' => null,
+            'ips' => null,
+            'attributes' => [],
+            'schemes' => null
+        ], $arguments);
+
+        return new RequestMatcher(
+            $arguments['path'],
+            $arguments['host'],
+            $arguments['methods'],
+            $arguments['ips'],
+            $arguments['attributes'],
+            $arguments['schemes']
         );
     }
 }
