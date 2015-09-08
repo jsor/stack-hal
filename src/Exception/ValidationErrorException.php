@@ -11,12 +11,13 @@ class ValidationErrorException extends BadRequestHttpException implements HalExc
     private $violationList;
     private $logref;
 
-    public function __construct(ConstraintViolationListInterface $violationList,
-                                $message = null,
-                                $logref = null,
-                                \Exception $previous = null,
-                                $code = 0)
-    {
+    public function __construct(
+        ConstraintViolationListInterface $violationList,
+        $message = null,
+        $logref = null,
+        \Exception $previous = null,
+        $code = 0
+    ) {
         parent::__construct($message, $previous, $code);
 
         $this->violationList = $violationList;

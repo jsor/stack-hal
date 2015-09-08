@@ -15,8 +15,12 @@ class CreatedResponse extends HalResponse
         }
     }
 
-    public static function create($hal = null, $status = 201, $headers = [], $prettyPrint = true)
-    {
+    public static function create(
+        $hal = null,
+        $status = 201,
+        $headers = [],
+        $prettyPrint = true
+    ) {
         return new static($hal, $headers, $prettyPrint);
     }
 }

@@ -21,6 +21,11 @@ class RequestFormatNegotiator extends Negotiation
             $formatNegotiator = new HalNegotiator();
         }
 
-        parent::__construct($app, $formatNegotiator, $languageNegotiator, $decoderProvider);
+        parent::__construct(
+            $app,
+            $formatNegotiator,
+            $languageNegotiator,
+            $decoderProvider
+        );
     }
 }

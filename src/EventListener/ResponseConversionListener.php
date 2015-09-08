@@ -22,7 +22,9 @@ class ResponseConversionListener implements EventSubscriberInterface
         $hal = $event->getControllerResult();
 
         if ($hal instanceof Hal) {
-            $event->setResponse(new HalResponse($hal, 200, [], $this->prettyPrint));
+            $event->setResponse(
+                new HalResponse($hal, 200, [], $this->prettyPrint)
+            );
         }
     }
 

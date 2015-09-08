@@ -22,13 +22,14 @@ class ExceptionConverter implements HttpKernelInterface
     private $passThroughCatch;
     private $formats;
 
-    public function __construct(HttpKernelInterface $app,
-                                LoggerInterface $logger = null,
-                                $prettyPrint = true,
-                                $debug = false,
-                                $passThroughCatch = false,
-                                array $formats = null)
-    {
+    public function __construct(
+        HttpKernelInterface $app,
+        LoggerInterface $logger = null,
+        $prettyPrint = true,
+        $debug = false,
+        $passThroughCatch = false,
+        array $formats = null
+    ) {
         $this->app = $app;
         $this->logger = $logger;
         $this->prettyPrint = (bool) $prettyPrint;
@@ -37,10 +38,17 @@ class ExceptionConverter implements HttpKernelInterface
         $this->formats = $formats;
     }
 
-    public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
-    {
+    public function handle(
+        Request $request,
+        $type = HttpKernelInterface::MASTER_REQUEST,
+        $catch = true
+    ) {
         try {
-            return $this->app->handle($request, $type, $this->passThroughCatch ? $catch : false);
+            return $this->app->handle(
+                $request,
+                $type,
+                $this->passThroughCatch ? $catch : false
+            );
         } catch (\Exception $exception) {
             if (!$catch) {
                 throw $exception;
@@ -63,13 +71,14 @@ class ExceptionConverter implements HttpKernelInterface
         }
     }
 
-    public static function handleException(\Exception $exception,
-                                           Request $request,
-                                           LoggerInterface $logger = null,
-                                           $prettyPrint = true,
-                                           $debug = false,
-                                           array $formats = null)
-    {
+    public static function handleException(
+        \Exception $exception,
+        Request $request,
+        LoggerInterface $logger = null,
+        $prettyPrint = true,
+        $debug = false,
+        array $formats = null
+    ) {
         if (null !== $logger) {
             self::logException($logger, $exception);
         }
@@ -82,11 +91,17 @@ class ExceptionConverter implements HttpKernelInterface
             return;
         }
 
-        return VndErrorResponse::fromException($exception, $prettyPrint, $debug);
+        return VndErrorResponse::fromException(
+            $exception,
+            $prettyPrint,
+            $debug
+        );
     }
 
-    public static function logException(LoggerInterface $logger, \Exception $exception)
-    {
+    public static function logException(
+        LoggerInterface $logger,
+        \Exception $exception
+    ) {
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
             get_class($exception),
@@ -95,7 +110,8 @@ class ExceptionConverter implements HttpKernelInterface
             $exception->getLine()
         );
 
-        $isCritical = !$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500;
+        $isCritical = !$exception instanceof HttpExceptionInterface ||
+                      $exception->getStatusCode() >= 500;
         $context = ['exception' => $exception];
 
         if ($isCritical) {

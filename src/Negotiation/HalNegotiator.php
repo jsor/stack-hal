@@ -10,13 +10,22 @@ class HalNegotiator extends FormatNegotiator
     {
         $this->registerFormat(
             'json',
-            ['application/hal+json', 'application/json', 'application/x-json'],
+            [
+                'application/hal+json',
+                'application/json',
+                'application/x-json'
+            ],
             true
         );
 
         $this->registerFormat(
             'xml',
-            ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
+            [
+                'application/hal+xml',
+                'text/xml',
+                'application/xml',
+                'application/x-xml'
+            ],
             true
         );
     }

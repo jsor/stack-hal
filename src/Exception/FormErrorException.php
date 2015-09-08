@@ -12,12 +12,13 @@ class FormErrorException extends BadRequestHttpException implements HalException
     private $form;
     private $logref;
 
-    public function __construct(FormInterface $form,
-                                $message = null,
-                                $logref = null,
-                                \Exception $previous = null,
-                                $code = 0)
-    {
+    public function __construct(
+        FormInterface $form,
+        $message = null,
+        $logref = null,
+        \Exception $previous = null,
+        $code = 0
+    ) {
         parent::__construct($message, $previous, $code);
 
         $this->form = $form;

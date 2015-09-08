@@ -11,14 +11,19 @@ class RequestFormatValidator implements HttpKernelInterface
     private $app;
     private $acceptableFormats;
 
-    public function __construct(HttpKernelInterface $app, array $acceptableFormats = null)
-    {
+    public function __construct(
+        HttpKernelInterface $app,
+        array $acceptableFormats = null
+    ) {
         $this->app = $app;
         $this->acceptableFormats = $acceptableFormats;
     }
 
-    public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
-    {
+    public function handle(
+        Request $request,
+        $type = HttpKernelInterface::MASTER_REQUEST,
+        $catch = true
+    ) {
         $response = static::intercept($request, $this->acceptableFormats);
 
         if ($response instanceof Response) {
@@ -28,8 +33,10 @@ class RequestFormatValidator implements HttpKernelInterface
         return $this->app->handle($request, $type, $catch);
     }
 
-    public static function intercept(Request $request, array $acceptableFormats = null)
-    {
+    public static function intercept(
+        Request $request,
+        array $acceptableFormats = null
+    ) {
         $acceptableFormats = $acceptableFormats ?: [
             'json' => ['application/hal+json', 'application/json', 'application/x-json'],
             'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
@@ -41,9 +48,13 @@ class RequestFormatValidator implements HttpKernelInterface
             return;
         }
 
-        $acceptableMimeTypes = call_user_func_array('array_merge', array_values($acceptableFormats));
+        $acceptableMimeTypes = call_user_func_array(
+            'array_merge',
+            array_values($acceptableFormats)
+        );
 
-        $mimeType = $request->attributes->get('_mime_type'); // Might be set via Negotiation middleware
+        // Might be set via Negotiation middleware
+        $mimeType = $request->attributes->get('_mime_type');
 
         if ($mimeType) {
             return new Response(
