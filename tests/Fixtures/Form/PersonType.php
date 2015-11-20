@@ -22,9 +22,6 @@ class PersonType extends AbstractType
             ])
             ->add('name', new NameType(), [
                 'mapped' => false,
-                'constraints' => [
-                    new Valid()
-                ]
             ]);
     }
 
