@@ -35,35 +35,25 @@ class VndErrorResponse extends HalResponse
         $prettyPrint = true,
         $debug = false
     ) {
-        $statusCode = 500;
-        $headers = [];
-        $message = null;
-
-        if ($exception instanceof HttpExceptionInterface) {
-            $statusCode = $exception->getStatusCode();
-            $headers = $exception->getHeaders();
-            $message = $exception->getMessage();
-        } elseif ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
-            $statusCode = 403;
-            $message = $exception->getMessage();
-        } elseif ($debug) {
-            // Expose exception message only in debug mode
-            $message = $exception->getMessage();
-        }
+        $statusCode = self::extractStatus($exception);
+        $headers    = self::extractHeaders($exception);
+        $message    = self::extractMessage($exception, $debug);
 
         if ($exception instanceof HalException) {
             $hal = $exception->getHal();
-        } elseif ($message) {
-            $hal = new Hal(null, ['message' => $exception->getMessage()]);
         } else {
-            $hal = new Hal();
+            $hal = new Hal(null, ['message' => $message]);
         }
 
         $data = $hal->getData();
 
-        if ((!isset($data['message']) || '' === $data['message']) &&
-            isset(Response::$statusTexts[$statusCode])) {
-            $data['message'] = Response::$statusTexts[$statusCode];
+        if (!isset($data['message']) || '' === $data['message']) {
+            if ($message) {
+                $data['message'] = $message;
+            } elseif (isset(Response::$statusTexts[$statusCode])) {
+                $data['message'] = Response::$statusTexts[$statusCode];
+            }
+
             $hal->setData($data);
         }
 
@@ -79,5 +69,45 @@ class VndErrorResponse extends HalResponse
         }
 
         return $this;
+    }
+
+    private static function extractStatus(\Exception $exception)
+    {
+        if ($exception instanceof HttpExceptionInterface) {
+            return $exception->getStatusCode();
+        }
+
+        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+            return 403;
+        }
+
+        return 500;
+    }
+
+    private static function extractHeaders(\Exception $exception)
+    {
+        if ($exception instanceof HttpExceptionInterface) {
+            return $exception->getHeaders();
+        }
+
+        return [];
+    }
+
+    private static function extractMessage(\Exception $exception, $debug)
+    {
+        if ($exception instanceof HttpExceptionInterface) {
+            return $exception->getMessage();
+        }
+
+        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+            return $exception->getMessage();
+        }
+
+        if ($debug) {
+            // Expose exception message only in debug mode
+            return $exception->getMessage();
+        }
+
+        return null;
     }
 }

@@ -60,4 +60,40 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
             $response->getContent()
         );
     }
+
+    /** @test */
+    public function it_hides_message_from_unknown_exceptions_by_default()
+    {
+        $exception = new \Exception('Unknown Error');
+
+        $response = VndErrorResponse::fromException($exception);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    'message' => 'Internal Server Error'
+                ]
+            ),
+            $response->getContent()
+        );
+    }
+
+    /** @test */
+    public function it_exposes_message_from_unknown_exceptions_in_debug_mode()
+    {
+        $exception = new \Exception('Unknown Error');
+
+        $response = VndErrorResponse::fromException($exception, true, true);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    'message' => 'Unknown Error'
+                ]
+            ),
+            $response->getContent()
+        );
+    }
 }
