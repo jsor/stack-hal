@@ -13,14 +13,14 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('gender', 'choice', [
+            ->add('gender', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', [
                 'choices' => ['m' => 'Male', 'f' => 'Female'],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank()
                 ],
             ])
-            ->add('name', new NameType(), [
+            ->add('name', 'Jsor\Stack\Hal\Fixtures\Form\NameType', [
                 'mapped' => false,
             ]);
     }

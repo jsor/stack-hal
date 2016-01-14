@@ -2,7 +2,6 @@
 
 namespace Jsor\Stack\Hal\Exception;
 
-use Jsor\Stack\Hal\Fixtures\Form\FormType;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Validator\Validation;
@@ -17,7 +16,7 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
             ->addExtension(new ValidatorExtension($validator))
             ->getFormFactory();
 
-        $form = $formFactory->create(new FormType());
+        $form = $formFactory->create('Jsor\Stack\Hal\Fixtures\Form\FormType');
 
         $data = [
             'family' => [

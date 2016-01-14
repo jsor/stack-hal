@@ -25,7 +25,7 @@ class ValidationErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $builder = new ValidatorBuilder();
 
-        $violationList = $builder->getValidator()->validateValue($data, $constraint);
+        $violationList = $builder->getValidator()->validate($data, $constraint);
 
         $exception = new ValidationErrorException($violationList, 'Validation failed', 100);
 

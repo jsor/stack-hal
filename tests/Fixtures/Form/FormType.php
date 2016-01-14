@@ -15,19 +15,19 @@ class FormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('person', new PersonType())
-            ->add('family', 'collection', [
-                'type'      => new PersonType(),
+            ->add('person', 'Jsor\Stack\Hal\Fixtures\Form\PersonType')
+            ->add('family', 'Symfony\Component\Form\Extension\Core\Type\CollectionType', [
+                'entry_type'      => 'Jsor\Stack\Hal\Fixtures\Form\PersonType',
                 'allow_add' => true
             ])
-            ->add('friends', 'collection', [
-                'type'        => new PersonType(),
+            ->add('friends', 'Symfony\Component\Form\Extension\Core\Type\CollectionType', [
+                'entry_type'  => 'Jsor\Stack\Hal\Fixtures\Form\PersonType',
                 'allow_add'   => true,
                 'constraints' => [
                     new Count(['min' => 1]),
                 ]
             ])
-            ->add('newsletter', 'checkbox', [
+            ->add('newsletter', 'Symfony\Component\Form\Extension\Core\Type\CheckboxType', [
                 'constraints' => [
                     new NotBlank()
                 ],
