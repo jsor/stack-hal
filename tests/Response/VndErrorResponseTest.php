@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal\Response;
 
 use Jsor\Stack\Hal\Exception\ErrorException;
+use Jsor\Stack\Hal\Exception\HalException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -95,5 +96,30 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
             ),
             $response->getContent()
         );
+    }
+
+    /** @test */
+    public function it_exposes_message_from_hal_exceptions_in_debug_mode()
+    {
+        $exception = new EmptyHalException('Message');
+
+        $response = VndErrorResponse::fromException($exception, true, true);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                [
+                    'message' => 'Message'
+                ]
+            ),
+            $response->getContent()
+        );
+    }
+}
+
+class EmptyHalException extends \Exception implements HalException
+{
+    public function getHal()
+    {
+        return new Hal();
     }
 }
