@@ -11,7 +11,7 @@ class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provideAcceptHeaders
      */
-    public function it_accepts_hal_headers($acceptHeader, $format)
+    public function it_accepts_hal_headers($acceptHeader, $type, $format)
     {
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
@@ -26,26 +26,29 @@ class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
 
         $app->handle($request);
 
-        $this->assertEquals($format, $request->getRequestFormat(null));
-        $this->assertEquals($format, $request->attributes->get('_format'));
+        $this->assertEquals($type, $request->attributes->get('_mime_type'), '_mime_type');
+
+        $this->assertEquals($format, $request->getRequestFormat(null), 'getRequestFormat');
+        $this->assertEquals($format, $request->attributes->get('_format'), '_format');
     }
 
     public static function provideAcceptHeaders()
     {
         return [
-            ['application/hal+json,application/json;q=0.9,*/*;q=0.8', 'json'],
-            ['application/json;q=0.9,*/*;q=0.8', 'json'],
-            ['application/x-json;q=0.9,*/*;q=0.8', 'json'],
+            ['application/hal+json,application/json;q=0.9,*/*;q=0.8', 'application/hal+json', 'json'],
+            ['application/json;q=0.9,*/*;q=0.8', 'application/json', 'json'],
+            ['application/x-json;q=0.9,*/*;q=0.8', 'application/x-json', 'json'],
 
-            ['application/hal+xml,text/xml;q=0.9,*/*;q=0.8', 'xml'],
-            ['text/xml;q=0.9,*/*;q=0.8', 'xml'],
-            ['application/xml;q=0.9,*/*;q=0.8', 'xml'],
-            ['application/x-xml;q=0.9,*/*;q=0.8', 'xml'],
+            ['application/hal+xml,text/xml;q=0.9,*/*;q=0.8', 'application/hal+xml', 'xml'],
+            ['text/xml;q=0.9,*/*;q=0.8', 'text/xml', 'xml'],
+            ['application/xml;q=0.9,*/*;q=0.8', 'application/xml', 'xml'],
+            ['application/x-xml;q=0.9,*/*;q=0.8', 'application/x-xml', 'xml'],
 
-            ['text/html, application/json;q=0.8, text/csv;q=0.7', 'html'],
-            ['text/html', 'html'],
-            ['text/*, text/html, text/html;level=1, */*', 'html'],
-            ['text/html; q=0.0', 'html'],
+            ['text/html, application/json;q=0.8, text/csv;q=0.7', 'application/json', 'json'],
+            ['text/html', null, null],
+            ['text/*, text/html, text/html;level=1, */*', 'application/hal+json', 'json'],
+            ['text/html; q=0.0', null, null],
+            [null, null, null],
         ];
     }
 }
