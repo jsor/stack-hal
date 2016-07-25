@@ -35,7 +35,9 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
 
-        $request = Request::create('/');
+        $request = Request::create('/exception', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'text/html'
+        ]);
         $request->attributes->set('_format', 'html');
 
         $response = $httpKernel->handle($request)->prepare($request);
@@ -70,7 +72,9 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
 
-        $request = Request::create('/');
+        $request = Request::create('/', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'application/json'
+        ]);
         $request->attributes->set('_format', 'json');
 
         $response = $httpKernel->handle($request)->prepare($request);
@@ -122,7 +126,9 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener($logger));
 
-        $request = Request::create('/exception');
+        $request = Request::create('/exception', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'application/json'
+        ]);
         $request->attributes->set('_format', 'json');
 
         $response = $httpKernel->handle($request)->prepare($request);

@@ -40,7 +40,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener(null, true, true));
 
-        $request = Request::create('/');
+        $request = Request::create('/', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'text/html'
+        ]);
         $request->attributes->set('_format', 'html');
 
         $response = $kernel->handle($request)->prepare($request);
@@ -79,7 +81,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
 
-        $request = Request::create('/');
+        $request = Request::create('/', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'application/json'
+        ]);
         $request->attributes->set('_format', 'json');
 
         $response = $kernel->handle($request)->prepare($request);
@@ -135,7 +139,9 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener($logger));
 
-        $request = Request::create('/exception');
+        $request = Request::create('/exception', 'GET', [], [], [], [
+            'HTTP_ACCEPT' => 'application/json'
+        ]);
         $request->attributes->set('_format', 'json');
 
         $response = $kernel->handle($request)->prepare($request);

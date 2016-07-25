@@ -47,16 +47,6 @@ class RequestFormatNegotiator implements HttpKernelInterface
 
         self::extendRequestFormats($request, $formats);
 
-        $format = $request->getRequestFormat(null);
-
-        if (null !== $format) {
-            $request->attributes->set(
-                '_mime_type',
-                $request->getMimeType($format)
-            );
-            return;
-        }
-
         if (null === $priorities) {
             $priorities = self::buildPrioritiesFromFormats($formats);
         }
@@ -70,7 +60,7 @@ class RequestFormatNegotiator implements HttpKernelInterface
         $negotiator = new Negotiator();
 
         /** @var Accept $accept */
-        $accept = $negotiator->getBest($acceptHeader, array_merge($priorities, ['*/*']));
+        $accept = $negotiator->getBest($acceptHeader, $priorities);
 
         if (!$accept) {
             return;
