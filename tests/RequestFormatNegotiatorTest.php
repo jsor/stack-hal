@@ -29,7 +29,6 @@ class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($type, $request->attributes->get('_mime_type'), '_mime_type');
 
         $this->assertEquals($format, $request->getRequestFormat(null), 'getRequestFormat');
-        $this->assertEquals($format, $request->attributes->get('_format'), '_format');
     }
 
     public static function provideAcceptHeaders()

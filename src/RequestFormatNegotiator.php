@@ -78,10 +78,7 @@ class RequestFormatNegotiator implements HttpKernelInterface
         $request->attributes->set('_mime_type', $accept->getValue());
 
         if (isset($formats[$accept->getType()])) {
-            $request->attributes->set(
-                '_format',
-                $formats[$accept->getType()]
-            );
+            $request->setRequestFormat($formats[$accept->getType()]);
         }
     }
 }
