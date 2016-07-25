@@ -14,15 +14,8 @@ class RequestFormatNegotiator implements HttpKernelInterface
     private $priorities;
 
     private static $defaultFormats = [
-        'application/hal+json' => 'json',
-        'application/hal+xml' => 'xml',
-
-        'application/json' => 'json',
-        'application/x-json' => 'json',
-
-        'text/xml' => 'xml',
-        'application/xml' => 'xml',
-        'application/x-xml' => 'xml'
+        'json' => ['application/hal+json', 'application/json', 'application/x-json'],
+        'xml'  => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
     ];
 
     public function __construct(
@@ -50,14 +43,10 @@ class RequestFormatNegotiator implements HttpKernelInterface
         array $formats = null,
         array $priorities = null
     ) {
-        if (null === $formats) {
-            $formats = self::$defaultFormats;
-        }
-
-        $formats = array_change_key_case($formats, CASE_LOWER);
+        $formats = $formats ?: self::$defaultFormats;
 
         if (null === $priorities) {
-            $priorities = array_keys($formats);
+            $priorities = self::buildPrioritiesFromFormats($formats);
         }
 
         $acceptHeader = $request->headers->get('Accept');
@@ -77,8 +66,32 @@ class RequestFormatNegotiator implements HttpKernelInterface
 
         $request->attributes->set('_mime_type', $accept->getValue());
 
-        if (isset($formats[$accept->getType()])) {
-            $request->setRequestFormat($formats[$accept->getType()]);
+        $format = self::getFormatForMimeType($formats, $accept->getType());
+
+        if ($format) {
+            $request->setRequestFormat($format);
         }
+    }
+
+    private static function buildPrioritiesFromFormats(array $formats)
+    {
+        $priorities = [];
+
+        foreach ($formats as $types) {
+            $priorities = array_merge($priorities, $types);
+        }
+
+        return $priorities;
+    }
+
+    private static function getFormatForMimeType(array $formats, $mimeType)
+    {
+        foreach ($formats as $format => $mimeTypes) {
+            if (in_array($mimeType, (array) $mimeTypes, true)) {
+                return $format;
+            }
+        }
+
+        return null;
     }
 }
