@@ -45,6 +45,18 @@ class RequestFormatNegotiator implements HttpKernelInterface
     ) {
         $formats = $formats ?: self::$defaultFormats;
 
+        self::extendRequestFormats($request, $formats);
+
+        $format = $request->getRequestFormat(null);
+
+        if (null !== $format) {
+            $request->attributes->set(
+                '_mime_type',
+                $request->getMimeType($format)
+            );
+            return;
+        }
+
         if (null === $priorities) {
             $priorities = self::buildPrioritiesFromFormats($formats);
         }
@@ -58,18 +70,36 @@ class RequestFormatNegotiator implements HttpKernelInterface
         $negotiator = new Negotiator();
 
         /** @var Accept $accept */
-        $accept = $negotiator->getBest($acceptHeader, $priorities);
+        $accept = $negotiator->getBest($acceptHeader, array_merge($priorities, ['*/*']));
 
         if (!$accept) {
             return;
         }
 
         $request->attributes->set('_mime_type', $accept->getValue());
+        $request->setRequestFormat($request->getFormat($accept->getType()));
+    }
 
-        $format = self::getFormatForMimeType($formats, $accept->getType());
+    private static function extendRequestFormats(Request $request, array $formats)
+    {
+        foreach ($formats as $format => $mimeTypes) {
+            if (method_exists(get_class($request), 'getMimeTypes')) {
+                $mimeTypes = array_merge(
+                    $mimeTypes,
+                    Request::getMimeTypes($format)
+                );
+            } elseif (null !== $request->getMimeType($format)) {
+                $class = new \ReflectionClass(get_class($request));
+                $properties = $class->getStaticProperties();
+                if (isset($properties['formats'][$format])) {
+                    $mimeTypes = array_merge(
+                        $mimeTypes,
+                        $properties['formats'][$format]
+                    );
+                }
+            }
 
-        if ($format) {
-            $request->setRequestFormat($format);
+            $request->setFormat($format, array_unique($mimeTypes));
         }
     }
 
@@ -82,16 +112,5 @@ class RequestFormatNegotiator implements HttpKernelInterface
         }
 
         return $priorities;
-    }
-
-    private static function getFormatForMimeType(array $formats, $mimeType)
-    {
-        foreach ($formats as $format => $mimeTypes) {
-            if (in_array($mimeType, (array) $mimeTypes, true)) {
-                return $format;
-            }
-        }
-
-        return null;
     }
 }

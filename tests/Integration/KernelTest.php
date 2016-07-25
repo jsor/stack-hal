@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
+use Jsor\Stack\Hal\EventListener\RequestFormatNegotiationListener;
 use Jsor\Stack\Hal\EventListener\RequestFormatValidationListener;
 use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
 use Nocarrier\Hal;
@@ -34,9 +35,10 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
+        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
-        $dispatcher->addSubscriber(new ExceptionConversionListener());
+        $dispatcher->addSubscriber(new ExceptionConversionListener(null, true, true));
 
         $request = Request::create('/');
         $request->attributes->set('_format', 'html');
@@ -45,7 +47,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(406, $response->getStatusCode());
         $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
-        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -72,6 +74,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
+        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
@@ -127,6 +130,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel->boot();
         $kernel->getContainer()->set('http_kernel', $httpKernel);
 
+        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener($logger));

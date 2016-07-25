@@ -70,11 +70,17 @@ class RequestFormatValidator implements HttpKernelInterface
         // Might be set via Negotiation middleware
         $mimeType = $request->attributes->get('_mime_type');
 
+        if (!$mimeType) {
+            $mimeType = implode(', ', $request->getAcceptableContentTypes());
+        }
+
         if ($mimeType) {
             return new Response(
                 sprintf(
-                    'Mime type "%s" is not supported. Supported mime types are: %s.',
+                    'Mime type%s "%s" %s not supported. Supported mime types are: %s.',
+                    false !== strpos($mimeType, ',') ? 's' : '',
                     $mimeType,
+                    false !== strpos($mimeType, ',') ? 'are' : 'is',
                     implode(', ', $acceptableMimeTypes)
                 ),
                 406,

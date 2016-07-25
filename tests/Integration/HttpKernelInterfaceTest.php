@@ -3,6 +3,7 @@
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\ExceptionConverter;
+use Jsor\Stack\Hal\RequestFormatNegotiator;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Jsor\Stack\Hal\Response\HalResponse;
 use Nocarrier\Hal;
@@ -20,7 +21,8 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('handle');
 
-        $app = new RequestFormatValidator($kernel);
+        $app = new RequestFormatNegotiator($kernel);
+        $app = new RequestFormatValidator($app);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -45,7 +47,8 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->returnValue($hal));
 
-        $app = new RequestFormatValidator($kernel);
+        $app = new RequestFormatNegotiator($kernel);
+        $app = new RequestFormatValidator($app);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -81,7 +84,8 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->will($this->returnValue($hal));
 
-        $app = new RequestFormatValidator($kernel);
+        $app = new RequestFormatNegotiator($kernel);
+        $app = new RequestFormatValidator($app);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -113,7 +117,8 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('error');
 
-        $app = new RequestFormatValidator($kernel);
+        $app = new RequestFormatNegotiator($kernel);
+        $app = new RequestFormatValidator($app);
         $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();
@@ -149,7 +154,8 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('error');
 
-        $app = new RequestFormatValidator($kernel);
+        $app = new RequestFormatNegotiator($kernel);
+        $app = new RequestFormatValidator($app);
         $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();
