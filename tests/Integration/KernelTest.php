@@ -18,7 +18,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_intercepts_not_acceptable_format()
     {
-        $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
+        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
 
         $resolver
             ->expects($this->never())
@@ -55,7 +55,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_response_to_json()
     {
-        $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
+        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
 
         $resolver
             ->expects($this->once())
@@ -107,7 +107,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_exception_to_json()
     {
-        $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
+        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
 
         $resolver
             ->expects($this->once())
@@ -121,7 +121,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->method('getArguments')
             ->will($this->returnValue([]));
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
 
         $logger
             ->expects($this->once())

@@ -13,7 +13,7 @@ class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_accepts_hal_headers($acceptHeader, $type, $format)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
 
         $kernel
             ->expects($this->once())
