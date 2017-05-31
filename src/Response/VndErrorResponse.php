@@ -99,13 +99,13 @@ class VndErrorResponse extends HalResponse
             return $exception->getMessage();
         }
 
-        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
-            return $exception->getMessage();
-        }
-
         if ($debug) {
             // Expose exception message only in debug mode
             return $exception->getMessage();
+        }
+
+        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+            return 'Access Denied';
         }
 
         return null;

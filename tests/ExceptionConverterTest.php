@@ -101,7 +101,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new AccessDeniedException('Forbidden')));
+            ->will($this->throwException(new AccessDeniedException('Hidden')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -114,7 +114,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertJsonStringEqualsJsonString(
             json_encode(
                 [
-                    'message' => 'Forbidden',
+                    'message' => 'Access Denied',
                 ]
             ),
             $response->getContent()
@@ -201,7 +201,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new AccessDeniedException('Forbidden')));
+            ->will($this->throwException(new AccessDeniedException('Hidden')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -212,7 +212,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(403, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
-            '<resource><message>Forbidden</message></resource>',
+            '<resource><message>Access Denied</message></resource>',
             $response->getContent()
         );
     }
