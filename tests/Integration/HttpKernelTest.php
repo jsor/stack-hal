@@ -10,25 +10,14 @@ use Nocarrier\Hal;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernel;
 
 class HttpKernelTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
     public function it_intercepts_not_acceptable_format()
     {
-        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
-
-        $resolver
-            ->expects($this->never())
-            ->method('getController');
-
-        $resolver
-            ->expects($this->never())
-            ->method('getArguments');
-
         $dispatcher = new EventDispatcher();
-        $httpKernel = new HttpKernel($dispatcher, $resolver);
+        $httpKernel = new TestHttpKernel($dispatcher);
 
         $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
@@ -50,22 +39,10 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_response_to_json()
     {
-        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
-
-        $resolver
-            ->expects($this->once())
-            ->method('getController')
-            ->will($this->returnValue(function () {
-                return new Hal('/');
-            }));
-
-        $resolver
-            ->expects($this->once())
-            ->method('getArguments')
-            ->will($this->returnValue([]));
-
         $dispatcher = new EventDispatcher();
-        $httpKernel = new HttpKernel($dispatcher, $resolver);
+        $httpKernel = new TestHttpKernel($dispatcher, function () {
+            return new Hal('/');
+        });
 
         $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
@@ -98,20 +75,6 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_exception_to_json()
     {
-        $resolver = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface')->getMock();
-
-        $resolver
-            ->expects($this->once())
-            ->method('getController')
-            ->will($this->returnValue(function () {
-                throw new NotFoundHttpException();
-            }));
-
-        $resolver
-            ->expects($this->once())
-            ->method('getArguments')
-            ->will($this->returnValue([]));
-
         $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
 
         $logger
@@ -119,7 +82,9 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
             ->method('error');
 
         $dispatcher = new EventDispatcher();
-        $httpKernel = new HttpKernel($dispatcher, $resolver);
+        $httpKernel = new TestHttpKernel($dispatcher, function () {
+            throw new NotFoundHttpException();
+        });
 
         $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
