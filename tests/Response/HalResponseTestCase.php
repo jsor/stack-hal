@@ -14,7 +14,7 @@ trait HalResponseTestCase
         $response->setContent(new Hal(null, ['message' => 'test']));
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'test'
                 ]
@@ -48,12 +48,12 @@ trait HalResponseTestCase
     {
         $response = $this->provideResponse(new Hal(null, ['message' => 'test']));
 
-        ob_start();
+        \ob_start();
         $response->sendContent();
-        $string = ob_get_clean();
+        $string = \ob_get_clean();
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'test'
                 ]

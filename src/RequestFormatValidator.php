@@ -62,26 +62,26 @@ class RequestFormatValidator implements HttpKernelInterface
             return;
         }
 
-        $acceptableMimeTypes = call_user_func_array(
+        $acceptableMimeTypes = \call_user_func_array(
             'array_merge',
-            array_values($acceptableFormats)
+            \array_values($acceptableFormats)
         );
 
         // Might be set via Negotiation middleware
         $mimeType = $request->attributes->get('_mime_type');
 
         if (!$mimeType) {
-            $mimeType = implode(', ', $request->getAcceptableContentTypes());
+            $mimeType = \implode(', ', $request->getAcceptableContentTypes());
         }
 
         if ($mimeType) {
             return new Response(
-                sprintf(
+                \sprintf(
                     'Mime type%s "%s" %s not supported. Supported mime types are: %s.',
-                    false !== strpos($mimeType, ',') ? 's' : '',
+                    false !== \strpos($mimeType, ',') ? 's' : '',
                     $mimeType,
-                    false !== strpos($mimeType, ',') ? 'are' : 'is',
-                    implode(', ', $acceptableMimeTypes)
+                    false !== \strpos($mimeType, ',') ? 'are' : 'is',
+                    \implode(', ', $acceptableMimeTypes)
                 ),
                 406,
                 [
@@ -92,9 +92,9 @@ class RequestFormatValidator implements HttpKernelInterface
 
         if (!$format) {
             return new Response(
-                sprintf(
+                \sprintf(
                     'Could not detect supported mime type. Supported mime types are: %s.',
-                    implode(', ', $acceptableMimeTypes)
+                    \implode(', ', $acceptableMimeTypes)
                 ),
                 406,
                 [
@@ -104,10 +104,10 @@ class RequestFormatValidator implements HttpKernelInterface
         }
 
         return new Response(
-            sprintf(
+            \sprintf(
                 'Format "%s" is not supported. Supported mime types are: %s.',
                 $format,
-                implode(', ', $acceptableMimeTypes)
+                \implode(', ', $acceptableMimeTypes)
             ),
             406,
             [
@@ -122,11 +122,11 @@ class RequestFormatValidator implements HttpKernelInterface
             return false;
         }
 
-        if (!is_array($exclude) || 0 !== key($exclude)) {
+        if (!\is_array($exclude) || 0 !== \key($exclude)) {
             $exclude = [$exclude];
         }
 
-        $requestMatchers = array_map([__CLASS__, 'createRequestMatcher'], $exclude);
+        $requestMatchers = \array_map([__CLASS__, 'createRequestMatcher'], $exclude);
 
         /** @var RequestMatcherInterface $requestMatcher */
         foreach ($requestMatchers as $requestMatcher) {
@@ -144,11 +144,11 @@ class RequestFormatValidator implements HttpKernelInterface
             return $arguments;
         }
 
-        if (!is_array($arguments)) {
+        if (!\is_array($arguments)) {
             return new RequestMatcher($arguments);
         }
 
-        $arguments = array_replace([
+        $arguments = \array_replace([
             'path' => null,
             'host' => null,
             'methods' => null,

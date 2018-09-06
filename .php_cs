@@ -1,20 +1,19 @@
 <?php
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(__DIR__)
-;
+$config = PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules(array(
+        '@PSR2' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'native_constant_invocation' => true,
+        'native_function_invocation' => true,
+    ));
 
-return Symfony\CS\Config\Config::create()
-    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
-    ->fixers(array(
-        'concat_with_spaces',
-        'ordered_use',
-        'extra_empty_lines',
-        'phpdoc_params',
-        'remove_lines_between_uses',
-        'return',
-        'unused_use',
-        'whitespacy_lines',
-        'short_array_syntax'
-    ))
-    ->finder($finder);
+$config->getFinder()
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/tests');
+
+$config
+    ->setCacheFile(__DIR__ . '/.php_cs.cache');
+
+return $config;

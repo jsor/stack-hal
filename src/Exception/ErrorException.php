@@ -43,7 +43,7 @@ class ErrorException extends BadRequestHttpException implements HalException
     private function appendErrors(Hal $hal, array $errors)
     {
         foreach ($errors as $error) {
-            if (!is_array($error)) {
+            if (!\is_array($error)) {
                 $error = [
                     'message' => (string) $error
                 ];

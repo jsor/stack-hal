@@ -73,23 +73,23 @@ class RequestFormatNegotiator implements HttpKernelInterface
     private static function extendRequestFormats(Request $request, array $formats)
     {
         foreach ($formats as $format => $mimeTypes) {
-            if (method_exists(get_class($request), 'getMimeTypes')) {
-                $mimeTypes = array_merge(
+            if (\method_exists(\get_class($request), 'getMimeTypes')) {
+                $mimeTypes = \array_merge(
                     $mimeTypes,
                     Request::getMimeTypes($format)
                 );
             } elseif (null !== $request->getMimeType($format)) {
-                $class = new \ReflectionClass(get_class($request));
+                $class = new \ReflectionClass(\get_class($request));
                 $properties = $class->getStaticProperties();
                 if (isset($properties['formats'][$format])) {
-                    $mimeTypes = array_merge(
+                    $mimeTypes = \array_merge(
                         $mimeTypes,
                         $properties['formats'][$format]
                     );
                 }
             }
 
-            $request->setFormat($format, array_unique($mimeTypes));
+            $request->setFormat($format, \array_unique($mimeTypes));
         }
     }
 
@@ -98,7 +98,7 @@ class RequestFormatNegotiator implements HttpKernelInterface
         $priorities = [];
 
         foreach ($formats as $types) {
-            $priorities = array_merge($priorities, $types);
+            $priorities = \array_merge($priorities, $types);
         }
 
         return $priorities;

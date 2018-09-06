@@ -35,7 +35,7 @@ class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'Invalid form',
                     'logref' => 100,

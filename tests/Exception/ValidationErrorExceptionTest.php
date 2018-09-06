@@ -31,7 +31,7 @@ class ValidationErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'Validation failed',
                     'logref' => 100,

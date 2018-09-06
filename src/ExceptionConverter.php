@@ -87,7 +87,7 @@ class ExceptionConverter implements HttpKernelInterface
 
         $format = $request->getRequestFormat(null);
 
-        if (!$format || !in_array($format, $formats)) {
+        if (!$format || !\in_array($format, $formats)) {
             return;
         }
 
@@ -102,9 +102,9 @@ class ExceptionConverter implements HttpKernelInterface
         LoggerInterface $logger,
         \Exception $exception
     ) {
-        $message = sprintf(
+        $message = \sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            get_class($exception),
+            \get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine()

@@ -59,12 +59,12 @@ class RequestBodyDecoder implements HttpKernelInterface
     ) {
         if (null === $decoders) {
             $decoders = [
-                'json' => function($content) {
+                'json' => function ($content) {
                     $encoder = new JsonEncoder();
 
                     return $encoder->decode($content, 'json');
                 },
-                'xml' => function($content) {
+                'xml' => function ($content) {
                     $encoder = new XmlEncoder();
 
                     return $encoder->decode($content, 'xml');
@@ -86,7 +86,7 @@ class RequestBodyDecoder implements HttpKernelInterface
             return;
         }
 
-        if (!is_callable($decoders[$format])) {
+        if (!\is_callable($decoders[$format])) {
             return;
         }
 
@@ -97,7 +97,7 @@ class RequestBodyDecoder implements HttpKernelInterface
         }
 
         try {
-            $data = call_user_func($decoders[$format], $content);
+            $data = \call_user_func($decoders[$format], $content);
         } catch (\Exception $e) {
             throw new BadRequestHttpException(
                 'Invalid ' . $format . ' message received',
@@ -105,7 +105,7 @@ class RequestBodyDecoder implements HttpKernelInterface
             );
         }
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             throw new BadRequestHttpException(
                 'Invalid ' . $format . ' message received'
             );
@@ -116,7 +116,7 @@ class RequestBodyDecoder implements HttpKernelInterface
 
     private static function isDecodeable(Request $request)
     {
-        if (!in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
+        if (!\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return false;
         }
 
@@ -125,14 +125,14 @@ class RequestBodyDecoder implements HttpKernelInterface
 
     private static function isFormRequest(Request $request)
     {
-        $contentTypeParts = explode(';', $request->headers->get('Content-Type'));
+        $contentTypeParts = \explode(';', $request->headers->get('Content-Type'));
 
-        if (!isset($contentTypeParts[0]) || '' === trim($contentTypeParts[0])) {
+        if (!isset($contentTypeParts[0]) || '' === \trim($contentTypeParts[0])) {
             return false;
         }
 
-        return in_array(
-            strtolower($contentTypeParts[0]),
+        return \in_array(
+            \strtolower($contentTypeParts[0]),
             ['multipart/form-data', 'application/x-www-form-urlencoded'],
             true
         );

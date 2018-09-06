@@ -15,7 +15,7 @@ class ErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'Error',
                     'logref' => 100,
@@ -48,7 +48,7 @@ class ErrorExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            json_encode(
+            \json_encode(
                 [
                     'message' => 'Error',
                     'logref' => 100,
