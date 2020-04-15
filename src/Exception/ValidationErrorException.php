@@ -15,7 +15,7 @@ class ValidationErrorException extends BadRequestHttpException implements HalExc
         ConstraintViolationListInterface $violationList,
         $message = null,
         $logref = null,
-        \Exception $previous = null,
+        \Throwable $previous = null,
         $code = 0
     ) {
         parent::__construct($message, $previous, $code);

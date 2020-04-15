@@ -10,12 +10,12 @@ use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
+class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_intercepts_not_acceptable_format()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -40,7 +40,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $hal = new HalResponse(new Hal('/'));
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -77,7 +77,7 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $hal = new HalResponse(new Hal('/'));
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -104,14 +104,14 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_exception_to_json()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $logger
             ->expects($this->once())
@@ -141,14 +141,14 @@ class HttpKernelInterfaceTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_exception_to_xml()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $logger
             ->expects($this->once())

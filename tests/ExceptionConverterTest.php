@@ -7,12 +7,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
+class ExceptionConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_serializes_exception_to_json()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -40,7 +40,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_http_exception_with_default_message_to_json()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -68,7 +68,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_http_exception_with_custom_message_to_json()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -96,7 +96,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_access_denied_exception_to_json()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -124,7 +124,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_exception_to_xml()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -148,7 +148,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_http_exception_with_default_message_to_xml()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -172,7 +172,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_http_exception_with_custom_message_to_xml()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -196,7 +196,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_serializes_access_denied_exception_to_xml()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -220,7 +220,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_discards_standard_exception_message()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -248,7 +248,7 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_exposes_standard_exception_message_when_debug_is_true()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -276,9 +276,10 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_rethrows_exception_if_catch_is_false()
     {
-        $this->setExpectedException('\Exception', 'Error');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Error');
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -296,9 +297,10 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_rethrows_exception_for_default_request_format()
     {
-        $this->setExpectedException('\Exception', 'Error');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Error');
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -315,9 +317,10 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_rethrows_exception_for_invalid_request_format()
     {
-        $this->setExpectedException('\Exception', 'Error');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Error');
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -335,14 +338,14 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_logs_exceptions()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $logger
             ->expects($this->once())
@@ -359,14 +362,14 @@ class ExceptionConverterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_logs_critical_exceptions()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new \Exception()));
 
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $logger
             ->expects($this->once())

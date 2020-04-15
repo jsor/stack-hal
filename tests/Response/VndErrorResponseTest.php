@@ -7,7 +7,7 @@ use Jsor\Stack\Hal\Exception\HalException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 
-class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
+class VndErrorResponseTest extends \PHPUnit\Framework\TestCase
 {
     use HalResponseTestCase;
 
@@ -39,7 +39,7 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new ErrorException(['Error'], 'Error', 100);
 
-        $response = VndErrorResponse::fromException($exception);
+        $response = VndErrorResponse::fromThrowable($exception);
 
         $this->assertSame(400, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -67,7 +67,7 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new \Exception('Unknown Error');
 
-        $response = VndErrorResponse::fromException($exception);
+        $response = VndErrorResponse::fromThrowable($exception);
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -85,7 +85,7 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new \Exception('Unknown Error');
 
-        $response = VndErrorResponse::fromException($exception, true, true);
+        $response = VndErrorResponse::fromThrowable($exception, true, true);
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
@@ -103,7 +103,7 @@ class VndErrorResponseTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new EmptyHalException('Message');
 
-        $response = VndErrorResponse::fromException($exception, true, true);
+        $response = VndErrorResponse::fromThrowable($exception, true, true);
 
         $this->assertJsonStringEqualsJsonString(
             \json_encode(

@@ -6,12 +6,13 @@ use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
 use Jsor\Stack\Hal\EventListener\RequestFormatNegotiationListener;
 use Jsor\Stack\Hal\EventListener\RequestFormatValidationListener;
 use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
+use Jsor\Stack\Hal\Fixtures\TestHttpKernel;
 use Nocarrier\Hal;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class HttpKernelTest extends \PHPUnit_Framework_TestCase
+class HttpKernelTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_intercepts_not_acceptable_format()
@@ -75,7 +76,7 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_converts_exception_to_json()
     {
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $logger
             ->expects($this->once())

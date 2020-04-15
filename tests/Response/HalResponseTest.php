@@ -5,7 +5,7 @@ namespace Jsor\Stack\Hal\Response;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 
-class HalResponseTest extends \PHPUnit_Framework_TestCase
+class HalResponseTest extends \PHPUnit\Framework\TestCase
 {
     use HalResponseTestCase;
 

@@ -6,7 +6,7 @@ use Jsor\Stack\Hal\ExceptionConverter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionConversionListener implements EventSubscriberInterface
@@ -28,10 +28,10 @@ class ExceptionConversionListener implements EventSubscriberInterface
         $this->formats = $formats;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $response = ExceptionConverter::handleException(
-            $event->getException(),
+        $response = ExceptionConverter::handleThrowable(
+            $event->getThrowable(),
             $event->getRequest(),
             $this->logger,
             $this->prettyPrint,

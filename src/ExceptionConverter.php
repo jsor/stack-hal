@@ -54,7 +54,7 @@ class ExceptionConverter implements HttpKernelInterface
                 throw $exception;
             }
 
-            $response = self::handleException(
+            $response = self::handleThrowable(
                 $exception,
                 $request,
                 $this->logger,
@@ -71,8 +71,8 @@ class ExceptionConverter implements HttpKernelInterface
         }
     }
 
-    public static function handleException(
-        \Exception $exception,
+    public static function handleThrowable(
+        \Throwable $throwable,
         Request $request,
         LoggerInterface $logger = null,
         $prettyPrint = true,
@@ -80,7 +80,7 @@ class ExceptionConverter implements HttpKernelInterface
         array $formats = null
     ) {
         if (null !== $logger) {
-            self::logException($logger, $exception);
+            self::logThrowable($logger, $throwable);
         }
 
         $formats = $formats ?: ['json', 'xml'];
@@ -91,28 +91,28 @@ class ExceptionConverter implements HttpKernelInterface
             return;
         }
 
-        return VndErrorResponse::fromException(
-            $exception,
+        return VndErrorResponse::fromThrowable(
+            $throwable,
             $prettyPrint,
             $debug
         );
     }
 
-    public static function logException(
+    public static function logThrowable(
         LoggerInterface $logger,
-        \Exception $exception
+        \Throwable $throwable
     ) {
         $message = \sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            \get_class($exception),
-            $exception->getMessage(),
-            $exception->getFile(),
-            $exception->getLine()
+            \get_class($throwable),
+            $throwable->getMessage(),
+            $throwable->getFile(),
+            $throwable->getLine()
         );
 
-        $isCritical = !$exception instanceof HttpExceptionInterface ||
-                      $exception->getStatusCode() >= 500;
-        $context = ['exception' => $exception];
+        $isCritical = !$throwable instanceof HttpExceptionInterface ||
+                      $throwable->getStatusCode() >= 500;
+        $context = ['exception' => $throwable];
 
         if ($isCritical) {
             $logger->critical($message, $context);

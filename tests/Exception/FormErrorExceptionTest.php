@@ -6,7 +6,7 @@ use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Validator\Validation;
 
-class FormErrorExceptionTest extends \PHPUnit_Framework_TestCase
+class FormErrorExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_serializes_exception_to_json()

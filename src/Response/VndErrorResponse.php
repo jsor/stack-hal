@@ -7,6 +7,7 @@ use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class VndErrorResponse extends HalResponse
 {
@@ -30,17 +31,17 @@ class VndErrorResponse extends HalResponse
         return new static($hal, $status, $headers, $prettyPrint);
     }
 
-    public static function fromException(
-        \Exception $exception,
+    public static function fromThrowable(
+        \Throwable $throwable,
         $prettyPrint = true,
         $debug = false
     ) {
-        $statusCode = self::extractStatus($exception);
-        $headers    = self::extractHeaders($exception);
-        $message    = self::extractMessage($exception, $debug);
+        $statusCode = self::extractStatus($throwable);
+        $headers    = self::extractHeaders($throwable);
+        $message    = self::extractMessage($throwable, $debug);
 
-        if ($exception instanceof HalException) {
-            $hal = $exception->getHal();
+        if ($throwable instanceof HalException) {
+            $hal = $throwable->getHal();
         } else {
             $hal = new Hal(null, ['message' => $message]);
         }
@@ -71,40 +72,40 @@ class VndErrorResponse extends HalResponse
         return $this;
     }
 
-    private static function extractStatus(\Exception $exception)
+    private static function extractStatus(\Throwable $throwable)
     {
-        if ($exception instanceof HttpExceptionInterface) {
-            return $exception->getStatusCode();
+        if ($throwable instanceof HttpExceptionInterface) {
+            return $throwable->getStatusCode();
         }
 
-        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+        if ($throwable instanceof AccessDeniedException) {
             return 403;
         }
 
         return 500;
     }
 
-    private static function extractHeaders(\Exception $exception)
+    private static function extractHeaders(\Throwable $throwable)
     {
-        if ($exception instanceof HttpExceptionInterface) {
-            return $exception->getHeaders();
+        if ($throwable instanceof HttpExceptionInterface) {
+            return $throwable->getHeaders();
         }
 
         return [];
     }
 
-    private static function extractMessage(\Exception $exception, $debug)
+    private static function extractMessage(\Throwable $throwable, $debug)
     {
-        if ($exception instanceof HttpExceptionInterface) {
-            return $exception->getMessage();
+        if ($throwable instanceof HttpExceptionInterface) {
+            return $throwable->getMessage();
         }
 
         if ($debug) {
             // Expose exception message only in debug mode
-            return $exception->getMessage();
+            return $throwable->getMessage();
         }
 
-        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
+        if ($throwable instanceof AccessDeniedException) {
             return 'Access Denied';
         }
 

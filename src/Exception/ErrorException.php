@@ -14,7 +14,7 @@ class ErrorException extends BadRequestHttpException implements HalException
         array $errors,
         $message = null,
         $logref = null,
-        \Exception $previous = null,
+        \Throwable $previous = null,
         $code = 0
     ) {
         parent::__construct($message, $previous, $code);

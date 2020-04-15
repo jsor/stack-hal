@@ -5,7 +5,7 @@ namespace Jsor\Stack\Hal\EventListener;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestFormatValidationListener implements EventSubscriberInterface
@@ -21,7 +21,7 @@ class RequestFormatValidationListener implements EventSubscriberInterface
         $this->exclude = $exclude;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $response = RequestFormatValidator::intercept(
             $event->getRequest(),

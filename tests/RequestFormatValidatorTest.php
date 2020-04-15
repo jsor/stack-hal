@@ -6,14 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcher;
 use Symfony\Component\HttpFoundation\Response;
 
-class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
+class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_accepts_default_json_format()
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -35,7 +35,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -55,7 +55,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_406_for_null_format()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -75,7 +75,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_406_for_not_acceptable_format()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -96,7 +96,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_406_for_not_acceptable_format_with_mime_type()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -118,7 +118,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_406_for_null_format_with_mime_type()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -142,7 +142,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -163,7 +163,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -186,7 +186,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -209,7 +209,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -233,7 +233,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -254,7 +254,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = new Response();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -276,7 +276,7 @@ class RequestFormatValidatorTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_intercepts_with_non_matching_exclude()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())

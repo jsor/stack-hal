@@ -2,7 +2,7 @@
 
 namespace Jsor\Stack\Hal\Exception;
 
-class ErrorExceptionTest extends \PHPUnit_Framework_TestCase
+class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_serializes_exception_to_json()

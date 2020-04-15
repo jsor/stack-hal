@@ -4,7 +4,7 @@ namespace Jsor\Stack\Hal\EventListener;
 
 use Jsor\Stack\Hal\RequestFormatNegotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestFormatNegotiationListener implements EventSubscriberInterface
@@ -20,7 +20,7 @@ class RequestFormatNegotiationListener implements EventSubscriberInterface
         $this->priorities = $priorities;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         RequestFormatNegotiator::negotiate(
             $event->getRequest(),

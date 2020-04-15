@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ValidatorBuilder;
 
-class ValidationErrorExceptionTest extends \PHPUnit_Framework_TestCase
+class ValidationErrorExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_serializes_exception_to_json()

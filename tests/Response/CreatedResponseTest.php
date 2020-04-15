@@ -4,7 +4,7 @@ namespace Jsor\Stack\Hal\Response;
 
 use Nocarrier\Hal;
 
-class CreatedResponseTest extends \PHPUnit_Framework_TestCase
+class CreatedResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_sets_location_header()

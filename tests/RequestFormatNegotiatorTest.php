@@ -5,7 +5,7 @@ namespace Jsor\Stack\Hal;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 
-class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
+class RequestFormatNegotiatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -13,7 +13,7 @@ class RequestFormatNegotiatorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_accepts_hal_headers($acceptHeader, $type, $format)
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())

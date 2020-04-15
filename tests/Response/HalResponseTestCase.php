@@ -36,7 +36,7 @@ trait HalResponseTestCase
     /** @test */
     public function it_throws_exception_for_non_hal_content()
     {
-        $this->setExpectedException('\LogicException');
+        $this->expectException('\LogicException');
 
         $response = $this->provideResponse();
 

@@ -5,7 +5,7 @@ namespace Jsor\Stack\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
+class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -18,7 +18,7 @@ class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
         $contentType = null,
         array $decoders = null
     ) {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->once())
@@ -63,7 +63,7 @@ class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_returns_bad_request_response_when_decoder_throws()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -87,9 +87,9 @@ class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_bad_request_exception_when_decoder_throws_and_catch_is_false()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -111,7 +111,7 @@ class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_returns_bad_request_response_when_decoder_returns_non_array()
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
@@ -135,9 +135,9 @@ class RequestBodyDecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_bad_request_exception_when_decoder_returns_non_array_and_catch_is_false()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
 
         $kernel
             ->expects($this->never())
