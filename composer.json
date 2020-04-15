@@ -25,6 +25,8 @@
         "symfony/serializer": "For using RequestBodyDecoder"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
+
         "psr/log": "^1.0",
 
         "symfony/event-dispatcher": "^4.4||^5.0",
