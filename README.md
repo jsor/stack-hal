@@ -23,5 +23,5 @@ all available versions.
 License
 -------
 
-Copyright (c) 2014-2018 Jan Sorgalla.
+Copyright (c) 2014-2020 Jan Sorgalla.
 Released under the [MIT](LICENSE) license.
