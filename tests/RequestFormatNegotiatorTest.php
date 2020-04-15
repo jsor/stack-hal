@@ -2,7 +2,6 @@
 
 namespace Jsor\Stack\Hal;
 
-use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestFormatNegotiatorTest extends \PHPUnit\Framework\TestCase

@@ -26,7 +26,7 @@ class ErrorException extends BadRequestHttpException implements HalException
     public function getHal()
     {
         $data = [
-            'message' => $this->getMessage()
+            'message' => $this->getMessage(),
         ];
 
         if ($this->logref) {
@@ -45,7 +45,7 @@ class ErrorException extends BadRequestHttpException implements HalException
         foreach ($errors as $error) {
             if (!\is_array($error)) {
                 $error = [
-                    'message' => (string) $error
+                    'message' => (string) $error,
                 ];
             }
 

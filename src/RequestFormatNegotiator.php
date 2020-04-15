@@ -15,7 +15,7 @@ class RequestFormatNegotiator implements HttpKernelInterface
 
     private static $defaultFormats = [
         'json' => ['application/hal+json', 'application/json', 'application/x-json'],
-        'xml'  => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
+        'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
     ];
 
     public function __construct(
@@ -23,8 +23,8 @@ class RequestFormatNegotiator implements HttpKernelInterface
         array $formats = null,
         array $priorities = null
     ) {
-        $this->app        = $app;
-        $this->formats    = $formats;
+        $this->app = $app;
+        $this->formats = $formats;
         $this->priorities = $priorities;
     }
 

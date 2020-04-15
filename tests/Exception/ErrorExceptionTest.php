@@ -8,7 +8,7 @@ class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
     public function it_serializes_exception_to_json()
     {
         $errors = [
-          'Error'
+          'Error',
         ];
 
         $exception = new ErrorException($errors, 'Error', 100);
@@ -19,12 +19,10 @@ class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
                 [
                     'message' => 'Error',
                     'logref' => 100,
-                    '_embedded' =>
-                        [
-                            'errors' =>
-                                [
+                    '_embedded' => [
+                            'errors' => [
                                     [
-                                        'message' => 'Error'
+                                        'message' => 'Error',
                                     ],
                                 ],
                         ],
@@ -40,8 +38,8 @@ class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
         $errors = [
             [
                 'message' => 'Error',
-                'path' => '/foo'
-            ]
+                'path' => '/foo',
+            ],
         ];
 
         $exception = new ErrorException($errors, 'Error', 100);
@@ -52,13 +50,11 @@ class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
                 [
                     'message' => 'Error',
                     'logref' => 100,
-                    '_embedded' =>
-                        [
-                            'errors' =>
-                                [
+                    '_embedded' => [
+                            'errors' => [
                                     [
                                         'message' => 'Error',
-                                        'path' => '/foo'
+                                        'path' => '/foo',
                                     ],
                                 ],
                         ],

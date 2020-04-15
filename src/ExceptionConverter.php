@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Converts to a vnd.error response.
+ *
  * @see https://github.com/blongden/vnd.error
  */
 class ExceptionConverter implements HttpKernelInterface
@@ -87,7 +88,7 @@ class ExceptionConverter implements HttpKernelInterface
 
         $format = $request->getRequestFormat(null);
 
-        if (!$format || !\in_array($format, $formats)) {
+        if (!$format || !\in_array($format, $formats, true)) {
             return;
         }
 

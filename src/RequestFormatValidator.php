@@ -49,7 +49,7 @@ class RequestFormatValidator implements HttpKernelInterface
     ) {
         $acceptableFormats = $acceptableFormats ?: [
             'json' => ['application/hal+json', 'application/json', 'application/x-json'],
-            'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml']
+            'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
         ];
 
         $format = $request->getRequestFormat(null);
@@ -85,7 +85,7 @@ class RequestFormatValidator implements HttpKernelInterface
                 ),
                 406,
                 [
-                    'Content-Type' => 'text/plain'
+                    'Content-Type' => 'text/plain',
                 ]
             );
         }
@@ -98,7 +98,7 @@ class RequestFormatValidator implements HttpKernelInterface
                 ),
                 406,
                 [
-                    'Content-Type' => 'text/plain'
+                    'Content-Type' => 'text/plain',
                 ]
             );
         }
@@ -111,7 +111,7 @@ class RequestFormatValidator implements HttpKernelInterface
             ),
             406,
             [
-                'Content-Type' => 'text/plain'
+                'Content-Type' => 'text/plain',
             ]
         );
     }
@@ -154,7 +154,7 @@ class RequestFormatValidator implements HttpKernelInterface
             'methods' => null,
             'ips' => null,
             'attributes' => [],
-            'schemes' => null
+            'schemes' => null,
         ], $arguments);
 
         return new RequestMatcher(

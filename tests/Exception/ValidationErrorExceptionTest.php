@@ -20,7 +20,7 @@ class ValidationErrorExceptionTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $data = [
-            'additional' => 'foo'
+            'additional' => 'foo',
         ];
 
         $builder = new ValidatorBuilder();
@@ -35,10 +35,8 @@ class ValidationErrorExceptionTest extends \PHPUnit\Framework\TestCase
                 [
                     'message' => 'Validation failed',
                     'logref' => 100,
-                    '_embedded' =>
-                        [
-                            'errors' =>
-                                [
+                    '_embedded' => [
+                            'errors' => [
                                     [
                                         'message' => 'This field is missing.',
                                         'path' => '/email',

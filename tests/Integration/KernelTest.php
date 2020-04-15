@@ -31,7 +31,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         $dispatcher->addSubscriber(new ExceptionConversionListener(null, true, true));
 
         $request = Request::create('/', 'GET', [], [], [], [
-            'HTTP_ACCEPT' => 'text/html'
+            'HTTP_ACCEPT' => 'text/html',
         ]);
         $request->attributes->set('_format', 'html');
 
@@ -60,7 +60,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         $dispatcher->addSubscriber(new ExceptionConversionListener());
 
         $request = Request::create('/', 'GET', [], [], [], [
-            'HTTP_ACCEPT' => 'application/json'
+            'HTTP_ACCEPT' => 'application/json',
         ]);
         $request->attributes->set('_format', 'json');
 
@@ -106,7 +106,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         $dispatcher->addSubscriber(new ExceptionConversionListener($logger));
 
         $request = Request::create('/exception', 'GET', [], [], [], [
-            'HTTP_ACCEPT' => 'application/json'
+            'HTTP_ACCEPT' => 'application/json',
         ]);
         $request->attributes->set('_format', 'json');
 
@@ -117,7 +117,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'Not Found'
+                    'message' => 'Not Found',
                 ]
             ),
             $response->getContent()

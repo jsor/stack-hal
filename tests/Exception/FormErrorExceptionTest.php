@@ -23,10 +23,10 @@ class FormErrorExceptionTest extends \PHPUnit\Framework\TestCase
                 [
                     'name' => [
                         'first_name' => 'Jan',
-                    ]
-                ]
+                    ],
+                ],
             ],
-            'additional' => 'foo'
+            'additional' => 'foo',
         ];
 
         $form->submit($data);
@@ -39,10 +39,8 @@ class FormErrorExceptionTest extends \PHPUnit\Framework\TestCase
                 [
                     'message' => 'Invalid form',
                     'logref' => 100,
-                    '_embedded' =>
-                        [
-                            'errors' =>
-                                [
+                    '_embedded' => [
+                            'errors' => [
                                     [
                                         'message' => 'This form should not contain extra fields.',
                                         'path' => '/',

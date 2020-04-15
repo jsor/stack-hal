@@ -16,7 +16,7 @@ trait HalResponseTestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'test'
+                    'message' => 'test',
                 ]
             ),
             $response->getContent()
@@ -55,7 +55,7 @@ trait HalResponseTestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'test'
+                    'message' => 'test',
                 ]
             ),
             $string

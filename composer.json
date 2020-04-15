@@ -41,7 +41,9 @@
         "symfony/serializer": "^4.4||^5.0",
 
         "willdurand/negotiation": "^2.0",
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+
+        "friendsofphp/php-cs-fixer": "3.0.x-dev"
     },
     "autoload": {
         "psr-4": {

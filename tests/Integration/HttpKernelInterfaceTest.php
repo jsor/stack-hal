@@ -45,7 +45,7 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($hal));
+            ->willReturn($hal);
 
         $app = new RequestFormatNegotiator($kernel);
         $app = new RequestFormatValidator($app);
@@ -82,7 +82,7 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($hal));
+            ->willReturn($hal);
 
         $app = new RequestFormatNegotiator($kernel);
         $app = new RequestFormatValidator($app);
@@ -131,7 +131,7 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'Not Found'
+                    'message' => 'Not Found',
                 ]
             ),
             $response->getContent()

@@ -27,7 +27,7 @@ class ValidationErrorException extends BadRequestHttpException implements HalExc
     public function getHal()
     {
         $data = [
-            'message' => $this->getMessage()
+            'message' => $this->getMessage(),
         ];
 
         if ($this->logref) {
@@ -38,11 +38,11 @@ class ValidationErrorException extends BadRequestHttpException implements HalExc
 
         foreach ($this->violationList as $violation) {
             $path = \str_replace('][', '/', $violation->getPropertyPath());
-            $path = '/' . \trim($path, '[]');
+            $path = '/'.\trim($path, '[]');
 
             $data = [
                 'message' => $violation->getMessage(),
-                'path' => $path
+                'path' => $path,
             ];
 
             $hal->addResource('errors', new Hal(null, $data));

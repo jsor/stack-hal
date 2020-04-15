@@ -18,7 +18,7 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel);
 
@@ -40,7 +40,7 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel);
 
@@ -147,7 +147,7 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], '/ignore');
 
@@ -168,10 +168,10 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], [
-            '/ignore'
+            '/ignore',
         ]);
 
         $request = Request::create('/ignore');
@@ -191,10 +191,10 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], [
-            'host' => 'example\.com'
+            'host' => 'example\.com',
         ]);
 
         $request = Request::create('http://example.com');
@@ -214,11 +214,11 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], [
             ['host' => 'example\.com'],
-            ['path' => '/ignore']
+            ['path' => '/ignore'],
         ]);
 
         $request = Request::create('/ignore');
@@ -238,7 +238,7 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], new RequestMatcher('/ignore'));
 
@@ -259,11 +259,11 @@ class RequestFormatValidatorTest extends \PHPUnit\Framework\TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->returnValue($expectedResponse));
+            ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], [
             new RequestMatcher(null, 'example\.com'),
-            new RequestMatcher('/ignore')
+            new RequestMatcher('/ignore'),
         ]);
 
         $request = Request::create('/ignore');

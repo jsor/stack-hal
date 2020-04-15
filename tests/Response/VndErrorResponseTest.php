@@ -47,10 +47,8 @@ class VndErrorResponseTest extends \PHPUnit\Framework\TestCase
                 [
                     'message' => 'Error',
                     'logref' => 100,
-                    '_embedded' =>
-                        [
-                            'errors' =>
-                                [
+                    '_embedded' => [
+                            'errors' => [
                                     [
                                         'message' => 'Error',
                                     ],
@@ -73,7 +71,7 @@ class VndErrorResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'Internal Server Error'
+                    'message' => 'Internal Server Error',
                 ]
             ),
             $response->getContent()
@@ -91,7 +89,7 @@ class VndErrorResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'Unknown Error'
+                    'message' => 'Unknown Error',
                 ]
             ),
             $response->getContent()
@@ -108,7 +106,7 @@ class VndErrorResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertJsonStringEqualsJsonString(
             \json_encode(
                 [
-                    'message' => 'Message'
+                    'message' => 'Message',
                 ]
             ),
             $response->getContent()

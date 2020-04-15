@@ -10,7 +10,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
- * Adapted from the FOSRestBundle BodyListener
+ * Adapted from the FOSRestBundle BodyListener.
+ *
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
 class RequestBodyDecoder implements HttpKernelInterface
@@ -68,7 +69,7 @@ class RequestBodyDecoder implements HttpKernelInterface
                     $encoder = new XmlEncoder();
 
                     return $encoder->decode($content, 'xml');
-                }
+                },
             ];
         }
 
@@ -99,16 +100,11 @@ class RequestBodyDecoder implements HttpKernelInterface
         try {
             $data = \call_user_func($decoders[$format], $content);
         } catch (\Exception $e) {
-            throw new BadRequestHttpException(
-                'Invalid ' . $format . ' message received',
-                $e
-            );
+            throw new BadRequestHttpException('Invalid '.$format.' message received', $e);
         }
 
         if (!\is_array($data)) {
-            throw new BadRequestHttpException(
-                'Invalid ' . $format . ' message received'
-            );
+            throw new BadRequestHttpException('Invalid '.$format.' message received');
         }
 
         $request->request->replace($data);

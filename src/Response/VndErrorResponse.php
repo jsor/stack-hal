@@ -37,8 +37,8 @@ class VndErrorResponse extends HalResponse
         $debug = false
     ) {
         $statusCode = self::extractStatus($throwable);
-        $headers    = self::extractHeaders($throwable);
-        $message    = self::extractMessage($throwable, $debug);
+        $headers = self::extractHeaders($throwable);
+        $message = self::extractMessage($throwable, $debug);
 
         if ($throwable instanceof HalException) {
             $hal = $throwable->getHal();

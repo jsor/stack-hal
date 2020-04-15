@@ -28,7 +28,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
     public function getHal()
     {
         $data = [
-            'message' => $this->getMessage()
+            'message' => $this->getMessage(),
         ];
 
         if ($this->logref) {
@@ -49,7 +49,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
         /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
             $data = [
-                'message' => $error->getMessage()
+                'message' => $error->getMessage(),
             ];
 
             $origin = $error->getOrigin();
@@ -90,6 +90,6 @@ class FormErrorException extends BadRequestHttpException implements HalException
         // Remove root form
         \array_shift($path);
 
-        return '/' . \implode('/', $path);
+        return '/'.\implode('/', $path);
     }
 }
