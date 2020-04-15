@@ -77,23 +77,12 @@ final class RequestFormatNegotiator implements HttpKernelInterface
         array $formats
     ): void {
         foreach ($formats as $format => $mimeTypes) {
-            if (\method_exists(\get_class($request), 'getMimeTypes')) {
-                $mimeTypes = \array_merge(
-                    $mimeTypes,
-                    Request::getMimeTypes($format)
-                );
-            } elseif (null !== $request->getMimeType($format)) {
-                $class = new \ReflectionClass(\get_class($request));
-                $properties = $class->getStaticProperties();
-                if (isset($properties['formats'][$format])) {
-                    $mimeTypes = \array_merge(
-                        $mimeTypes,
-                        $properties['formats'][$format]
-                    );
-                }
-            }
+            $allMimeTypes = \array_merge(
+                $mimeTypes,
+                Request::getMimeTypes($format)
+            );
 
-            $request->setFormat($format, \array_unique($mimeTypes));
+            $request->setFormat($format, \array_unique($allMimeTypes));
         }
     }
 
