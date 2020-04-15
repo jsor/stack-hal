@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +16,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
  *
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
-class RequestBodyDecoder implements HttpKernelInterface
+final class RequestBodyDecoder implements HttpKernelInterface
 {
     private $app;
     private $decoders;
@@ -57,15 +59,15 @@ class RequestBodyDecoder implements HttpKernelInterface
     public static function decode(
         Request $request,
         array $decoders = null
-    ) {
+    ): void {
         if (null === $decoders) {
             $decoders = [
-                'json' => function ($content) {
+                'json' => static function ($content) {
                     $encoder = new JsonEncoder();
 
                     return $encoder->decode($content, 'json');
                 },
-                'xml' => function ($content) {
+                'xml' => static function ($content) {
                     $encoder = new XmlEncoder();
 
                     return $encoder->decode($content, 'xml');
@@ -110,7 +112,7 @@ class RequestBodyDecoder implements HttpKernelInterface
         $request->request->replace($data);
     }
 
-    private static function isDecodeable(Request $request)
+    private static function isDecodeable(Request $request): bool
     {
         if (!\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return false;
@@ -119,9 +121,13 @@ class RequestBodyDecoder implements HttpKernelInterface
         return !self::isFormRequest($request);
     }
 
-    private static function isFormRequest(Request $request)
+    private static function isFormRequest(Request $request): bool
     {
-        $contentTypeParts = \explode(';', $request->headers->get('Content-Type'));
+        if (!$request->headers->has('Content-Type')) {
+            return false;
+        }
+
+        $contentTypeParts = \explode(';', (string) $request->headers->get('Content-Type'));
 
         if (!isset($contentTypeParts[0]) || '' === \trim($contentTypeParts[0])) {
             return false;

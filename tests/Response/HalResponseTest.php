@@ -3,26 +3,27 @@
 namespace Jsor\Stack\Hal\Response;
 
 use Nocarrier\Hal;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class HalResponseTest extends \PHPUnit\Framework\TestCase
+final class HalResponseTest extends TestCase
 {
     use HalResponseTestCase;
 
-    protected function provideResponse(Hal $hal = null)
+    protected function provideResponse(Hal $hal = null): HalResponse
     {
-        return HalResponse::create($hal ?: new Hal());
+        return new HalResponse($hal ?: new Hal());
     }
 
     /** @test */
-    public function it_sets_default_content_type_header()
+    public function it_sets_default_content_type_header(): void
     {
         $response = $this->provideResponse();
         $this->assertSame('application/hal+json', $response->headers->get('Content-Type'));
     }
 
     /** @test */
-    public function it_sets_content_type_header_depending_on_request_format()
+    public function it_sets_content_type_header_depending_on_request_format(): void
     {
         $response = $this->provideResponse();
 

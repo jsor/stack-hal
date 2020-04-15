@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\EventListener;
 
 use Jsor\Stack\Hal\Response\HalResponse;
@@ -8,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ResponseConversionListener implements EventSubscriberInterface
+final class ResponseConversionListener implements EventSubscriberInterface
 {
     private $prettyPrint;
 
@@ -17,7 +19,7 @@ class ResponseConversionListener implements EventSubscriberInterface
         $this->prettyPrint = (bool) $prettyPrint;
     }
 
-    public function onKernelView(ViewEvent $event)
+    public function onKernelView(ViewEvent $event): void
     {
         $hal = $event->getControllerResult();
 
@@ -28,7 +30,7 @@ class ResponseConversionListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => 'onKernelView',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Response;
 
 use Nocarrier\Hal;
@@ -14,29 +16,20 @@ class HalResponse extends Response
 
     public function __construct(
         Hal $hal,
-        $status = 200,
-        $headers = [],
-        $prettyPrint = true
+        int $status = 200,
+        array $headers = [],
+        bool $prettyPrint = true
     ) {
         parent::__construct(null, $status, $headers);
 
         $this->hal = $hal;
-        $this->prettyPrint = (bool) $prettyPrint;
+        $this->prettyPrint = $prettyPrint;
 
         $this->requestFormat = 'json';
         $this->headers->set('Content-Type', 'application/hal+json');
     }
 
-    public static function create(
-        $hal = null,
-        $status = 200,
-        $headers = [],
-        $prettyPrint = true
-    ) {
-        return new static($hal, $status, $headers, $prettyPrint);
-    }
-
-    public function prepare(Request $request)
+    public function prepare(Request $request): Response
     {
         if ('xml' === $request->getRequestFormat()) {
             $this->requestFormat = 'xml';
@@ -46,14 +39,14 @@ class HalResponse extends Response
         return parent::prepare($request);
     }
 
-    public function sendContent()
+    public function sendContent(): self
     {
         echo $this->getContent();
 
         return $this;
     }
 
-    public function setContent($content)
+    public function setContent($content): void
     {
         if (null !== $content && !$content instanceof Hal) {
             throw new \LogicException('The content must be a Hal instance.');
@@ -62,21 +55,20 @@ class HalResponse extends Response
         $this->hal = $content;
     }
 
-    public function getContent()
+    public function getContent(): string
     {
         if (null === $this->hal) {
             return '';
         }
 
-        switch ($this->requestFormat) {
-            case 'xml':
-                return $this->hal->asXml($this->prettyPrint);
-            default:
-                return $this->hal->asJson($this->prettyPrint);
+        if ($this->requestFormat === 'xml') {
+            return $this->hal->asXml($this->prettyPrint);
         }
+
+        return $this->hal->asJson($this->prettyPrint);
     }
 
-    public function getHal()
+    public function getHal(): ?Hal
     {
         return $this->hal;
     }

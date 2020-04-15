@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\EventListener;
 
 use Jsor\Stack\Hal\RequestFormatValidator;
@@ -8,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestFormatValidationListener implements EventSubscriberInterface
+final class RequestFormatValidationListener implements EventSubscriberInterface
 {
     private $acceptableFormats;
     private $exclude;
@@ -21,7 +23,7 @@ class RequestFormatValidationListener implements EventSubscriberInterface
         $this->exclude = $exclude;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $response = RequestFormatValidator::intercept(
             $event->getRequest(),
@@ -34,7 +36,7 @@ class RequestFormatValidationListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => 'onKernelRequest',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal;
 
 use Negotiation\Accept;
@@ -7,13 +9,13 @@ use Negotiation\Negotiator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestFormatNegotiator implements HttpKernelInterface
+final class RequestFormatNegotiator implements HttpKernelInterface
 {
     private $app;
     private $formats;
     private $priorities;
 
-    private static $defaultFormats = [
+    private const DEFAULT_FORMATS = [
         'json' => ['application/hal+json', 'application/json', 'application/x-json'],
         'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
     ];
@@ -42,8 +44,8 @@ class RequestFormatNegotiator implements HttpKernelInterface
         Request $request,
         array $formats = null,
         array $priorities = null
-    ) {
-        $formats = $formats ?: self::$defaultFormats;
+    ): void {
+        $formats = $formats ?: self::DEFAULT_FORMATS;
 
         self::extendRequestFormats($request, $formats);
 
@@ -70,8 +72,10 @@ class RequestFormatNegotiator implements HttpKernelInterface
         $request->setRequestFormat($request->getFormat($accept->getType()));
     }
 
-    private static function extendRequestFormats(Request $request, array $formats)
-    {
+    private static function extendRequestFormats(
+        Request $request,
+        array $formats
+    ): void {
         foreach ($formats as $format => $mimeTypes) {
             if (\method_exists(\get_class($request), 'getMimeTypes')) {
                 $mimeTypes = \array_merge(
@@ -93,7 +97,7 @@ class RequestFormatNegotiator implements HttpKernelInterface
         }
     }
 
-    private static function buildPrioritiesFromFormats(array $formats)
+    private static function buildPrioritiesFromFormats(array $formats): array
     {
         $priorities = [];
 

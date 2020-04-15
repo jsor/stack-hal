@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal;
 
 use Jsor\Stack\Hal\Response\VndErrorResponse;
@@ -14,7 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @see https://github.com/blongden/vnd.error
  */
-class ExceptionConverter implements HttpKernelInterface
+final class ExceptionConverter implements HttpKernelInterface
 {
     private $app;
     private $logger;
@@ -26,16 +28,16 @@ class ExceptionConverter implements HttpKernelInterface
     public function __construct(
         HttpKernelInterface $app,
         LoggerInterface $logger = null,
-        $prettyPrint = true,
-        $debug = false,
-        $passThroughCatch = false,
+        bool $prettyPrint = true,
+        bool $debug = false,
+        bool $passThroughCatch = false,
         array $formats = null
     ) {
         $this->app = $app;
         $this->logger = $logger;
-        $this->prettyPrint = (bool) $prettyPrint;
-        $this->debug = (bool) $debug;
-        $this->passThroughCatch = (bool) $passThroughCatch;
+        $this->prettyPrint = $prettyPrint;
+        $this->debug = $debug;
+        $this->passThroughCatch = $passThroughCatch;
         $this->formats = $formats;
     }
 
@@ -76,10 +78,10 @@ class ExceptionConverter implements HttpKernelInterface
         \Throwable $throwable,
         Request $request,
         LoggerInterface $logger = null,
-        $prettyPrint = true,
-        $debug = false,
+        bool $prettyPrint = true,
+        bool $debug = false,
         array $formats = null
-    ) {
+    ): ?VndErrorResponse {
         if (null !== $logger) {
             self::logThrowable($logger, $throwable);
         }
@@ -89,7 +91,7 @@ class ExceptionConverter implements HttpKernelInterface
         $format = $request->getRequestFormat(null);
 
         if (!$format || !\in_array($format, $formats, true)) {
-            return;
+            return null;
         }
 
         return VndErrorResponse::fromThrowable(
@@ -102,7 +104,7 @@ class ExceptionConverter implements HttpKernelInterface
     public static function logThrowable(
         LoggerInterface $logger,
         \Throwable $throwable
-    ) {
+    ): void {
         $message = \sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
             \get_class($throwable),

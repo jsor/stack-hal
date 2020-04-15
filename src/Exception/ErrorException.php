@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
 use Nocarrier\Hal;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class ErrorException extends BadRequestHttpException implements HalException
+final class ErrorException extends BadRequestHttpException implements HalException
 {
     private $errors;
     private $logref;
@@ -23,7 +25,7 @@ class ErrorException extends BadRequestHttpException implements HalException
         $this->logref = $logref;
     }
 
-    public function getHal()
+    public function getHal(): Hal
     {
         $data = [
             'message' => $this->getMessage(),
@@ -40,7 +42,7 @@ class ErrorException extends BadRequestHttpException implements HalException
         return $hal;
     }
 
-    private function appendErrors(Hal $hal, array $errors)
+    private function appendErrors(Hal $hal, array $errors): void
     {
         foreach ($errors as $error) {
             if (!\is_array($error)) {

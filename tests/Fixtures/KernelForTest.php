@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Fixtures;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-class KernelForTest extends Kernel
+final class KernelForTest extends Kernel
 {
     public function getBundleMap()
     {

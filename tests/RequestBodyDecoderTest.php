@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
+final class RequestBodyDecoderTest extends TestCase
 {
     /**
      * @test
@@ -13,16 +18,17 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
      */
     public function it_decodes_request_body(
         Request $request,
-        $method,
-        $expectedParameters,
-        $contentType = null,
+        string $method,
+        array $expectedParameters,
+        string $contentType = null,
         array $decoders = null
-    ) {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+    ): void {
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
         $app = new RequestBodyDecoder($kernel, $decoders);
 
@@ -37,7 +43,7 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($request->request->all(), $expectedParameters);
     }
 
-    public static function provideOnKernelRequestData()
+    public static function provideOnKernelRequestData(): array
     {
         return [
             'Empty POST request' => [new Request([], [], [], [], [], [], ''), 'POST', [], 'application/json'],
@@ -61,15 +67,16 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_bad_request_response_when_decoder_throws()
+    public function it_returns_bad_request_response_when_decoder_throws(): void
     {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->never())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
-        $app = new RequestBodyDecoder($kernel, ['json' => function () {
+        $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             throw new \Exception('Foo');
         }]);
 
@@ -85,17 +92,18 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_throws_bad_request_exception_when_decoder_throws_and_catch_is_false()
+    public function it_throws_bad_request_exception_when_decoder_throws_and_catch_is_false(): void
     {
-        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException(BadRequestHttpException::class);
 
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->never())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
-        $app = new RequestBodyDecoder($kernel, ['json' => function () {
+        $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             throw new \Exception('Foo');
         }]);
 
@@ -109,15 +117,16 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_bad_request_response_when_decoder_returns_non_array()
+    public function it_returns_bad_request_response_when_decoder_returns_non_array(): void
     {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->never())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
-        $app = new RequestBodyDecoder($kernel, ['json' => function () {
+        $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             return '';
         }]);
 
@@ -133,17 +142,18 @@ class RequestBodyDecoderTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_throws_bad_request_exception_when_decoder_returns_non_array_and_catch_is_false()
+    public function it_throws_bad_request_exception_when_decoder_returns_non_array_and_catch_is_false(): void
     {
-        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException(BadRequestHttpException::class);
 
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->never())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
-        $app = new RequestBodyDecoder($kernel, ['json' => function () {
+        $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             return '';
         }]);
 

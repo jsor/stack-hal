@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
 use Nocarrier\Hal;
@@ -7,7 +9,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class FormErrorException extends BadRequestHttpException implements HalException
+final class FormErrorException extends BadRequestHttpException implements HalException
 {
     private $form;
     private $logref;
@@ -25,7 +27,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
         $this->logref = $logref;
     }
 
-    public function getHal()
+    public function getHal(): Hal
     {
         $data = [
             'message' => $this->getMessage(),
@@ -42,7 +44,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
         return $hal;
     }
 
-    private function appendErrors(Hal $hal, FormInterface $form)
+    private function appendErrors(Hal $hal, FormInterface $form): void
     {
         $formPath = null;
 
@@ -54,7 +56,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
 
             $origin = $error->getOrigin();
 
-            if ($origin) {
+            if ($origin !== null) {
                 $currPath = $this->getPath($origin);
             } else {
                 if (null === $formPath) {
@@ -76,7 +78,7 @@ class FormErrorException extends BadRequestHttpException implements HalException
         }
     }
 
-    private function getPath(FormInterface $form)
+    private function getPath(FormInterface $form): string
     {
         $path = [];
 

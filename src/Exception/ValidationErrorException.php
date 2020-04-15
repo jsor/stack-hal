@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
 use Nocarrier\Hal;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class ValidationErrorException extends BadRequestHttpException implements HalException
+final class ValidationErrorException extends BadRequestHttpException implements HalException
 {
     private $violationList;
     private $logref;
@@ -24,7 +26,7 @@ class ValidationErrorException extends BadRequestHttpException implements HalExc
         $this->logref = $logref;
     }
 
-    public function getHal()
+    public function getHal(): Hal
     {
         $data = [
             'message' => $this->getMessage(),

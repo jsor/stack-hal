@@ -1,35 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
+use Jsor\Stack\Hal\Fixtures\Form\FormType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Validator\Validation;
 
-class FormErrorExceptionTest extends \PHPUnit\Framework\TestCase
+final class FormErrorExceptionTest extends TestCase
 {
+    private const DATA = [
+        'family' => [
+            [
+                'name' => [
+                    'first_name' => 'Jan',
+                ],
+            ],
+        ],
+        'additional' => 'foo',
+    ];
+
     /** @test */
-    public function it_serializes_exception_to_json()
+    public function it_serializes_exception_to_json(): void
     {
         $validator = Validation::createValidator();
         $formFactory = Forms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($validator))
             ->getFormFactory();
 
-        $form = $formFactory->create('Jsor\Stack\Hal\Fixtures\Form\FormType');
+        $form = $formFactory->create(FormType::class);
 
-        $data = [
-            'family' => [
-                [
-                    'name' => [
-                        'first_name' => 'Jan',
-                    ],
-                ],
-            ],
-            'additional' => 'foo',
-        ];
-
-        $form->submit($data);
+        $form->submit(self::DATA);
 
         $exception = new FormErrorException($form, 'Invalid form', 100);
 

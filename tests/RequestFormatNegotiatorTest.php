@@ -1,18 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestFormatNegotiatorTest extends \PHPUnit\Framework\TestCase
+final class RequestFormatNegotiatorTest extends TestCase
 {
     /**
      * @test
      * @dataProvider provideAcceptHeaders
      */
-    public function it_accepts_hal_headers($acceptHeader, $type, $format)
-    {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+    public function it_accepts_hal_headers(
+        ?string $acceptHeader,
+        ?string $type,
+        ?string $format
+    ): void {
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
@@ -30,7 +37,7 @@ class RequestFormatNegotiatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($format, $request->getRequestFormat(null), 'getRequestFormat');
     }
 
-    public static function provideAcceptHeaders()
+    public static function provideAcceptHeaders(): array
     {
         return [
             ['application/hal+json,application/json;q=0.9,*/*;q=0.8', 'application/hal+json', 'json'],

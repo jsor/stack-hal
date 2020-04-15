@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\ExceptionConverter;
@@ -7,15 +9,18 @@ use Jsor\Stack\Hal\RequestFormatNegotiator;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Jsor\Stack\Hal\Response\HalResponse;
 use Nocarrier\Hal;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
+final class HttpKernelInterfaceTest extends TestCase
 {
     /** @test */
-    public function it_intercepts_not_acceptable_format()
+    public function it_intercepts_not_acceptable_format(): void
     {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->never())
@@ -36,11 +41,11 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_response_to_json()
+    public function it_converts_response_to_json(): void
     {
         $hal = new HalResponse(new Hal('/'));
 
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
@@ -73,11 +78,11 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_response_to_xml()
+    public function it_converts_response_to_xml(): void
     {
         $hal = new HalResponse(new Hal('/'));
 
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
@@ -102,16 +107,16 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_exception_to_json()
+    public function it_converts_exception_to_json(): void
     {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $logger = $this->createMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
 
         $logger
             ->expects($this->once())
@@ -139,16 +144,16 @@ class HttpKernelInterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_exception_to_xml()
+    public function it_converts_exception_to_xml(): void
     {
-        $kernel = $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
             ->method('handle')
             ->will($this->throwException(new NotFoundHttpException()));
 
-        $logger = $this->createMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
 
         $logger
             ->expects($this->once())

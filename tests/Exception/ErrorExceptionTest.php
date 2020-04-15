@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
-class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class ErrorExceptionTest extends TestCase
 {
     /** @test */
-    public function it_serializes_exception_to_json()
+    public function it_serializes_exception_to_json(): void
     {
         $errors = [
           'Error',
@@ -33,7 +37,7 @@ class ErrorExceptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_alllows_errors_to_be_arrays()
+    public function it_alllows_errors_to_be_arrays(): void
     {
         $errors = [
             [

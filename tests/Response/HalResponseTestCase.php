@@ -7,7 +7,7 @@ use Nocarrier\Hal;
 trait HalResponseTestCase
 {
     /** @test */
-    public function it_allows_setting_hal_content()
+    public function it_allows_setting_hal_content(): void
     {
         $response = $this->provideResponse();
 
@@ -24,7 +24,7 @@ trait HalResponseTestCase
     }
 
     /** @test */
-    public function it_allows_setting_null_content()
+    public function it_allows_setting_null_content(): void
     {
         $response = $this->provideResponse();
 
@@ -34,7 +34,7 @@ trait HalResponseTestCase
     }
 
     /** @test */
-    public function it_throws_exception_for_non_hal_content()
+    public function it_throws_exception_for_non_hal_content(): void
     {
         $this->expectException('\LogicException');
 
@@ -44,7 +44,7 @@ trait HalResponseTestCase
     }
 
     /** @test */
-    public function is_sends_hal_content()
+    public function is_sends_hal_content(): void
     {
         $response = $this->provideResponse(new Hal(null, ['message' => 'test']));
 
@@ -63,7 +63,7 @@ trait HalResponseTestCase
     }
 
     /** @test */
-    public function it_returns_hal_instance()
+    public function it_returns_hal_instance(): void
     {
         $hal = new Hal(null, ['message' => 'test']);
 
@@ -72,8 +72,5 @@ trait HalResponseTestCase
         $this->assertSame($hal, $response->getHal());
     }
 
-    /**
-     * @return HalResponse
-     */
-    abstract protected function provideResponse();
+    abstract protected function provideResponse(Hal $hal = null): HalResponse;
 }

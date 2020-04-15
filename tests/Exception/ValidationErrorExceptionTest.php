@@ -1,17 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Exception;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ValidatorBuilder;
 
-class ValidationErrorExceptionTest extends \PHPUnit\Framework\TestCase
+final class ValidationErrorExceptionTest extends TestCase
 {
+    /**
+     * @var string[]
+     */
+    private const DATA = [
+        'additional' => 'foo',
+    ];
     /** @test */
-    public function it_serializes_exception_to_json()
+    public function it_serializes_exception_to_json(): void
     {
         $constraint = new Collection([
             'email' => new Email(),
@@ -19,13 +28,9 @@ class ValidationErrorExceptionTest extends \PHPUnit\Framework\TestCase
             'birthday' => new Date(),
         ]);
 
-        $data = [
-            'additional' => 'foo',
-        ];
-
         $builder = new ValidatorBuilder();
 
-        $violationList = $builder->getValidator()->validate($data, $constraint);
+        $violationList = $builder->getValidator()->validate(self::DATA, $constraint);
 
         $exception = new ValidationErrorException($violationList, 'Validation failed', 100);
 

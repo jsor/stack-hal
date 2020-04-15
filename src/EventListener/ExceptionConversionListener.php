@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\EventListener;
 
 use Jsor\Stack\Hal\ExceptionConverter;
@@ -9,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ExceptionConversionListener implements EventSubscriberInterface
+final class ExceptionConversionListener implements EventSubscriberInterface
 {
     private $logger;
     private $prettyPrint;
@@ -18,17 +20,17 @@ class ExceptionConversionListener implements EventSubscriberInterface
 
     public function __construct(
         LoggerInterface $logger = null,
-        $prettyPrint = true,
-        $debug = false,
+        bool $prettyPrint = true,
+        bool $debug = false,
         array $formats = null
     ) {
         $this->logger = $logger;
-        $this->prettyPrint = (bool) $prettyPrint;
-        $this->debug = (bool) $debug;
+        $this->prettyPrint = $prettyPrint;
+        $this->debug = $debug;
         $this->formats = $formats;
     }
 
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $response = ExceptionConverter::handleThrowable(
             $event->getThrowable(),
@@ -44,7 +46,7 @@ class ExceptionConversionListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::EXCEPTION => 'onKernelException',

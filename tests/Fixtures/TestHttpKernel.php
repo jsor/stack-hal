@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Fixtures;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -9,7 +11,7 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-class TestHttpKernel extends HttpKernel implements ControllerResolverInterface, ArgumentResolverInterface
+final class TestHttpKernel extends HttpKernel implements ControllerResolverInterface, ArgumentResolverInterface
 {
     private $controller;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
@@ -9,14 +11,16 @@ use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
 use Jsor\Stack\Hal\Fixtures\KernelForTest;
 use Jsor\Stack\Hal\Fixtures\TestHttpKernel;
 use Nocarrier\Hal;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class KernelTest extends \PHPUnit\Framework\TestCase
+final class KernelTest extends TestCase
 {
     /** @test */
-    public function it_intercepts_not_acceptable_format()
+    public function it_intercepts_not_acceptable_format(): void
     {
         $dispatcher = new EventDispatcher();
         $httpKernel = new TestHttpKernel($dispatcher);
@@ -43,10 +47,10 @@ class KernelTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_response_to_json()
+    public function it_converts_response_to_json(): void
     {
         $dispatcher = new EventDispatcher();
-        $httpKernel = new TestHttpKernel($dispatcher, function () {
+        $httpKernel = new TestHttpKernel($dispatcher, static function () {
             return new Hal('/');
         });
 
@@ -83,16 +87,16 @@ class KernelTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function it_converts_exception_to_json()
+    public function it_converts_exception_to_json(): void
     {
-        $logger = $this->createMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
 
         $logger
             ->expects($this->once())
             ->method('error');
 
         $dispatcher = new EventDispatcher();
-        $httpKernel = new TestHttpKernel($dispatcher, function () {
+        $httpKernel = new TestHttpKernel($dispatcher, static function () {
             throw new NotFoundHttpException();
         });
 

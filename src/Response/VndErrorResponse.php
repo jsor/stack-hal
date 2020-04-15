@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Response;
 
 use Jsor\Stack\Hal\Exception\HalException;
@@ -9,33 +11,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class VndErrorResponse extends HalResponse
+final class VndErrorResponse extends HalResponse
 {
     public function __construct(
         Hal $hal,
-        $status = 500,
-        $headers = [],
-        $prettyPrint = true
+        int $status = 500,
+        array $headers = [],
+        bool $prettyPrint = true
     ) {
         parent::__construct($hal, $status, $headers, $prettyPrint);
 
         $this->headers->set('Content-Type', 'application/vnd.error+json');
     }
 
-    public static function create(
-        $hal = null,
-        $status = 500,
-        $headers = [],
-        $prettyPrint = true
-    ) {
-        return new static($hal, $status, $headers, $prettyPrint);
-    }
-
     public static function fromThrowable(
         \Throwable $throwable,
-        $prettyPrint = true,
-        $debug = false
-    ) {
+        bool $prettyPrint = true,
+        bool $debug = false
+    ): VndErrorResponse {
         $statusCode = self::extractStatus($throwable);
         $headers = self::extractHeaders($throwable);
         $message = self::extractMessage($throwable, $debug);
@@ -61,7 +54,7 @@ class VndErrorResponse extends HalResponse
         return new static($hal, $statusCode, $headers, $prettyPrint);
     }
 
-    public function prepare(Request $request)
+    public function prepare(Request $request): Response
     {
         parent::prepare($request);
 
