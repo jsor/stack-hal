@@ -124,7 +124,7 @@ final class RequestFormatValidator implements HttpKernelInterface
     /**
      * @param array|string|null $exclude
      */
-    protected static function isExcluded(Request $request, $exclude): bool
+    private static function isExcluded(Request $request, $exclude): bool
     {
         if (!$exclude) {
             return false;
@@ -149,7 +149,7 @@ final class RequestFormatValidator implements HttpKernelInterface
     /**
      * @param RequestMatcherInterface|array|string $arguments
      */
-    protected static function createRequestMatcher(
+    private static function createRequestMatcher(
         $arguments
     ): RequestMatcherInterface {
         if ($arguments instanceof RequestMatcherInterface) {

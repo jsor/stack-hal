@@ -19,6 +19,7 @@ final class ValidationErrorExceptionTest extends TestCase
     private const DATA = [
         'additional' => 'foo',
     ];
+
     /** @test */
     public function it_serializes_exception_to_json(): void
     {

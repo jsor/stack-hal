@@ -28,7 +28,7 @@ final class VndErrorResponse extends HalResponse
         \Throwable $throwable,
         bool $prettyPrint = true,
         bool $debug = false
-    ): VndErrorResponse {
+    ): self {
         $statusCode = self::extractStatus($throwable);
         $headers = self::extractHeaders($throwable);
         $message = self::extractMessage($throwable, $debug);

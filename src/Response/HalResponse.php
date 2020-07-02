@@ -61,7 +61,7 @@ class HalResponse extends Response
             return '';
         }
 
-        if ($this->requestFormat === 'xml') {
+        if ('xml' === $this->requestFormat) {
             return $this->hal->asXml($this->prettyPrint);
         }
 

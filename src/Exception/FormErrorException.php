@@ -56,7 +56,7 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
 
             $origin = $error->getOrigin();
 
-            if ($origin !== null) {
+            if (null !== $origin) {
                 $currPath = $this->getPath($origin);
             } else {
                 if (null === $formPath) {
