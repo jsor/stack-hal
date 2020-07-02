@@ -44,7 +44,7 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
         return $hal;
     }
 
-    private function appendErrors(Hal $hal, FormInterface $form): void
+    private function appendErrors(Hal $hal, FormInterface $form, array &$visited = []): void
     {
         $formPath = null;
 
@@ -67,6 +67,11 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
             }
 
             if ($currPath) {
+                if (isset($visited[$currPath])) {
+                    continue;
+                }
+
+                $visited[$currPath] = true;
                 $data['path'] = $currPath;
             }
 
@@ -74,7 +79,7 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
         }
 
         foreach ($form->all() as $child) {
-            $this->appendErrors($hal, $child);
+            $this->appendErrors($hal, $child, $visited);
         }
     }
 
