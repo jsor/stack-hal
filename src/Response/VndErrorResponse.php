@@ -51,7 +51,7 @@ final class VndErrorResponse extends HalResponse
             $hal->setData($data);
         }
 
-        return new static($hal, $statusCode, $headers, $prettyPrint);
+        return new self($hal, $statusCode, $headers, $prettyPrint);
     }
 
     public function prepare(Request $request): Response

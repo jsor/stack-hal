@@ -34,7 +34,7 @@ final class RequestFormatValidator implements HttpKernelInterface
         $type = HttpKernelInterface::MASTER_REQUEST,
         $catch = true
     ) {
-        $response = static::intercept(
+        $response = self::intercept(
             $request,
             $this->acceptableFormats,
             $this->exclude
@@ -66,7 +66,7 @@ final class RequestFormatValidator implements HttpKernelInterface
             return null;
         }
 
-        if (static::isExcluded($request, $exclude)) {
+        if (self::isExcluded($request, $exclude)) {
             return null;
         }
 
