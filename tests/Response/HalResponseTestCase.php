@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Response;
 
 use Nocarrier\Hal;
@@ -17,9 +19,9 @@ trait HalResponseTestCase
             json_encode(
                 [
                     'message' => 'test',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -56,9 +58,9 @@ trait HalResponseTestCase
             json_encode(
                 [
                     'message' => 'test',
-                ]
+                ],
             ),
-            $string
+            $string,
         );
     }
 

@@ -11,9 +11,9 @@
         }
     ],
     "require": {
-        "php": "^7.2",
-        "symfony/http-foundation": "^4.4||^5.0",
-        "symfony/http-kernel": "^4.4||^5.0",
+        "php": "^8.0",
+        "symfony/http-foundation": "^5.4||^6.0",
+        "symfony/http-kernel": "^5.4||^6.0",
         "nocarrier/hal": "^0.9.4"
     },
     "suggest": {
@@ -25,23 +25,23 @@
         "symfony/serializer": "For using RequestBodyDecoder"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
+        "roave/security-advisories": "dev-latest",
 
-        "psr/log": "^1.0",
+        "psr/log": "^1.0||^3.0",
 
-        "symfony/event-dispatcher": "^4.4||^5.0",
+        "symfony/event-dispatcher": "^5.4||^6.0",
 
-        "symfony/config": "^4.4||^5.0",
-        "symfony/dependency-injection": "^4.4||^5.0",
+        "symfony/config": "^5.4||^6.0",
+        "symfony/dependency-injection": "^5.4||^6.0",
 
-        "symfony/form": "^4.4||^5.0",
-        "symfony/translation": "^4.4||^5.0",
-        "symfony/validator": "^4.4||^5.0",
-        "symfony/security-core": "^4.4||^5.0",
-        "symfony/serializer": "^4.4||^5.0",
+        "symfony/form": "^5.4||^6.0",
+        "symfony/translation": "^5.4||^6.0",
+        "symfony/validator": "^5.4||^6.0",
+        "symfony/security-core": "^5.4||^6.0",
+        "symfony/serializer": "^5.4||^6.0",
 
-        "willdurand/negotiation": "^2.0",
-        "phpunit/phpunit": "^8.5",
+        "willdurand/negotiation": "^3.0",
+        "phpunit/phpunit": "^9.5",
 
         "friendsofphp/php-cs-fixer": "^3.0"
     },

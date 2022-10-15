@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+
+use function call_user_func;
+use function in_array;
+use function is_array;
+use function is_callable;
 
 /**
  * Adapted from the FOSRestBundle BodyListener.
@@ -18,15 +24,15 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
  */
 final class RequestBodyDecoder implements HttpKernelInterface
 {
-    private $app;
-    private $decoders;
+    private HttpKernelInterface $app;
+    private ?array $decoders;
 
     /**
      * @param callable[] $decoders
      */
     public function __construct(
         HttpKernelInterface $app,
-        array $decoders = null
+        array $decoders = null,
     ) {
         $this->app = $app;
         $this->decoders = $decoders;
@@ -34,9 +40,9 @@ final class RequestBodyDecoder implements HttpKernelInterface
 
     public function handle(
         Request $request,
-        $type = HttpKernelInterface::MASTER_REQUEST,
-        $catch = true
-    ) {
+        int $type = HttpKernelInterface::MAIN_REQUEST,
+        bool $catch = true,
+    ): Response {
         try {
             self::decode($request, $this->decoders);
         } catch (BadRequestHttpException $exception) {
@@ -46,7 +52,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
 
             return new Response(
                 $exception->getMessage(),
-                Response::HTTP_BAD_REQUEST
+                Response::HTTP_BAD_REQUEST,
             );
         }
 
@@ -58,19 +64,15 @@ final class RequestBodyDecoder implements HttpKernelInterface
      */
     public static function decode(
         Request $request,
-        array $decoders = null
+        array $decoders = null,
     ): void {
         if (null === $decoders) {
             $decoders = [
                 'json' => static function ($content) {
-                    $encoder = new JsonEncoder();
-
-                    return $encoder->decode($content, 'json');
+                    return (new JsonEncoder())->decode($content, 'json');
                 },
                 'xml' => static function ($content) {
-                    $encoder = new XmlEncoder();
-
-                    return $encoder->decode($content, 'xml');
+                    return (new XmlEncoder())->decode($content, 'xml');
                 },
             ];
         }
@@ -89,7 +91,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
             return;
         }
 
-        if (!\is_callable($decoders[$format])) {
+        if (!is_callable($decoders[$format])) {
             return;
         }
 
@@ -100,13 +102,13 @@ final class RequestBodyDecoder implements HttpKernelInterface
         }
 
         try {
-            $data = \call_user_func($decoders[$format], $content);
-        } catch (\Exception $e) {
-            throw new BadRequestHttpException('Invalid '.$format.' message received', $e);
+            $data = call_user_func($decoders[$format], $content);
+        } catch (Exception $e) {
+            throw new BadRequestHttpException('Invalid ' . $format . ' message received', $e);
         }
 
-        if (!\is_array($data)) {
-            throw new BadRequestHttpException('Invalid '.$format.' message received');
+        if (!is_array($data)) {
+            throw new BadRequestHttpException('Invalid ' . $format . ' message received');
         }
 
         $request->request->replace($data);
@@ -114,7 +116,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
 
     private static function isDecodeable(Request $request): bool
     {
-        if (!\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
+        if (!in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return false;
         }
 
@@ -133,10 +135,10 @@ final class RequestBodyDecoder implements HttpKernelInterface
             return false;
         }
 
-        return \in_array(
+        return in_array(
             strtolower($contentTypeParts[0]),
             ['multipart/form-data', 'application/x-www-form-urlencoded'],
-            true
+            true,
         );
     }
 }

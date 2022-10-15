@@ -7,13 +7,14 @@ namespace Jsor\Stack\Hal;
 use Negotiation\Accept;
 use Negotiation\Negotiator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 final class RequestFormatNegotiator implements HttpKernelInterface
 {
-    private $app;
-    private $formats;
-    private $priorities;
+    private HttpKernelInterface $app;
+    private ?array $formats;
+    private ?array $priorities;
 
     private const DEFAULT_FORMATS = [
         'json' => ['application/hal+json', 'application/json', 'application/x-json'],
@@ -23,7 +24,7 @@ final class RequestFormatNegotiator implements HttpKernelInterface
     public function __construct(
         HttpKernelInterface $app,
         array $formats = null,
-        array $priorities = null
+        array $priorities = null,
     ) {
         $this->app = $app;
         $this->formats = $formats;
@@ -32,9 +33,9 @@ final class RequestFormatNegotiator implements HttpKernelInterface
 
     public function handle(
         Request $request,
-        $type = HttpKernelInterface::MASTER_REQUEST,
-        $catch = true
-    ) {
+        int $type = HttpKernelInterface::MAIN_REQUEST,
+        bool $catch = true,
+    ): Response {
         self::negotiate($request, $this->formats, $this->priorities);
 
         return $this->app->handle($request, $type, $catch);
@@ -43,7 +44,7 @@ final class RequestFormatNegotiator implements HttpKernelInterface
     public static function negotiate(
         Request $request,
         array $formats = null,
-        array $priorities = null
+        array $priorities = null,
     ): void {
         $formats = $formats ?: self::DEFAULT_FORMATS;
 
@@ -74,12 +75,12 @@ final class RequestFormatNegotiator implements HttpKernelInterface
 
     private static function extendRequestFormats(
         Request $request,
-        array $formats
+        array $formats,
     ): void {
         foreach ($formats as $format => $mimeTypes) {
             $allMimeTypes = array_merge(
                 $mimeTypes,
-                Request::getMimeTypes($format)
+                Request::getMimeTypes($format),
             );
 
             $request->setFormat($format, array_unique($allMimeTypes));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $app = new ExceptionConverter($kernel);
 
@@ -35,9 +36,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Internal Server Error',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -63,9 +64,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Not Found',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -91,9 +92,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Resource not found',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -119,9 +120,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Access Denied',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -133,7 +134,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $app = new ExceptionConverter($kernel);
 
@@ -145,7 +146,7 @@ final class ExceptionConverterTest extends TestCase
         $this->assertSame(500, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Internal Server Error</message></resource>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -169,7 +170,7 @@ final class ExceptionConverterTest extends TestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Not Found</message></resource>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -193,7 +194,7 @@ final class ExceptionConverterTest extends TestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Resource not found</message></resource>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -217,7 +218,7 @@ final class ExceptionConverterTest extends TestCase
         $this->assertSame(403, $response->getStatusCode());
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Access Denied</message></resource>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -229,7 +230,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception('Error')));
+            ->will($this->throwException(new Exception('Error')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -243,9 +244,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Internal Server Error',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -257,7 +258,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception('Custom error message')));
+            ->will($this->throwException(new Exception('Custom error message')));
 
         $app = new ExceptionConverter($kernel, null, false, true);
 
@@ -271,9 +272,9 @@ final class ExceptionConverterTest extends TestCase
             json_encode(
                 [
                     'message' => 'Custom error message',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -288,7 +289,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception('Error')));
+            ->will($this->throwException(new Exception('Error')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -309,7 +310,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception('Error')));
+            ->will($this->throwException(new Exception('Error')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -329,7 +330,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception('Error')));
+            ->will($this->throwException(new Exception('Error')));
 
         $app = new ExceptionConverter($kernel);
 
@@ -371,7 +372,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $logger = $this->createMock(LoggerInterface::class);
 

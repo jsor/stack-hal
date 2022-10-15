@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal;
 
+use Exception;
 use Jsor\Stack\Hal\Response\VndErrorResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Throwable;
+
+use function get_class;
+use function in_array;
 
 /**
  * Converts to a vnd.error response.
@@ -18,12 +23,12 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 final class ExceptionConverter implements HttpKernelInterface
 {
-    private $app;
-    private $logger;
-    private $prettyPrint;
-    private $debug;
-    private $passThroughCatch;
-    private $formats;
+    private HttpKernelInterface $app;
+    private ?LoggerInterface $logger;
+    private bool $prettyPrint;
+    private bool $debug;
+    private bool $passThroughCatch;
+    private ?array $formats;
 
     public function __construct(
         HttpKernelInterface $app,
@@ -31,7 +36,7 @@ final class ExceptionConverter implements HttpKernelInterface
         bool $prettyPrint = true,
         bool $debug = false,
         bool $passThroughCatch = false,
-        array $formats = null
+        array $formats = null,
     ) {
         $this->app = $app;
         $this->logger = $logger;
@@ -43,16 +48,16 @@ final class ExceptionConverter implements HttpKernelInterface
 
     public function handle(
         Request $request,
-        $type = HttpKernelInterface::MASTER_REQUEST,
-        $catch = true
-    ) {
+        int $type = HttpKernelInterface::MAIN_REQUEST,
+        bool $catch = true,
+    ): Response {
         try {
             return $this->app->handle(
                 $request,
                 $type,
-                $this->passThroughCatch ? $catch : false
+                $this->passThroughCatch ? $catch : false,
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if (!$catch) {
                 throw $exception;
             }
@@ -63,7 +68,7 @@ final class ExceptionConverter implements HttpKernelInterface
                 $this->logger,
                 $this->prettyPrint,
                 $this->debug,
-                $this->formats
+                $this->formats,
             );
 
             if ($response instanceof Response) {
@@ -75,12 +80,12 @@ final class ExceptionConverter implements HttpKernelInterface
     }
 
     public static function handleThrowable(
-        \Throwable $throwable,
+        Throwable $throwable,
         Request $request,
         LoggerInterface $logger = null,
         bool $prettyPrint = true,
         bool $debug = false,
-        array $formats = null
+        array $formats = null,
     ): ?VndErrorResponse {
         if (null !== $logger) {
             self::logThrowable($logger, $throwable);
@@ -90,27 +95,27 @@ final class ExceptionConverter implements HttpKernelInterface
 
         $format = $request->getRequestFormat(null);
 
-        if (!$format || !\in_array($format, $formats, true)) {
+        if (!$format || !in_array($format, $formats, true)) {
             return null;
         }
 
         return VndErrorResponse::fromThrowable(
             $throwable,
             $prettyPrint,
-            $debug
+            $debug,
         );
     }
 
     public static function logThrowable(
         LoggerInterface $logger,
-        \Throwable $throwable
+        Throwable $throwable,
     ): void {
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            \get_class($throwable),
+            get_class($throwable),
             $throwable->getMessage(),
             $throwable->getFile(),
-            $throwable->getLine()
+            $throwable->getLine(),
         );
 
         $isCritical = !$throwable instanceof HttpExceptionInterface ||

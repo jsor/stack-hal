@@ -71,9 +71,9 @@ final class HttpKernelTest extends TestCase
                             'href' => '/',
                         ],
                     ],
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -109,9 +109,9 @@ final class HttpKernelTest extends TestCase
             json_encode(
                 [
                     'message' => 'Not Found',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 }

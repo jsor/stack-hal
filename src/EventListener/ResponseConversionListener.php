@@ -12,11 +12,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class ResponseConversionListener implements EventSubscriberInterface
 {
-    private $prettyPrint;
+    private bool $prettyPrint;
 
-    public function __construct($prettyPrint = true)
+    public function __construct(bool $prettyPrint = true)
     {
-        $this->prettyPrint = (bool) $prettyPrint;
+        $this->prettyPrint = $prettyPrint;
     }
 
     public function onKernelView(ViewEvent $event): void
@@ -25,7 +25,7 @@ final class ResponseConversionListener implements EventSubscriberInterface
 
         if ($hal instanceof Hal) {
             $event->setResponse(
-                new HalResponse($hal, 200, [], $this->prettyPrint)
+                new HalResponse($hal, 200, [], $this->prettyPrint),
             );
         }
     }

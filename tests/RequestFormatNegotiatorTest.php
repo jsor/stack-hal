@@ -6,24 +6,27 @@ namespace Jsor\Stack\Hal;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 final class RequestFormatNegotiatorTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider provideAcceptHeaders
      */
     public function it_accepts_hal_headers(
         ?string $acceptHeader,
         ?string $type,
-        ?string $format
+        ?string $format,
     ): void {
         $kernel = $this->createMock(HttpKernelInterface::class);
 
         $kernel
             ->expects($this->once())
-            ->method('handle');
+            ->method('handle')
+            ->willReturn(new Response());
 
         $app = new RequestFormatNegotiator($kernel);
 

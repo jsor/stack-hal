@@ -71,9 +71,9 @@ final class HttpKernelInterfaceTest extends TestCase
                             'href' => '/',
                         ],
                     ],
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -102,7 +102,7 @@ final class HttpKernelInterfaceTest extends TestCase
         $this->assertSame('application/hal+xml', $response->headers->get('Content-Type'));
         $this->assertXmlStringEqualsXmlString(
             '<resource href="/"/>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -137,9 +137,9 @@ final class HttpKernelInterfaceTest extends TestCase
             json_encode(
                 [
                     'message' => 'Not Found',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -172,7 +172,7 @@ final class HttpKernelInterfaceTest extends TestCase
         $this->assertSame('application/vnd.error+xml', $response->headers->get('Content-Type'));
         $this->assertXmlStringEqualsXmlString(
             '<resource><message>Not Found</message></resource>',
-            $response->getContent()
+            $response->getContent(),
         );
     }
 }

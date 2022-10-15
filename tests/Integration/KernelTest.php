@@ -80,9 +80,9 @@ final class KernelTest extends TestCase
                             'href' => '/',
                         ],
                     ],
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -122,9 +122,9 @@ final class KernelTest extends TestCase
             json_encode(
                 [
                     'message' => 'Not Found',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 }

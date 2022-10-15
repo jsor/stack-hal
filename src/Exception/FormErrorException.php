@@ -8,18 +8,19 @@ use Nocarrier\Hal;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Throwable;
 
 final class FormErrorException extends BadRequestHttpException implements HalException
 {
-    private $form;
-    private $logref;
+    private FormInterface $form;
+    private mixed $logref;
 
     public function __construct(
         FormInterface $form,
-        $message = null,
-        $logref = null,
-        \Throwable $previous = null,
-        $code = 0
+        string $message = '',
+        mixed $logref = null,
+        Throwable $previous = null,
+        int $code = 0,
     ) {
         parent::__construct($message, $previous, $code);
 
@@ -97,6 +98,6 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
         // Remove root form
         array_shift($path);
 
-        return '/'.implode('/', $path);
+        return '/' . implode('/', $path);
     }
 }

@@ -7,18 +7,19 @@ namespace Jsor\Stack\Hal\Exception;
 use Nocarrier\Hal;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Throwable;
 
 final class ValidationErrorException extends BadRequestHttpException implements HalException
 {
-    private $violationList;
-    private $logref;
+    private ConstraintViolationListInterface $violationList;
+    private mixed $logref;
 
     public function __construct(
         ConstraintViolationListInterface $violationList,
-        $message = null,
-        $logref = null,
-        \Throwable $previous = null,
-        $code = 0
+        string $message = '',
+        mixed $logref = null,
+        Throwable $previous = null,
+        int $code = 0,
     ) {
         parent::__construct($message, $previous, $code);
 
@@ -40,7 +41,7 @@ final class ValidationErrorException extends BadRequestHttpException implements 
 
         foreach ($this->violationList as $violation) {
             $path = str_replace('][', '/', $violation->getPropertyPath());
-            $path = '/'.trim($path, '[]');
+            $path = '/' . trim($path, '[]');
 
             $data = [
                 'message' => $violation->getMessage(),

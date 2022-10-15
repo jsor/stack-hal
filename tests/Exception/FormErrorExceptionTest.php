@@ -79,7 +79,7 @@ final class FormErrorExceptionTest extends TestCase
                             ],
                     ],
             ],
-            json_decode($exception->getHal()->asJson(), true)
+            json_decode($exception->getHal()->asJson(), true),
         );
     }
 }

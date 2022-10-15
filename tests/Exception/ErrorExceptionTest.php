@@ -30,9 +30,9 @@ final class ErrorExceptionTest extends TestCase
                                     ],
                                 ],
                         ],
-                ]
+                ],
             ),
-            $exception->getHal()->asJson()
+            $exception->getHal()->asJson(),
         );
     }
 
@@ -62,9 +62,9 @@ final class ErrorExceptionTest extends TestCase
                                     ],
                                 ],
                         ],
-                ]
+                ],
             ),
-            $exception->getHal()->asJson()
+            $exception->getHal()->asJson(),
         );
     }
 }

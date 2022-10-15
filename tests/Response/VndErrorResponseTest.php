@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jsor\Stack\Hal\Response;
 
+use Exception;
 use Jsor\Stack\Hal\Exception\ErrorException;
 use Jsor\Stack\Hal\Exception\HalException;
 use Nocarrier\Hal;
@@ -55,16 +58,16 @@ final class VndErrorResponseTest extends TestCase
                                     ],
                                 ],
                         ],
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
     /** @test */
     public function it_hides_message_from_unknown_exceptions_by_default(): void
     {
-        $exception = new \Exception('Unknown Error');
+        $exception = new Exception('Unknown Error');
 
         $response = VndErrorResponse::fromThrowable($exception);
 
@@ -73,16 +76,16 @@ final class VndErrorResponseTest extends TestCase
             json_encode(
                 [
                     'message' => 'Internal Server Error',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
     /** @test */
     public function it_exposes_message_from_unknown_exceptions_in_debug_mode(): void
     {
-        $exception = new \Exception('Unknown Error');
+        $exception = new Exception('Unknown Error');
 
         $response = VndErrorResponse::fromThrowable($exception, true, true);
 
@@ -91,9 +94,9 @@ final class VndErrorResponseTest extends TestCase
             json_encode(
                 [
                     'message' => 'Unknown Error',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 
@@ -108,14 +111,14 @@ final class VndErrorResponseTest extends TestCase
             json_encode(
                 [
                     'message' => 'Message',
-                ]
+                ],
             ),
-            $response->getContent()
+            $response->getContent(),
         );
     }
 }
 
-final class EmptyHalException extends \Exception implements HalException
+final class EmptyHalException extends Exception implements HalException
 {
     public function getHal(): Hal
     {

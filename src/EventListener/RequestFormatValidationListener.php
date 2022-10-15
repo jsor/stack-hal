@@ -12,12 +12,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class RequestFormatValidationListener implements EventSubscriberInterface
 {
-    private $acceptableFormats;
-    private $exclude;
+    private ?array $acceptableFormats;
+    private array|string|null $exclude;
 
     public function __construct(
         array $acceptableFormats = null,
-        $exclude = null
+        array|string|null $exclude = null,
     ) {
         $this->acceptableFormats = $acceptableFormats;
         $this->exclude = $exclude;
@@ -28,7 +28,7 @@ final class RequestFormatValidationListener implements EventSubscriberInterface
         $response = RequestFormatValidator::intercept(
             $event->getRequest(),
             $this->acceptableFormats,
-            $this->exclude
+            $this->exclude,
         );
 
         if ($response instanceof Response) {

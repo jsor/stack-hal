@@ -22,7 +22,7 @@ final class TestHttpKernel extends HttpKernel implements ControllerResolverInter
         parent::__construct($eventDispatcher, $this, null, $this);
     }
 
-    public function getController(Request $request)
+    public function getController(Request $request): callable|false
     {
         if ($this->controller) {
             return $this->controller;
@@ -38,6 +38,6 @@ final class TestHttpKernel extends HttpKernel implements ControllerResolverInter
 
     public function callController(Request $request)
     {
-        return new Response('Request: '.$request->getRequestUri());
+        return new Response('Request: ' . $request->getRequestUri());
     }
 }

@@ -11,12 +11,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class RequestFormatNegotiationListener implements EventSubscriberInterface
 {
-    private $formats;
-    private $priorities;
+    private ?array $formats;
+    private ?array $priorities;
 
     public function __construct(
         array $formats = null,
-        array $priorities = null
+        array $priorities = null,
     ) {
         $this->formats = $formats;
         $this->priorities = $priorities;
@@ -27,7 +27,7 @@ final class RequestFormatNegotiationListener implements EventSubscriberInterface
         RequestFormatNegotiator::negotiate(
             $event->getRequest(),
             $this->formats,
-            $this->priorities
+            $this->priorities,
         );
     }
 

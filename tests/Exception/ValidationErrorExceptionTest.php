@@ -61,9 +61,9 @@ final class ValidationErrorExceptionTest extends TestCase
                                     ],
                                 ],
                         ],
-                ]
+                ],
             ),
-            $exception->getHal()->asJson()
+            $exception->getHal()->asJson(),
         );
     }
 }

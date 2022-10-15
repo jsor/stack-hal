@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ final class RequestBodyDecoderTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider provideOnKernelRequestData
      */
     public function it_decodes_request_body(
@@ -21,7 +23,7 @@ final class RequestBodyDecoderTest extends TestCase
         string $method,
         array $expectedParameters,
         string $contentType = null,
-        array $decoders = null
+        array $decoders = null,
     ): void {
         $kernel = $this->createMock(HttpKernelInterface::class);
 
@@ -73,11 +75,10 @@ final class RequestBodyDecoderTest extends TestCase
 
         $kernel
             ->expects($this->never())
-            ->method('handle')
-            ->willReturn(new Response());
+            ->method('handle');
 
         $app = new RequestBodyDecoder($kernel, ['json' => static function () {
-            throw new \Exception('Foo');
+            throw new Exception('Foo');
         }]);
 
         $request = new Request([], [], [], [], [], [], '["foo"]');
@@ -100,11 +101,10 @@ final class RequestBodyDecoderTest extends TestCase
 
         $kernel
             ->expects($this->never())
-            ->method('handle')
-            ->willReturn(new Response());
+            ->method('handle');
 
         $app = new RequestBodyDecoder($kernel, ['json' => static function () {
-            throw new \Exception('Foo');
+            throw new Exception('Foo');
         }]);
 
         $request = new Request([], [], [], [], [], [], '["foo"]');
@@ -123,8 +123,7 @@ final class RequestBodyDecoderTest extends TestCase
 
         $kernel
             ->expects($this->never())
-            ->method('handle')
-            ->willReturn(new Response());
+            ->method('handle');
 
         $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             return '';
@@ -150,8 +149,7 @@ final class RequestBodyDecoderTest extends TestCase
 
         $kernel
             ->expects($this->never())
-            ->method('handle')
-            ->willReturn(new Response());
+            ->method('handle');
 
         $app = new RequestBodyDecoder($kernel, ['json' => static function () {
             return '';

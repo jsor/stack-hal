@@ -9,22 +9,12 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class KernelForTest extends Kernel
 {
-    public function getBundleMap()
-    {
-        return $this->bundleMap;
-    }
-
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-    }
-
-    public function isBooted()
-    {
-        return $this->booted;
     }
 }

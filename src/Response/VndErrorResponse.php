@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Throwable;
 
 final class VndErrorResponse extends HalResponse
 {
@@ -17,7 +18,7 @@ final class VndErrorResponse extends HalResponse
         Hal $hal,
         int $status = 500,
         array $headers = [],
-        bool $prettyPrint = true
+        bool $prettyPrint = true,
     ) {
         parent::__construct($hal, $status, $headers, $prettyPrint);
 
@@ -25,9 +26,9 @@ final class VndErrorResponse extends HalResponse
     }
 
     public static function fromThrowable(
-        \Throwable $throwable,
+        Throwable $throwable,
         bool $prettyPrint = true,
-        bool $debug = false
+        bool $debug = false,
     ): self {
         $statusCode = self::extractStatus($throwable);
         $headers = self::extractHeaders($throwable);
@@ -54,7 +55,7 @@ final class VndErrorResponse extends HalResponse
         return new self($hal, $statusCode, $headers, $prettyPrint);
     }
 
-    public function prepare(Request $request): Response
+    public function prepare(Request $request): static
     {
         parent::prepare($request);
 
@@ -65,7 +66,7 @@ final class VndErrorResponse extends HalResponse
         return $this;
     }
 
-    private static function extractStatus(\Throwable $throwable)
+    private static function extractStatus(Throwable $throwable)
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getStatusCode();
@@ -78,7 +79,7 @@ final class VndErrorResponse extends HalResponse
         return 500;
     }
 
-    private static function extractHeaders(\Throwable $throwable)
+    private static function extractHeaders(Throwable $throwable)
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getHeaders();
@@ -87,7 +88,7 @@ final class VndErrorResponse extends HalResponse
         return [];
     }
 
-    private static function extractMessage(\Throwable $throwable, $debug)
+    private static function extractMessage(Throwable $throwable, $debug)
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getMessage();

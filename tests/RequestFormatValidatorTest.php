@@ -244,7 +244,7 @@ final class RequestFormatValidatorTest extends TestCase
             ->method('handle')
             ->willReturn($expectedResponse);
 
-        $app = new RequestFormatValidator($kernel, [], new RequestMatcher('/ignore'));
+        $app = new RequestFormatValidator($kernel, [], [new RequestMatcher('/ignore')]);
 
         $request = Request::create('/ignore');
 

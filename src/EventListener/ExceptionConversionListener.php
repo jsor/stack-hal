@@ -13,16 +13,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class ExceptionConversionListener implements EventSubscriberInterface
 {
-    private $logger;
-    private $prettyPrint;
-    private $debug;
-    private $formats;
+    private ?LoggerInterface $logger;
+    private bool $prettyPrint;
+    private bool $debug;
+    private ?array $formats;
 
     public function __construct(
         LoggerInterface $logger = null,
         bool $prettyPrint = true,
         bool $debug = false,
-        array $formats = null
+        array $formats = null,
     ) {
         $this->logger = $logger;
         $this->prettyPrint = $prettyPrint;
@@ -38,7 +38,7 @@ final class ExceptionConversionListener implements EventSubscriberInterface
             $this->logger,
             $this->prettyPrint,
             $this->debug,
-            $this->formats
+            $this->formats,
         );
 
         if ($response instanceof Response) {

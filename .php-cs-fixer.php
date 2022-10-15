@@ -10,25 +10,40 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        'array_syntax' => ['syntax' => 'short'],
-        'linebreak_after_opening_tag' => true,
-        'native_constant_invocation' => true,
-        'native_function_invocation' => true,
-        'no_superfluous_phpdoc_tags' => true,
-        'no_unreachable_default_argument_value' => true,
-        'no_useless_else' => true,
-        'no_useless_return' => true,
-        'ordered_imports' => true,
+        'array_syntax' => [
+            'syntax' => 'short',
+        ],
+        'concat_space' => [
+            'spacing' => 'one',
+        ],
+        'declare_strict_types' => true,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => null,
+            'import_functions' => true,
+        ],
+        'native_constant_invocation' => [
+            'fix_built_in' => false,
+        ],
+        'ordered_imports' => [
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+        ],
         'php_unit_method_casing' => [
             'case' => 'snake_case',
         ],
         'php_unit_test_annotation' => [
             'style' => 'annotation',
         ],
-        'phpdoc_order' => true,
-        'semicolon_after_instruction' => true,
-        'strict_comparison' => true,
-        'strict_param' => true,
+        'single_line_throw' => false,
+        'trailing_comma_in_multiline' => [
+            'after_heredoc' => true,
+            'elements' => ['arrays', 'arguments', 'parameters'],
+        ],
+        'types_spaces' => ['space' => 'none'],
     ])
     ->setFinder($finder)
 ;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal\Response;
 
+use LogicException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class HalResponse extends Response
         Hal $hal,
         int $status = 200,
         array $headers = [],
-        bool $prettyPrint = true
+        bool $prettyPrint = true,
     ) {
         parent::__construct(null, $status, $headers);
 
@@ -29,7 +30,7 @@ class HalResponse extends Response
         $this->headers->set('Content-Type', 'application/hal+json');
     }
 
-    public function prepare(Request $request): Response
+    public function prepare(Request $request): static
     {
         if ('xml' === $request->getRequestFormat()) {
             $this->requestFormat = 'xml';
@@ -39,20 +40,22 @@ class HalResponse extends Response
         return parent::prepare($request);
     }
 
-    public function sendContent(): self
+    public function sendContent(): static
     {
         echo $this->getContent();
 
         return $this;
     }
 
-    public function setContent($content): void
+    public function setContent($content): static
     {
         if (null !== $content && !$content instanceof Hal) {
-            throw new \LogicException('The content must be a Hal instance.');
+            throw new LogicException('The content must be a Hal instance.');
         }
 
         $this->hal = $content;
+
+        return $this;
     }
 
     public function getContent(): string

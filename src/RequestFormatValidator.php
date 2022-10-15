@@ -10,11 +10,13 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+use function is_array;
+
 final class RequestFormatValidator implements HttpKernelInterface
 {
-    private $app;
-    private $acceptableFormats;
-    private $exclude;
+    private HttpKernelInterface $app;
+    private ?array $acceptableFormats;
+    private array|string|null $exclude;
 
     /**
      * @param array|string|null $exclude
@@ -22,7 +24,7 @@ final class RequestFormatValidator implements HttpKernelInterface
     public function __construct(
         HttpKernelInterface $app,
         array $acceptableFormats = null,
-        $exclude = null
+        array|string|null $exclude = null,
     ) {
         $this->app = $app;
         $this->acceptableFormats = $acceptableFormats;
@@ -31,13 +33,13 @@ final class RequestFormatValidator implements HttpKernelInterface
 
     public function handle(
         Request $request,
-        $type = HttpKernelInterface::MASTER_REQUEST,
-        $catch = true
-    ) {
+        int $type = HttpKernelInterface::MAIN_REQUEST,
+        bool $catch = true,
+    ): Response {
         $response = self::intercept(
             $request,
             $this->acceptableFormats,
-            $this->exclude
+            $this->exclude,
         );
 
         if ($response instanceof Response) {
@@ -47,13 +49,10 @@ final class RequestFormatValidator implements HttpKernelInterface
         return $this->app->handle($request, $type, $catch);
     }
 
-    /**
-     * @param array|string|null $exclude
-     */
     public static function intercept(
         Request $request,
         array $acceptableFormats = null,
-        $exclude = null
+        array|string|null $exclude = null,
     ): ?Response {
         $acceptableFormats = $acceptableFormats ?: [
             'json' => ['application/hal+json', 'application/json', 'application/x-json'],
@@ -83,15 +82,15 @@ final class RequestFormatValidator implements HttpKernelInterface
             return new Response(
                 sprintf(
                     'Mime type%s "%s" %s not supported. Supported mime types are: %s.',
-                    false !== strpos($mimeType, ',') ? 's' : '',
+                    str_contains($mimeType, ',') ? 's' : '',
                     $mimeType,
-                    false !== strpos($mimeType, ',') ? 'are' : 'is',
-                    implode(', ', $acceptableMimeTypes)
+                    str_contains($mimeType, ',') ? 'are' : 'is',
+                    implode(', ', $acceptableMimeTypes),
                 ),
                 406,
                 [
                     'Content-Type' => 'text/plain',
-                ]
+                ],
             );
         }
 
@@ -99,12 +98,12 @@ final class RequestFormatValidator implements HttpKernelInterface
             return new Response(
                 sprintf(
                     'Could not detect supported mime type. Supported mime types are: %s.',
-                    implode(', ', $acceptableMimeTypes)
+                    implode(', ', $acceptableMimeTypes),
                 ),
                 406,
                 [
                     'Content-Type' => 'text/plain',
-                ]
+                ],
             );
         }
 
@@ -112,25 +111,24 @@ final class RequestFormatValidator implements HttpKernelInterface
             sprintf(
                 'Format "%s" is not supported. Supported mime types are: %s.',
                 $format,
-                implode(', ', $acceptableMimeTypes)
+                implode(', ', $acceptableMimeTypes),
             ),
             406,
             [
                 'Content-Type' => 'text/plain',
-            ]
+            ],
         );
     }
 
-    /**
-     * @param array|string|null $exclude
-     */
-    private static function isExcluded(Request $request, $exclude): bool
-    {
+    private static function isExcluded(
+        Request $request,
+        array|string|null $exclude,
+    ): bool {
         if (!$exclude) {
             return false;
         }
 
-        if (!\is_array($exclude) || 0 !== key($exclude)) {
+        if (!is_array($exclude) || 0 !== key($exclude)) {
             $exclude = [$exclude];
         }
 
@@ -146,17 +144,14 @@ final class RequestFormatValidator implements HttpKernelInterface
         return false;
     }
 
-    /**
-     * @param RequestMatcherInterface|array|string $arguments
-     */
     private static function createRequestMatcher(
-        $arguments
+        array|string|RequestMatcherInterface $arguments,
     ): RequestMatcherInterface {
         if ($arguments instanceof RequestMatcherInterface) {
             return $arguments;
         }
 
-        if (!\is_array($arguments)) {
+        if (!is_array($arguments)) {
             return new RequestMatcher($arguments);
         }
 
@@ -175,7 +170,7 @@ final class RequestFormatValidator implements HttpKernelInterface
             $arguments['methods'],
             $arguments['ips'],
             $arguments['attributes'],
-            $arguments['schemes']
+            $arguments['schemes'],
         );
     }
 }

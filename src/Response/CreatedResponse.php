@@ -8,7 +8,7 @@ use Nocarrier\Hal;
 
 final class CreatedResponse extends HalResponse
 {
-    public function __construct(Hal $hal, $headers = [], $prettyPrint = true)
+    public function __construct(Hal $hal, array $headers = [], bool $prettyPrint = true)
     {
         parent::__construct($hal, 201, $headers, $prettyPrint);
 
