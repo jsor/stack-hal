@@ -1,8 +1,8 @@
 Stack/Hal
 =========
 
-[![Build Status](https://travis-ci.org/jsor/stack-hal.svg?branch=master)](https://travis-ci.org/jsor/stack-hal)
-[![Coverage Status](https://coveralls.io/repos/github/jsor/stack-hal/badge.svg?branch=master)](https://coveralls.io/github/jsor/stack-hal?branch=master)
+[![Build Status](https://github.com/jsor/stack-hal/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jsor/stack-hal/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/jsor/stack-hal/badge.svg?branch=main&service=github)](https://coveralls.io/github/jsor/stack-hal?branch=main)
 
 [Stack](https://stackphp.com) and [Symfony](https://symfony.com) middlewares
 and utilities for working with the
