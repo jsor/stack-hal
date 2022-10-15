@@ -64,7 +64,7 @@ final class HttpKernelInterfaceTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/hal+json', $response->headers->get('Content-Type'));
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     '_links' => [
                         'self' => [
@@ -134,7 +134,7 @@ final class HttpKernelInterfaceTest extends TestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/vnd.error+json', $response->headers->get('Content-Type'));
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Not Found',
                 ]

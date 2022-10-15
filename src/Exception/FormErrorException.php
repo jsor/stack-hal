@@ -90,13 +90,13 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
         $parent = $form;
 
         while ($parent) {
-            \array_unshift($path, $parent->getName());
+            array_unshift($path, $parent->getName());
             $parent = $parent->getParent();
         }
 
         // Remove root form
-        \array_shift($path);
+        array_shift($path);
 
-        return '/'.\implode('/', $path);
+        return '/'.implode('/', $path);
     }
 }

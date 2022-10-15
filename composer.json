@@ -43,7 +43,7 @@
         "willdurand/negotiation": "^2.0",
         "phpunit/phpunit": "^8.5",
 
-        "friendsofphp/php-cs-fixer": "3.0.x-dev"
+        "friendsofphp/php-cs-fixer": "^3.0"
     },
     "autoload": {
         "psr-4": {

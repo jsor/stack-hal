@@ -127,14 +127,14 @@ final class RequestBodyDecoder implements HttpKernelInterface
             return false;
         }
 
-        $contentTypeParts = \explode(';', (string) $request->headers->get('Content-Type'));
+        $contentTypeParts = explode(';', (string) $request->headers->get('Content-Type'));
 
-        if (!isset($contentTypeParts[0]) || '' === \trim($contentTypeParts[0])) {
+        if (!isset($contentTypeParts[0]) || '' === trim($contentTypeParts[0])) {
             return false;
         }
 
         return \in_array(
-            \strtolower($contentTypeParts[0]),
+            strtolower($contentTypeParts[0]),
             ['multipart/form-data', 'application/x-www-form-urlencoded'],
             true
         );

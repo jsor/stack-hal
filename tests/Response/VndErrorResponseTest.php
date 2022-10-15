@@ -44,7 +44,7 @@ final class VndErrorResponseTest extends TestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Error',
                     'logref' => 100,
@@ -70,7 +70,7 @@ final class VndErrorResponseTest extends TestCase
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Internal Server Error',
                 ]
@@ -88,7 +88,7 @@ final class VndErrorResponseTest extends TestCase
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Unknown Error',
                 ]
@@ -105,7 +105,7 @@ final class VndErrorResponseTest extends TestCase
         $response = VndErrorResponse::fromThrowable($exception, true, true);
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Message',
                 ]

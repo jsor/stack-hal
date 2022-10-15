@@ -77,12 +77,12 @@ final class RequestFormatNegotiator implements HttpKernelInterface
         array $formats
     ): void {
         foreach ($formats as $format => $mimeTypes) {
-            $allMimeTypes = \array_merge(
+            $allMimeTypes = array_merge(
                 $mimeTypes,
                 Request::getMimeTypes($format)
             );
 
-            $request->setFormat($format, \array_unique($allMimeTypes));
+            $request->setFormat($format, array_unique($allMimeTypes));
         }
     }
 
@@ -91,7 +91,7 @@ final class RequestFormatNegotiator implements HttpKernelInterface
         $priorities = [];
 
         foreach ($formats as $types) {
-            $priorities = \array_merge($priorities, $types);
+            $priorities = array_merge($priorities, $types);
         }
 
         return $priorities;

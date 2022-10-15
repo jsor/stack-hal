@@ -105,7 +105,7 @@ final class ExceptionConverter implements HttpKernelInterface
         LoggerInterface $logger,
         \Throwable $throwable
     ): void {
-        $message = \sprintf(
+        $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
             \get_class($throwable),
             $throwable->getMessage(),

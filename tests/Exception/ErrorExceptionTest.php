@@ -19,7 +19,7 @@ final class ErrorExceptionTest extends TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Error',
                     'logref' => 100,
@@ -50,7 +50,7 @@ final class ErrorExceptionTest extends TestCase
 
         $this->assertSame(400, $exception->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
-            \json_encode(
+            json_encode(
                 [
                     'message' => 'Error',
                     'logref' => 100,
