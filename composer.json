@@ -43,7 +43,8 @@
         "willdurand/negotiation": "^3.0",
         "phpunit/phpunit": "^9.5",
 
-        "friendsofphp/php-cs-fixer": "^3.0"
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "vimeo/psalm": "^4.29"
     },
     "autoload": {
         "psr-4": {

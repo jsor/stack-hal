@@ -62,7 +62,7 @@ final class RequestFormatNegotiator implements HttpKernelInterface
 
         $negotiator = new Negotiator();
 
-        /** @var Accept $accept */
+        /** @var Accept|null $accept */
         $accept = $negotiator->getBest($acceptHeader, $priorities);
 
         if (!$accept) {

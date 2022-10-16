@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal\Response;
 
+use InvalidArgumentException;
 use Nocarrier\Hal;
 
 trait HalResponseTestCase
 {
     /** @test */
-    public function it_allows_setting_hal_content(): void
+    public function it_allows_setting_hal_instance(): void
     {
         $response = $this->provideResponse();
 
-        $response->setContent(new Hal(null, ['message' => 'test']));
+        $response->setHal(new Hal(null, ['message' => 'test']));
 
         $this->assertJsonStringEqualsJsonString(
             json_encode(
@@ -32,15 +33,15 @@ trait HalResponseTestCase
 
         $response->setContent(null);
 
-        $this->assertSame('', $response->getContent());
+        $this->assertFalse($response->getContent());
     }
 
     /** @test */
     public function it_throws_exception_for_non_hal_content(): void
     {
-        $this->expectException('\LogicException');
-
         $response = $this->provideResponse();
+
+        $this->expectException(InvalidArgumentException::class);
 
         $response->setContent('');
     }

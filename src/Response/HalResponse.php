@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal\Response;
 
-use LogicException;
+use InvalidArgumentException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HalResponse extends Response
 {
-    protected $hal;
-    protected $requestFormat;
-    protected $prettyPrint;
+    protected ?Hal $hal;
+    protected string $requestFormat;
+    protected bool $prettyPrint;
 
     public function __construct(
         Hal $hal,
@@ -23,9 +23,11 @@ class HalResponse extends Response
     ) {
         parent::__construct(null, $status, $headers);
 
+        $this->content = '';
         $this->hal = $hal;
         $this->prettyPrint = $prettyPrint;
 
+        $this->charset = 'UTF-8';
         $this->requestFormat = 'json';
         $this->headers->set('Content-Type', 'application/hal+json');
     }
@@ -47,10 +49,13 @@ class HalResponse extends Response
         return $this;
     }
 
-    public function setContent($content): static
+    /**
+     * @return $this
+     */
+    public function setContent(?string $content): static
     {
-        if (null !== $content && !$content instanceof Hal) {
-            throw new LogicException('The content must be a Hal instance.');
+        if (null !== $content) {
+            throw new InvalidArgumentException('Cannot set content to a string. Use HalResponse::setHal() to set a Hal instance.');
         }
 
         $this->hal = $content;
@@ -58,21 +63,29 @@ class HalResponse extends Response
         return $this;
     }
 
-    public function getContent(): string
+    public function getContent(): string|false
     {
         if (null === $this->hal) {
-            return '';
+            return false;
         }
 
         if ('xml' === $this->requestFormat) {
             return $this->hal->asXml($this->prettyPrint);
         }
 
-        return $this->hal->asJson($this->prettyPrint);
+        /** @var string $content */
+        $content = $this->hal->asJson($this->prettyPrint);
+
+        return $content;
     }
 
     public function getHal(): ?Hal
     {
         return $this->hal;
+    }
+
+    public function setHal(Hal $hal): void
+    {
+        $this->hal = $hal;
     }
 }

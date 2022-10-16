@@ -281,7 +281,7 @@ final class ExceptionConverterTest extends TestCase
     /** @test */
     public function it_rethrows_exception_if_catch_is_false(): void
     {
-        $this->expectException('\Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error');
 
         $kernel = $this->createMock(HttpKernelInterface::class);
@@ -302,7 +302,7 @@ final class ExceptionConverterTest extends TestCase
     /** @test */
     public function it_rethrows_exception_for_default_request_format(): void
     {
-        $this->expectException('\Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error');
 
         $kernel = $this->createMock(HttpKernelInterface::class);
@@ -322,7 +322,7 @@ final class ExceptionConverterTest extends TestCase
     /** @test */
     public function it_rethrows_exception_for_invalid_request_format(): void
     {
-        $this->expectException('\Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error');
 
         $kernel = $this->createMock(HttpKernelInterface::class);

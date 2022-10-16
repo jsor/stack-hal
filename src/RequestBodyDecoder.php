@@ -68,10 +68,10 @@ final class RequestBodyDecoder implements HttpKernelInterface
     ): void {
         if (null === $decoders) {
             $decoders = [
-                'json' => static function ($content) {
+                'json' => static function (string $content): mixed {
                     return (new JsonEncoder())->decode($content, 'json');
                 },
-                'xml' => static function ($content) {
+                'xml' => static function (string $content): mixed {
                     return (new XmlEncoder())->decode($content, 'xml');
                 },
             ];
@@ -95,7 +95,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
             return;
         }
 
-        $content = $request->getContent();
+        $content = (string) $request->getContent();
 
         if (!$content) {
             return;

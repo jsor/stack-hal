@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal\Response;
 
+use InvalidArgumentException;
 use Jsor\Stack\Hal\Exception\HalException;
 use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +67,21 @@ final class VndErrorResponse extends HalResponse
         return $this;
     }
 
-    private static function extractStatus(Throwable $throwable)
+    /**
+     * @return $this
+     */
+    public function setContent(?string $content): static
+    {
+        if (null !== $content) {
+            throw new InvalidArgumentException('Cannot set content to a string. Use VndErrorResponse::setHal() to set a Hal instance.');
+        }
+
+        $this->hal = $content;
+
+        return $this;
+    }
+
+    private static function extractStatus(Throwable $throwable): int
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getStatusCode();
@@ -79,7 +94,7 @@ final class VndErrorResponse extends HalResponse
         return 500;
     }
 
-    private static function extractHeaders(Throwable $throwable)
+    private static function extractHeaders(Throwable $throwable): array
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getHeaders();
@@ -88,7 +103,7 @@ final class VndErrorResponse extends HalResponse
         return [];
     }
 
-    private static function extractMessage(Throwable $throwable, $debug)
+    private static function extractMessage(Throwable $throwable, bool $debug): ?string
     {
         if ($throwable instanceof HttpExceptionInterface) {
             return $throwable->getMessage();

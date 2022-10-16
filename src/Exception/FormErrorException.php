@@ -51,10 +51,14 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
 
         /* @var $error FormError */
         foreach ($form->getErrors() as $error) {
+            /** @psalm-suppress PossiblyUndefinedMethod */
+            $message = $error->getMessage();
+
             $data = [
-                'message' => $error->getMessage(),
+                'message' => $message,
             ];
 
+            /** @psalm-suppress PossiblyUndefinedMethod */
             $origin = $error->getOrigin();
 
             if (null !== $origin) {
