@@ -9,6 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 final class CreatedResponseTest extends TestCase
 {
+    use HalResponseTestCase;
+
+    protected function provideResponse(Hal $hal = null): HalResponse
+    {
+        return new CreatedResponse($hal ?: new Hal());
+    }
+
     /** @test */
     public function it_sets_location_header(): void
     {
