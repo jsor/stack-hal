@@ -15,7 +15,7 @@ final class VndErrorResponseTest extends TestCase
 {
     use HalResponseTestCase;
 
-    protected function provideResponse(Hal $hal = null): HalResponse
+    protected function provideResponse(?Hal $hal = null): HalResponse
     {
         return new VndErrorResponse($hal ?: new Hal());
     }
@@ -52,12 +52,12 @@ final class VndErrorResponseTest extends TestCase
                     'message' => 'Error',
                     'logref' => 100,
                     '_embedded' => [
-                            'errors' => [
-                                    [
-                                        'message' => 'Error',
-                                    ],
-                                ],
+                        'errors' => [
+                            [
+                                'message' => 'Error',
+                            ],
                         ],
+                    ],
                 ],
             ),
             $response->getContent(),

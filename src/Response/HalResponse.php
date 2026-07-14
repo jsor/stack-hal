@@ -9,6 +9,10 @@ use Nocarrier\Hal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress PossiblyNullReference
+ */
 class HalResponse extends Response
 {
     protected ?Hal $hal;
@@ -34,7 +38,16 @@ class HalResponse extends Response
 
     public function prepare(Request $request): static
     {
-        if ('xml' === $request->getRequestFormat()) {
+        $format = $request->getRequestFormat();
+
+        if ('hal' === $format) {
+            $format = 'application/hal+xml' === $request->headers->get('Content-Type')
+                ? 'xml'
+                : 'json'
+            ;
+        }
+
+        if ('xml' === $format) {
             $this->requestFormat = 'xml';
             $this->headers->set('Content-Type', 'application/hal+xml');
         }

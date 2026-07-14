@@ -16,7 +16,7 @@ final class RequestFormatValidationListener implements EventSubscriberInterface
     private array|string|null $exclude;
 
     public function __construct(
-        array $acceptableFormats = null,
+        ?array $acceptableFormats = null,
         array|string|null $exclude = null,
     ) {
         $this->acceptableFormats = $acceptableFormats;

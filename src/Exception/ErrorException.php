@@ -19,7 +19,7 @@ final class ErrorException extends BadRequestHttpException implements HalExcepti
         array $errors,
         string $message = '',
         mixed $logref = null,
-        Throwable $previous = null,
+        ?Throwable $previous = null,
         int $code = 0,
     ) {
         parent::__construct($message, $previous, $code);

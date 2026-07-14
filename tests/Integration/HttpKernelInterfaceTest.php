@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\ExceptionConverter;
-use Jsor\Stack\Hal\RequestFormatNegotiator;
 use Jsor\Stack\Hal\RequestFormatValidator;
 use Jsor\Stack\Hal\Response\HalResponse;
 use Nocarrier\Hal;
@@ -26,8 +25,7 @@ final class HttpKernelInterfaceTest extends TestCase
             ->expects($this->never())
             ->method('handle');
 
-        $app = new RequestFormatNegotiator($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -36,8 +34,8 @@ final class HttpKernelInterfaceTest extends TestCase
         $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
-        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('Content-Type'));
+        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -52,8 +50,7 @@ final class HttpKernelInterfaceTest extends TestCase
             ->method('handle')
             ->willReturn($hal);
 
-        $app = new RequestFormatNegotiator($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -89,8 +86,7 @@ final class HttpKernelInterfaceTest extends TestCase
             ->method('handle')
             ->willReturn($hal);
 
-        $app = new RequestFormatNegotiator($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app);
 
         $request = new Request();
@@ -114,7 +110,7 @@ final class HttpKernelInterfaceTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException()));
+            ->willThrowException(new NotFoundHttpException());
 
         $logger = $this->createMock(LoggerInterface::class);
 
@@ -122,8 +118,7 @@ final class HttpKernelInterfaceTest extends TestCase
             ->expects($this->once())
             ->method('error');
 
-        $app = new RequestFormatNegotiator($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();
@@ -159,8 +154,7 @@ final class HttpKernelInterfaceTest extends TestCase
             ->expects($this->once())
             ->method('error');
 
-        $app = new RequestFormatNegotiator($kernel);
-        $app = new RequestFormatValidator($app);
+        $app = new RequestFormatValidator($kernel);
         $app = new ExceptionConverter($app, $logger);
 
         $request = new Request();

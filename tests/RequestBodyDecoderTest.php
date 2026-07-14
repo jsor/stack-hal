@@ -22,8 +22,8 @@ final class RequestBodyDecoderTest extends TestCase
         Request $request,
         string $method,
         array $expectedParameters,
-        string $contentType = null,
-        array $decoders = null,
+        ?string $contentType = null,
+        ?array $decoders = null,
     ): void {
         $kernel = $this->createMock(HttpKernelInterface::class);
 
@@ -48,21 +48,35 @@ final class RequestBodyDecoderTest extends TestCase
     public static function provideOnKernelRequestData(): array
     {
         return [
-            'Empty POST request' => [new Request([], [], [], [], [], [], ''), 'POST', [], 'application/json'],
-            'Empty PUT request' => [new Request([], [], [], [], [], [], ''), 'PUT', [], 'application/json'],
-            'Empty PATCH request' => [new Request([], [], [], [], [], [], ''), 'PATCH', [], 'application/json'],
-            'Empty DELETE request' => [new Request([], [], [], [], [], [], ''), 'DELETE', [], 'application/json'],
-            'Empty GET request' => [new Request([], [], [], [], [], [], ''), 'GET', [], 'application/json'],
-            'JSON POST request' => [new Request([], [], [], [], [], [], '["foo"]'), 'POST', ['foo'], 'application/json'],
-            'JSON PUT request' => [new Request([], [], [], [], [], [], '["foo"]'), 'PUT', ['foo'], 'application/json'],
-            'JSON PATCH request' => [new Request([], [], [], [], [], [], '["foo"]'), 'PATCH', ['foo'], 'application/json'],
-            'JSON DELETE request' => [new Request([], [], [], [], [], [], '["foo"]'), 'DELETE', ['foo'], 'application/json'],
-            'JSON GET request' => [new Request([], [], [], [], [], [], '["foo"]'), 'GET', [], 'application/json'],
-            'POST request with parameters' => [new Request([], ['bar'], [], [], [], ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], '["foo"]'), 'POST', ['bar'], 'application/x-www-form-urlencoded'],
+            'Empty POST request' => [new Request([], [], [], [], [], [], ''), 'POST', [], 'application/hal+json'],
+            'Empty PUT request' => [new Request([], [], [], [], [], [], ''), 'PUT', [], 'application/hal+json'],
+            'Empty PATCH request' => [new Request([], [], [], [], [], [], ''), 'PATCH', [], 'application/hal+json'],
+            'Empty DELETE request' => [new Request([], [], [], [], [], [], ''), 'DELETE', [], 'application/hal+json'],
+            'Empty GET request' => [new Request([], [], [], [], [], [], ''), 'GET', [], 'application/hal+json'],
+
+            'JSON POST request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'POST', ['foo' => 'bar'], 'application/json'],
+            'JSON PUT request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'PUT', ['foo' => 'bar'], 'application/json'],
+            'JSON PATCH request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'PATCH', ['foo' => 'bar'], 'application/json'],
+            'JSON DELETE request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'DELETE', ['foo' => 'bar'], 'application/json'],
+            'JSON GET request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'GET', [], 'application/json'],
+
+            'HAL+JSON POST request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'POST', ['foo' => 'bar'], 'application/hal+json'],
+            'HAL+JSON PUT request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'PUT', ['foo' => 'bar'], 'application/hal+json'],
+            'HAL+JSON PATCH request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'PATCH', ['foo' => 'bar'], 'application/hal+json'],
+            'HAL+JSON DELETE request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'DELETE', ['foo' => 'bar'], 'application/hal+json'],
+            'HAL+JSON GET request' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'GET', [], 'application/hal+json'],
+
+            'HAL+XML POST request' => [new Request([], [], [], [], [], [], '<resource><foo>bar</foo></resource>'), 'POST', ['foo' => 'bar'], 'application/hal+xml'],
+            'HAL+XML PUT request' => [new Request([], [], [], [], [], [], '<resource><foo>bar</foo></resource>'), 'PUT', ['foo' => 'bar'], 'application/hal+xml'],
+            'HAL+XML PATCH request' => [new Request([], [], [], [], [], [], '<resource><foo>bar</foo></resource>'), 'PATCH', ['foo' => 'bar'], 'application/hal+xml'],
+            'HAL+XML DELETE request' => [new Request([], [], [], [], [], [], '<resource><foo>bar</foo></resource>'), 'DELETE', ['foo' => 'bar'], 'application/hal+xml'],
+            'HAL+XML GET request' => [new Request([], [], [], [], [], [], '<resource><foo>bar</foo></resource>'), 'GET', [], 'application/hal+xml'],
+
+            'POST request with parameters' => [new Request([], ['bar'], [], [], [], ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], '{"foo": "bar"}'), 'POST', ['bar'], 'application/x-www-form-urlencoded'],
             'POST request with parameters and no Content-Type' => [new Request([], ['bar'], [], [], [], [], ''), 'POST', ['bar']],
-            'POST request with unallowed format' => [new Request([], [], [], [], [], [], '["foo"]'), 'POST', [], 'application/fooformat'],
-            'POST request with no Content-Type' => [new Request([], [], ['_format' => 'json'], [], [], [], '["foo"]'), 'POST', ['foo']],
-            'POST request with invalid decoder' => [new Request([], [], [], [], [], [], '["foo"]'), 'POST', [], 'application/json', ['json' => 'foo']],
+            'POST request with unallowed format' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'POST', [], 'application/fooformat'],
+            'POST request with no Content-Type' => [new Request([], [], ['_format' => 'json'], [], [], [], '{"foo": "bar"}'), 'POST', ['foo' => 'bar']],
+            'POST request with invalid decoder' => [new Request([], [], [], [], [], [], '{"foo": "bar"}'), 'POST', [], 'application/json', ['json' => 'foo']],
         ];
     }
 
@@ -111,7 +125,7 @@ final class RequestBodyDecoderTest extends TestCase
         $request->setMethod('POST');
         $request->headers->set('Content-Type', 'application/json');
 
-        $app->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+        $app->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
     }
 
     /**
@@ -159,6 +173,6 @@ final class RequestBodyDecoderTest extends TestCase
         $request->setMethod('POST');
         $request->headers->set('Content-Type', 'application/json');
 
-        $app->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+        $app->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
     }
 }

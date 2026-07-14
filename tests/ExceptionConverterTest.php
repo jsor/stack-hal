@@ -22,12 +22,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new Exception()));
+            ->willThrowException(new Exception());
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -50,12 +50,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException()));
+            ->willThrowException(new NotFoundHttpException());
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -78,12 +78,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException('Resource not found')));
+            ->willThrowException(new NotFoundHttpException('Resource not found'));
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -106,12 +106,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new AccessDeniedException('Hidden')));
+            ->willThrowException(new AccessDeniedException('Hidden'));
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -134,12 +134,13 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new Exception()));
+            ->willThrowException(new Exception());
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'xml');
+        $request->setRequestFormat('hal');
+        $request->headers->set('Content-Type', 'application/hal+xml');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -158,12 +159,13 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException()));
+            ->willThrowException(new NotFoundHttpException());
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'xml');
+        $request->setRequestFormat('hal');
+        $request->headers->set('Content-Type', 'application/hal+xml');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -182,12 +184,13 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException('Resource not found')));
+            ->willThrowException(new NotFoundHttpException('Resource not found'));
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'xml');
+        $request->setRequestFormat('hal');
+        $request->headers->set('Content-Type', 'application/hal+xml');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -206,12 +209,13 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new AccessDeniedException('Hidden')));
+            ->willThrowException(new AccessDeniedException('Hidden'));
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'xml');
+        $request->setRequestFormat('hal');
+        $request->headers->set('Content-Type', 'application/hal+xml');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -230,12 +234,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new Exception('Error')));
+            ->willThrowException(new Exception('Error'));
 
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -258,12 +262,12 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new Exception('Custom error message')));
+            ->willThrowException(new Exception('Custom error message'));
 
         $app = new ExceptionConverter($kernel, null, false, true);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $response = $app->handle($request)->prepare($request);
 
@@ -294,9 +298,9 @@ final class ExceptionConverterTest extends TestCase
         $app = new ExceptionConverter($kernel);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
-        $app->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+        $app->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
     }
 
     /** @test */
@@ -348,7 +352,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new NotFoundHttpException()));
+            ->willThrowException(new NotFoundHttpException());
 
         $logger = $this->createMock(LoggerInterface::class);
 
@@ -359,7 +363,7 @@ final class ExceptionConverterTest extends TestCase
         $app = new ExceptionConverter($kernel, $logger);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $app->handle($request);
     }
@@ -372,7 +376,7 @@ final class ExceptionConverterTest extends TestCase
         $kernel
             ->expects($this->once())
             ->method('handle')
-            ->will($this->throwException(new Exception()));
+            ->willThrowException(new Exception());
 
         $logger = $this->createMock(LoggerInterface::class);
 
@@ -383,7 +387,7 @@ final class ExceptionConverterTest extends TestCase
         $app = new ExceptionConverter($kernel, $logger);
 
         $request = new Request();
-        $request->attributes->set('_format', 'json');
+        $request->setRequestFormat('hal');
 
         $app->handle($request);
     }

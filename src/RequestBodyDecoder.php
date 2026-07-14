@@ -32,7 +32,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
      */
     public function __construct(
         HttpKernelInterface $app,
-        array $decoders = null,
+        ?array $decoders = null,
     ) {
         $this->app = $app;
         $this->decoders = $decoders;
@@ -64,7 +64,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
      */
     public static function decode(
         Request $request,
-        array $decoders = null,
+        ?array $decoders = null,
     ): void {
         if (null === $decoders) {
             $decoders = [
@@ -87,7 +87,22 @@ final class RequestBodyDecoder implements HttpKernelInterface
             ? $request->getRequestFormat()
             : $request->getFormat($contentType);
 
-        if (!$format || !isset($decoders[$format])) {
+        if (null === $format) {
+            return;
+        }
+
+        if ('hal' === $format) {
+            if (null === $contentType) {
+                return;
+            }
+
+            $format = 'application/hal+xml' === $contentType
+                ? 'xml'
+                : 'json'
+            ;
+        }
+
+        if (!isset($decoders[$format])) {
             return;
         }
 
@@ -95,7 +110,7 @@ final class RequestBodyDecoder implements HttpKernelInterface
             return;
         }
 
-        $content = (string) $request->getContent();
+        $content = $request->getContent();
 
         if (!$content) {
             return;

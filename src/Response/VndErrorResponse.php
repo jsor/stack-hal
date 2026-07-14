@@ -13,6 +13,10 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress PossiblyNullReference
+ */
 final class VndErrorResponse extends HalResponse
 {
     public function __construct(
@@ -44,7 +48,7 @@ final class VndErrorResponse extends HalResponse
         $data = $hal->getData();
 
         if (!isset($data['message']) || '' === $data['message']) {
-            if ($message) {
+            if (null !== $message && '' !== $message) {
                 $data['message'] = $message;
             } elseif (isset(Response::$statusTexts[$statusCode])) {
                 $data['message'] = Response::$statusTexts[$statusCode];
@@ -60,7 +64,16 @@ final class VndErrorResponse extends HalResponse
     {
         parent::prepare($request);
 
-        if ('xml' === $request->getRequestFormat()) {
+        $format = $request->getRequestFormat();
+
+        if ('hal' === $format) {
+            $format = 'application/hal+xml' === $request->headers->get('Content-Type')
+                ? 'xml'
+                : 'json'
+            ;
+        }
+
+        if ('xml' === $format) {
             $this->headers->set('Content-Type', 'application/vnd.error+xml');
         }
 

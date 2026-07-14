@@ -6,12 +6,35 @@ namespace Jsor\Stack\Hal;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcher\HostRequestMatcher;
+use Symfony\Component\HttpFoundation\RequestMatcher\PathRequestMatcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 final class RequestFormatValidatorTest extends TestCase
 {
+    /** @test */
+    public function it_accepts_default_hal_format(): void
+    {
+        $expectedResponse = new Response();
+
+        $kernel = $this->createMock(HttpKernelInterface::class);
+
+        $kernel
+            ->expects($this->once())
+            ->method('handle')
+            ->willReturn($expectedResponse);
+
+        $app = new RequestFormatValidator($kernel);
+
+        $request = new Request();
+        $request->attributes->set('_format', 'hal');
+
+        $response = $app->handle($request)->prepare($request);
+
+        $this->assertSame($expectedResponse, $response);
+    }
+
     /** @test */
     public function it_accepts_default_json_format(): void
     {
@@ -72,8 +95,8 @@ final class RequestFormatValidatorTest extends TestCase
         $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
-        $this->assertSame('Could not detect supported mime type. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('content-type'));
+        $this->assertSame('Could not detect supported mime type. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -93,8 +116,8 @@ final class RequestFormatValidatorTest extends TestCase
         $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
-        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('content-type'));
+        $this->assertSame('Format "html" is not supported. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -110,13 +133,13 @@ final class RequestFormatValidatorTest extends TestCase
 
         $request = new Request();
         $request->attributes->set('_format', 'html');
-        $request->attributes->set('_mime_type', 'text/html');
+        $request->headers->set('Accept', 'text/html');
 
         $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
-        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('content-type'));
+        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -132,13 +155,13 @@ final class RequestFormatValidatorTest extends TestCase
 
         $request = new Request();
         $request->attributes->set('_format', null);
-        $request->attributes->set('_mime_type', 'text/html');
+        $request->headers->set('Accept', 'text/html');
 
         $response = $app->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('content-type'));
-        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('content-type'));
+        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -186,53 +209,6 @@ final class RequestFormatValidatorTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_with_exclude_as_array_with_arguments(): void
-    {
-        $expectedResponse = new Response();
-
-        $kernel = $this->createMock(HttpKernelInterface::class);
-
-        $kernel
-            ->expects($this->once())
-            ->method('handle')
-            ->willReturn($expectedResponse);
-
-        $app = new RequestFormatValidator($kernel, [], [
-            'host' => 'example\.com',
-        ]);
-
-        $request = Request::create('http://example.com');
-
-        $response = $app->handle($request)->prepare($request);
-
-        $this->assertSame($expectedResponse, $response);
-    }
-
-    /** @test */
-    public function it_ignores_with_exclude_as_array_with_multiple_arguments(): void
-    {
-        $expectedResponse = new Response();
-
-        $kernel = $this->createMock(HttpKernelInterface::class);
-
-        $kernel
-            ->expects($this->once())
-            ->method('handle')
-            ->willReturn($expectedResponse);
-
-        $app = new RequestFormatValidator($kernel, [], [
-            ['host' => 'example\.com'],
-            ['path' => '/ignore'],
-        ]);
-
-        $request = Request::create('/ignore');
-
-        $response = $app->handle($request)->prepare($request);
-
-        $this->assertSame($expectedResponse, $response);
-    }
-
-    /** @test */
     public function it_ignores_with_exclude_as_array_with_request_matcher(): void
     {
         $expectedResponse = new Response();
@@ -244,7 +220,7 @@ final class RequestFormatValidatorTest extends TestCase
             ->method('handle')
             ->willReturn($expectedResponse);
 
-        $app = new RequestFormatValidator($kernel, [], [new RequestMatcher('/ignore')]);
+        $app = new RequestFormatValidator($kernel, [], [new PathRequestMatcher('/ignore')]);
 
         $request = Request::create('/ignore');
 
@@ -254,7 +230,7 @@ final class RequestFormatValidatorTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_with_exclude_as_array_with_multiplerequest_matcher(): void
+    public function it_ignores_with_exclude_as_array_with_multiple_request_matchers(): void
     {
         $expectedResponse = new Response();
 
@@ -266,8 +242,8 @@ final class RequestFormatValidatorTest extends TestCase
             ->willReturn($expectedResponse);
 
         $app = new RequestFormatValidator($kernel, [], [
-            new RequestMatcher(null, 'example\.com'),
-            new RequestMatcher('/ignore'),
+            new HostRequestMatcher('example\.com'),
+            new PathRequestMatcher('/ignore'),
         ]);
 
         $request = Request::create('/ignore');

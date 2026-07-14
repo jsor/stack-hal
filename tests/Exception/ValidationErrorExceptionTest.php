@@ -42,25 +42,25 @@ final class ValidationErrorExceptionTest extends TestCase
                     'message' => 'Validation failed',
                     'logref' => 100,
                     '_embedded' => [
-                            'errors' => [
-                                    [
-                                        'message' => 'This field is missing.',
-                                        'path' => '/email',
-                                    ],
-                                    [
-                                        'message' => 'This field is missing.',
-                                        'path' => '/name',
-                                    ],
-                                    [
-                                        'message' => 'This field is missing.',
-                                        'path' => '/birthday',
-                                    ],
-                                    [
-                                        'message' => 'This field was not expected.',
-                                        'path' => '/additional',
-                                    ],
-                                ],
+                        'errors' => [
+                            [
+                                'message' => 'This field is missing.',
+                                'path' => '/email',
+                            ],
+                            [
+                                'message' => 'This field is missing.',
+                                'path' => '/name',
+                            ],
+                            [
+                                'message' => 'This field is missing.',
+                                'path' => '/birthday',
+                            ],
+                            [
+                                'message' => 'This field was not expected.',
+                                'path' => '/additional',
+                            ],
                         ],
+                    ],
                 ],
             ),
             $exception->getHal()->asJson(),

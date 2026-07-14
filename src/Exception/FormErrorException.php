@@ -19,7 +19,7 @@ final class FormErrorException extends BadRequestHttpException implements HalExc
         FormInterface $form,
         string $message = '',
         mixed $logref = null,
-        Throwable $previous = null,
+        ?Throwable $previous = null,
         int $code = 0,
     ) {
         parent::__construct($message, $previous, $code);

@@ -13,8 +13,8 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Throwable;
 
-use function get_class;
 use function in_array;
+use function sprintf;
 
 /**
  * Converts to a vnd.error response.
@@ -32,11 +32,11 @@ final class ExceptionConverter implements HttpKernelInterface
 
     public function __construct(
         HttpKernelInterface $app,
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         bool $prettyPrint = true,
         bool $debug = false,
         bool $passThroughCatch = false,
-        array $formats = null,
+        ?array $formats = null,
     ) {
         $this->app = $app;
         $this->logger = $logger;
@@ -82,20 +82,20 @@ final class ExceptionConverter implements HttpKernelInterface
     public static function handleThrowable(
         Throwable $throwable,
         Request $request,
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         bool $prettyPrint = true,
         bool $debug = false,
-        array $formats = null,
+        ?array $formats = null,
     ): ?VndErrorResponse {
         if (null !== $logger) {
             self::logThrowable($logger, $throwable);
         }
 
-        $formats = $formats ?: ['json', 'xml'];
+        $formats = $formats ?? ['hal', 'json', 'xml'];
 
         $format = $request->getRequestFormat(null);
 
-        if (!$format || !in_array($format, $formats, true)) {
+        if (null === $format || !in_array($format, $formats, true)) {
             return null;
         }
 
@@ -112,14 +112,14 @@ final class ExceptionConverter implements HttpKernelInterface
     ): void {
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            get_class($throwable),
+            $throwable::class,
             $throwable->getMessage(),
             $throwable->getFile(),
             $throwable->getLine(),
         );
 
-        $isCritical = !$throwable instanceof HttpExceptionInterface ||
-                      $throwable->getStatusCode() >= 500;
+        $isCritical = !$throwable instanceof HttpExceptionInterface
+                      || $throwable->getStatusCode() >= 500;
         $context = ['exception' => $throwable];
 
         if ($isCritical) {

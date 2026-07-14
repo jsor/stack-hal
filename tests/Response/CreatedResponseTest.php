@@ -11,7 +11,7 @@ final class CreatedResponseTest extends TestCase
 {
     use HalResponseTestCase;
 
-    protected function provideResponse(Hal $hal = null): HalResponse
+    protected function provideResponse(?Hal $hal = null): HalResponse
     {
         return new CreatedResponse($hal ?: new Hal());
     }

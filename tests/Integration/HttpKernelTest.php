@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Jsor\Stack\Hal\Integration;
 
 use Jsor\Stack\Hal\EventListener\ExceptionConversionListener;
-use Jsor\Stack\Hal\EventListener\RequestFormatNegotiationListener;
 use Jsor\Stack\Hal\EventListener\RequestFormatValidationListener;
 use Jsor\Stack\Hal\EventListener\ResponseConversionListener;
 use Jsor\Stack\Hal\Fixtures\TestHttpKernel;
@@ -24,7 +23,6 @@ final class HttpKernelTest extends TestCase
         $dispatcher = new EventDispatcher();
         $httpKernel = new TestHttpKernel($dispatcher);
 
-        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
@@ -37,8 +35,8 @@ final class HttpKernelTest extends TestCase
         $response = $httpKernel->handle($request)->prepare($request);
 
         $this->assertSame(406, $response->getStatusCode());
-        $this->assertSame('text/plain; charset=UTF-8', $response->headers->get('Content-Type'));
-        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/json, application/x-json, application/hal+xml, text/xml, application/xml, application/x-xml.', $response->getContent());
+        $this->assertSame('text/plain; charset=utf-8', $response->headers->get('Content-Type'));
+        $this->assertSame('Mime type "text/html" is not supported. Supported mime types are: application/hal+json, application/hal+xml, application/json, application/x-json, text/xml, application/xml, application/x-xml.', $response->getContent());
     }
 
     /** @test */
@@ -49,7 +47,6 @@ final class HttpKernelTest extends TestCase
             return new Hal('/');
         });
 
-        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener());
@@ -91,7 +88,6 @@ final class HttpKernelTest extends TestCase
             throw new NotFoundHttpException();
         });
 
-        $dispatcher->addSubscriber(new RequestFormatNegotiationListener());
         $dispatcher->addSubscriber(new RequestFormatValidationListener());
         $dispatcher->addSubscriber(new ResponseConversionListener());
         $dispatcher->addSubscriber(new ExceptionConversionListener($logger));

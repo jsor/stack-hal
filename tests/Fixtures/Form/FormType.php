@@ -25,7 +25,7 @@ final class FormType extends AbstractType
                 'entry_type' => PersonType::class,
                 'allow_add' => true,
                 'constraints' => [
-                    new Count(['min' => 1]),
+                    new Count(min: 1),
                 ],
             ])
             ->add('newsletter', CheckboxType::class, [

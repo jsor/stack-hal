@@ -12,7 +12,7 @@ final class ErrorExceptionTest extends TestCase
     public function it_serializes_exception_to_json(): void
     {
         $errors = [
-          'Error',
+            'Error',
         ];
 
         $exception = new ErrorException($errors, 'Error', 100);
@@ -24,12 +24,12 @@ final class ErrorExceptionTest extends TestCase
                     'message' => 'Error',
                     'logref' => 100,
                     '_embedded' => [
-                            'errors' => [
-                                    [
-                                        'message' => 'Error',
-                                    ],
-                                ],
+                        'errors' => [
+                            [
+                                'message' => 'Error',
+                            ],
                         ],
+                    ],
                 ],
             ),
             $exception->getHal()->asJson(),
@@ -55,13 +55,13 @@ final class ErrorExceptionTest extends TestCase
                     'message' => 'Error',
                     'logref' => 100,
                     '_embedded' => [
-                            'errors' => [
-                                    [
-                                        'message' => 'Error',
-                                        'path' => '/foo',
-                                    ],
-                                ],
+                        'errors' => [
+                            [
+                                'message' => 'Error',
+                                'path' => '/foo',
+                            ],
                         ],
+                    ],
                 ],
             ),
             $exception->getHal()->asJson(),

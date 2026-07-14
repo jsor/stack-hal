@@ -19,14 +19,14 @@ final class NameType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 3]),
+                    new Length(min: 3),
                 ],
             ])
             ->add('last_name', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 4]),
+                    new Length(min: 4),
                 ],
             ]);
     }

@@ -75,5 +75,5 @@ trait HalResponseTestCase
         $this->assertSame($hal, $response->getHal());
     }
 
-    abstract protected function provideResponse(Hal $hal = null): HalResponse;
+    abstract protected function provideResponse(?Hal $hal = null): HalResponse;
 }

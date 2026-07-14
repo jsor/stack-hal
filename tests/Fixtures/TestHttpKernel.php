@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jsor\Stack\Hal\Fixtures;
 
+use ReflectionFunctionAbstract;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ final class TestHttpKernel extends HttpKernel implements ControllerResolverInter
 {
     private $controller;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, callable $controller = null)
+    public function __construct(EventDispatcherInterface $eventDispatcher, ?callable $controller = null)
     {
         $this->controller = $controller;
 
@@ -31,8 +32,11 @@ final class TestHttpKernel extends HttpKernel implements ControllerResolverInter
         return [$this, 'callController'];
     }
 
-    public function getArguments(Request $request, $controller): array
-    {
+    public function getArguments(
+        Request $request,
+        callable $controller,
+        ?ReflectionFunctionAbstract $reflector = null,
+    ): array {
         return [$request];
     }
 

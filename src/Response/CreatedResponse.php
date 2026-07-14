@@ -7,6 +7,10 @@ namespace Jsor\Stack\Hal\Response;
 use InvalidArgumentException;
 use Nocarrier\Hal;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress PossiblyNullReference
+ */
 final class CreatedResponse extends HalResponse
 {
     public function __construct(Hal $hal, array $headers = [], bool $prettyPrint = true)

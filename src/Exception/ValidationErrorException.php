@@ -18,7 +18,7 @@ final class ValidationErrorException extends BadRequestHttpException implements 
         ConstraintViolationListInterface $violationList,
         string $message = '',
         mixed $logref = null,
-        Throwable $previous = null,
+        ?Throwable $previous = null,
         int $code = 0,
     ) {
         parent::__construct($message, $previous, $code);

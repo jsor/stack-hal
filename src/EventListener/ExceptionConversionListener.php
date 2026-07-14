@@ -19,10 +19,10 @@ final class ExceptionConversionListener implements EventSubscriberInterface
     private ?array $formats;
 
     public function __construct(
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         bool $prettyPrint = true,
         bool $debug = false,
-        array $formats = null,
+        ?array $formats = null,
     ) {
         $this->logger = $logger;
         $this->prettyPrint = $prettyPrint;

@@ -19,6 +19,9 @@ final class ResponseConversionListener implements EventSubscriberInterface
         $this->prettyPrint = $prettyPrint;
     }
 
+    /**
+     * @psalm-suppress UndefinedClass
+     */
     public function onKernelView(ViewEvent $event): void
     {
         $hal = $event->getControllerResult();

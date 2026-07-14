@@ -11,9 +11,9 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "symfony/http-foundation": "^5.4||^6.0",
-        "symfony/http-kernel": "^5.4||^6.0",
+        "php": "^8.2",
+        "symfony/http-foundation": "^7.4||^8.0",
+        "symfony/http-kernel": "^7.4||^8.0",
         "nocarrier/hal": "^0.9.4"
     },
     "suggest": {
@@ -21,7 +21,6 @@
         "psr/log": "For using the ExceptionConversionListener",
         "symfony/form": "For using FormErrorException",
         "symfony/validator": "For using ValidationErrorException",
-        "willdurand/negotiation": "For using HalNegotiator",
         "symfony/serializer": "For using RequestBodyDecoder"
     },
     "require-dev": {
@@ -29,22 +28,21 @@
 
         "psr/log": "^1.0||^3.0",
 
-        "symfony/event-dispatcher": "^5.4||^6.0",
+        "symfony/event-dispatcher": "^7.4||^8.0",
 
-        "symfony/config": "^5.4||^6.0",
-        "symfony/dependency-injection": "^5.4||^6.0",
+        "symfony/config": "^7.4||^8.0",
+        "symfony/dependency-injection": "^7.4||^8.0",
 
-        "symfony/form": "^5.4||^6.0",
-        "symfony/translation": "^5.4||^6.0",
-        "symfony/validator": "^5.4||^6.0",
-        "symfony/security-core": "^5.4||^6.0",
-        "symfony/serializer": "^5.4||^6.0",
+        "symfony/form": "^7.4||^8.0",
+        "symfony/translation": "^7.4||^8.0",
+        "symfony/validator": "^7.4||^8.0",
+        "symfony/security-core": "^7.4||^8.0",
+        "symfony/serializer": "^7.4||^8.0",
 
-        "willdurand/negotiation": "^3.0",
         "phpunit/phpunit": "^9.5",
 
         "friendsofphp/php-cs-fixer": "^3.0",
-        "vimeo/psalm": "^4.29"
+        "vimeo/psalm": "^6.16"
     },
     "autoload": {
         "psr-4": {

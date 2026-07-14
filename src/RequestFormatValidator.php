@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 use function is_array;
+use function sprintf;
 
 final class RequestFormatValidator implements HttpKernelInterface
 {
@@ -18,12 +19,9 @@ final class RequestFormatValidator implements HttpKernelInterface
     private ?array $acceptableFormats;
     private array|string|null $exclude;
 
-    /**
-     * @param array|string|null $exclude
-     */
     public function __construct(
         HttpKernelInterface $app,
-        array $acceptableFormats = null,
+        ?array $acceptableFormats = null,
         array|string|null $exclude = null,
     ) {
         $this->app = $app;
@@ -51,17 +49,18 @@ final class RequestFormatValidator implements HttpKernelInterface
 
     public static function intercept(
         Request $request,
-        array $acceptableFormats = null,
+        ?array $acceptableFormats = null,
         array|string|null $exclude = null,
     ): ?Response {
-        $acceptableFormats = $acceptableFormats ?: [
-            'json' => ['application/hal+json', 'application/json', 'application/x-json'],
-            'xml' => ['application/hal+xml', 'text/xml', 'application/xml', 'application/x-xml'],
+        $acceptableFormats = $acceptableFormats ?? [
+            'hal' => ['application/hal+json', 'application/hal+xml'],
+            'json' => ['application/json', 'application/x-json'],
+            'xml' => ['text/xml', 'application/xml', 'application/x-xml'],
         ];
 
         $format = $request->getRequestFormat(null);
 
-        if ($format && isset($acceptableFormats[$format])) {
+        if (null !== $format && isset($acceptableFormats[$format])) {
             return null;
         }
 
@@ -71,12 +70,7 @@ final class RequestFormatValidator implements HttpKernelInterface
 
         $acceptableMimeTypes = array_merge(...array_values($acceptableFormats));
 
-        // Might be set via Negotiation middleware
-        $mimeType = $request->attributes->get('_mime_type');
-
-        if (!$mimeType) {
-            $mimeType = implode(', ', $request->getAcceptableContentTypes());
-        }
+        $mimeType = implode(', ', $request->getAcceptableContentTypes());
 
         if ($mimeType) {
             return new Response(
@@ -94,7 +88,7 @@ final class RequestFormatValidator implements HttpKernelInterface
             );
         }
 
-        if (!$format) {
+        if (null === $format) {
             return new Response(
                 sprintf(
                     'Could not detect supported mime type. Supported mime types are: %s.',
@@ -124,7 +118,7 @@ final class RequestFormatValidator implements HttpKernelInterface
         Request $request,
         array|string|null $exclude,
     ): bool {
-        if (!$exclude) {
+        if (null === $exclude) {
             return false;
         }
 
@@ -144,33 +138,15 @@ final class RequestFormatValidator implements HttpKernelInterface
         return false;
     }
 
-    private static function createRequestMatcher(
-        array|string|RequestMatcherInterface $arguments,
+    public static function createRequestMatcher(
+        string|RequestMatcherInterface $arguments,
     ): RequestMatcherInterface {
         if ($arguments instanceof RequestMatcherInterface) {
             return $arguments;
         }
 
-        if (!is_array($arguments)) {
-            return new RequestMatcher($arguments);
-        }
-
-        $arguments = array_replace([
-            'path' => null,
-            'host' => null,
-            'methods' => null,
-            'ips' => null,
-            'attributes' => [],
-            'schemes' => null,
-        ], $arguments);
-
-        return new RequestMatcher(
-            $arguments['path'],
-            $arguments['host'],
-            $arguments['methods'],
-            $arguments['ips'],
-            $arguments['attributes'],
-            $arguments['schemes'],
+        return new RequestMatcher\PathRequestMatcher(
+            $arguments,
         );
     }
 }
